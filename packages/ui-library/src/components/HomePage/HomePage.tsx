@@ -1,4 +1,5 @@
 import { ModeCard } from '../ModeCard';
+import { TopBar } from '../TopBar';
 import { UserBadge } from '../UserBadge';
 import styles from './HomePage.module.css';
 
@@ -10,10 +11,10 @@ export interface HomePageProps {
 export function HomePage({ username, onBurgerTest }: HomePageProps) {
   return (
     <div className={styles.screen}>
-      <div className={styles.topBar}>
-        <p className={styles.appTitle}>Kartoffel</p>
-        {username && <UserBadge username={username} />}
-      </div>
+      <TopBar
+        left={<p className={styles.appTitle}>Kartoffel</p>}
+        right={username ? <UserBadge username={username} /> : undefined}
+      />
 
       <div className={styles.content}>
         <h2 className={styles.greeting}>Hey, {username ?? 'there'} 👋</h2>

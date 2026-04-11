@@ -1,3 +1,4 @@
+import { TopBar } from '../TopBar';
 import styles from './BurgerTestPage.module.css';
 
 export interface BurgerTestPageProps {
@@ -7,12 +8,21 @@ export interface BurgerTestPageProps {
 export function BurgerTestPage({ onBack }: BurgerTestPageProps) {
   return (
     <div className={styles.screen}>
-      <div className={styles.topBar}>
-        <button className={styles.backButton} onClick={onBack} aria-label="Go back" type="button">
-          ‹
-        </button>
-        <p className={styles.topBarTitle}>Burger Test</p>
-      </div>
+      <TopBar
+        left={
+          <>
+            <button
+              className={styles.backButton}
+              onClick={onBack}
+              aria-label="Go back"
+              type="button"
+            >
+              ‹
+            </button>
+            <p className={styles.topBarTitle}>Burger Test</p>
+          </>
+        }
+      />
       <div className={styles.content}>
         <span className={styles.icon}>🍔</span>
         <h2 className={styles.title}>Coming Soon</h2>

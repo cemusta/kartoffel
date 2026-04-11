@@ -3,7 +3,7 @@ import { QuestionContainer } from './QuestionContainer';
 import { QuestionData } from '../Question';
 
 const meta = {
-  title: 'Components/QuestionContainer',
+  title: 'Containers/QuestionContainer',
   component: QuestionContainer,
   parameters: {
     layout: 'centered',

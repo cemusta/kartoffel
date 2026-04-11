@@ -1,0 +1,21 @@
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(16px, env(safe-area-inset-top)) 20px 16px;
+  background-color: white;
+  box-shadow: var(--md-elevation-1);
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .topBar {
+    padding: 16px 48px;
+  }
+}
