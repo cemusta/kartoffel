@@ -95,3 +95,41 @@
   color: var(--md-sys-color-on-surface-variant);
   margin-top: 4px;
 }
+
+@media (min-width: 768px) {
+  .screen {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  .hero {
+    flex: 1;
+    padding: 60px 64px;
+    background: linear-gradient(160deg, #e8f0fe 0%, #d2e3fc 70%, #c5d8fb 100%);
+  }
+
+  .logo {
+    width: 200px;
+    height: 200px;
+  }
+
+  .tagline h1 {
+    font-size: 52px;
+  }
+
+  .tagline p {
+    font-size: 20px;
+  }
+
+  .actions {
+    flex: 0 0 420px;
+    width: 420px;
+    max-width: 420px;
+    padding: 60px 48px;
+    background: white;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.06);
+    justify-content: center;
+  }
+}

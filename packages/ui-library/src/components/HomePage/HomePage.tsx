@@ -21,19 +21,21 @@ export function HomePage({ username, onBurgerTest }: HomePageProps) {
 
         <p className={styles.sectionLabel}>Practice Modes</p>
 
-        <ModeCard
-          title="Burger Test"
-          description="Test your German citizenship knowledge"
-          icon="🍔"
-          onClick={onBurgerTest}
-        />
+        <div className={styles.modeCardGrid}>
+          <ModeCard
+            title="Burger Test"
+            description="Test your German citizenship knowledge"
+            icon="🍔"
+            onClick={onBurgerTest}
+          />
 
-        <ModeCard
-          title="Flash Cards"
-          description="Memorize key facts with spaced repetition"
-          icon="🃏"
-          disabled
-        />
+          <ModeCard
+            title="Flash Cards"
+            description="Memorize key facts with spaced repetition"
+            icon="🃏"
+            disabled
+          />
+        </div>
       </div>
     </div>
   );

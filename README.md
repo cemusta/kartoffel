@@ -10,14 +10,21 @@ Monorepo with React component library + Storybook.
 
 ## Structure
 
-```folders
+```tree
 kartoffel/
+├── apps/
+│   └── kartoffel-web/       # React web app (mobile-first)
+│       └── src/
+│           ├── screens/     # Thin wiring layers (hooks → Page props)
+│           ├── hooks/       # App-specific hooks (useUser)
+│           └── styles/      # Global CSS + MD3 tokens
 ├── packages/
-│   └── ui-library/          # React component library
-│       ├── src/
-│       │   ├── components/  # Components (Button, Card)
-│       │   └── index.ts     # Barrel exports
-│       └── .storybook/      # Storybook config
+│   ├── ui-library/          # Presentational component + page library
+│   │   ├── src/
+│   │   │   ├── components/  # Atoms + Pages (Button, Card, OnboardingPage…)
+│   │   │   └── index.ts     # Barrel exports
+│   │   └── .storybook/      # Storybook config
+│   └── utils/               # Shared helpers (generateUsername, userStorage)
 ├── package.json             # Root workspace config
 └── tsconfig.json            # Shared TypeScript config
 ```
@@ -28,72 +35,62 @@ kartoffel/
 # Install dependencies
 npm install
 
-# Start Storybook (dev mode)
+# Start web app (port 3000)
+npm run dev:app
+
+# Start Storybook component explorer (port 6006)
 npm run storybook
 
-# Build library
+# Build everything
+npm run build
+
+# Build web app only
+npm run build:app
+
+# Build ui-library only
 npm run build:lib
 
-# Lint code
+# Lint
 npm run lint
 
-# Format code
+# Format
 npm run format
 ```
 
 ## Tech Stack
 
 - **Node.js**: v24.14.1
-- **TypeScript**: 5.7.2
-- **React**: 18.x
+- **TypeScript**: 6.x
+- **React**: 19.x
+- **React Router**: v7 — URL-based routing
 - **Vite**: Build tool + dev server
-- **Storybook**: Component documentation
+- **Storybook**: Component + page documentation
 - **CSS Modules**: Component styling
+- **Material Design 3**: Design token system
 - **npm workspaces**: Monorepo management
 
-## Components
+## Architecture
 
-### Button
+Pages and screens follow a container/presentational split:
 
-Variants: primary, secondary, danger  
-Sizes: small, medium, large
-
-```tsx
-import { Button } from '@kartoffel/ui-library';
-
-<Button variant="primary" size="medium">
-  Click me
-</Button>;
-```
-
-### Card
-
-Container with optional title + footer
+- **Pages** (`packages/ui-library`) — pure presentational, props-only, fully Storybook-able
+- **Screens** (`apps/kartoffel-web/src/screens`) — thin wiring: call hooks, pass callbacks to Pages
 
 ```tsx
-import { Card } from '@kartoffel/ui-library';
+// Page (ui-library) — no hooks, no routing
+export function OnboardingPage({ onContinueAnonymous }: OnboardingPageProps) { ... }
 
-<Card title="Title" footer="Footer">
-  Content
-</Card>;
+// Screen (app) — hooks only, delegates rendering to Page
+export function OnboardingScreen() {
+  const navigate = useNavigate();
+  const { createAnonymousUser } = useUser();
+  return <OnboardingPage onContinueAnonymous={() => { createAnonymousUser(); navigate('/home'); }} />;
+}
 ```
 
 ## Development
 
-Storybook run on `http://localhost:6006` when start dev mode.
-
-## Build Output
-
-Library build to `packages/ui-library/dist/`:
-
-- `index.js` - ESM bundle
-- `index.cjs` - CommonJS bundle
-- `index.d.ts` - TypeScript declarations
-- `style.css` - Component styles
-
-## Next Steps
-
-- Add React app package that consume library
-- Add testing (Vitest + React Testing Library)
-- Add CI/CD pipeline
-- Configure npm publishing
+| URL                     | Service   |
+| ----------------------- | --------- |
+| `http://localhost:3000` | Web app   |
+| `http://localhost:6006` | Storybook |
