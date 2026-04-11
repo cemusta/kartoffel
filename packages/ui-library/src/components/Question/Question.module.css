@@ -1,0 +1,21 @@
+.question {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+}
+
+.text {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: block;
+}
