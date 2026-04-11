@@ -1,4 +1,10 @@
+<div align="center">
+  <img src="assets/logo.png" alt="Kartoffel Logo" width="400">
+  
 # Kartoffel UI Library
+  
+  **Become German** 🥔
+</div>
 
 Monorepo with React component library + Storybook.
 

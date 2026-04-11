@@ -4,11 +4,14 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspace=packages/ui-library",
+    "dev:app": "npm run dev --workspace=apps/kartoffel-web",
+    "build:app": "npm run build --workspace=apps/kartoffel-web",
     "storybook": "npm run storybook --workspace=packages/ui-library",
     "build:lib": "npm run build --workspace=packages/ui-library",
     "lint": "eslint .",
