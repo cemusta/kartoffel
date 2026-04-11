@@ -3,6 +3,9 @@ import { resolve } from 'path';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
+  test: {
+    environment: 'jsdom',
+  },
   plugins: [
     dts({
       insertTypesEntry: true,
