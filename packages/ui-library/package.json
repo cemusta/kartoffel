@@ -20,7 +20,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -30,6 +31,7 @@
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-links": "^10.3.5",
+    "@storybook/addon-vitest": "^10.3.5",
     "@storybook/react": "^10.3.5",
     "@storybook/react-vite": "^10.3.5",
     "@types/react": "^19.2.14",
@@ -39,6 +41,10 @@
     "react-dom": "^19.2.5",
     "storybook": "^10.3.5",
     "vite": "^8.0.8",
-    "vite-plugin-dts": "^4.5.4"
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.4",
+    "playwright": "^1.59.1",
+    "@vitest/browser-playwright": "^4.1.4",
+    "@vitest/coverage-v8": "^4.1.4"
   }
 }
