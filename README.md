@@ -4,7 +4,7 @@ Monorepo with React component library + Storybook.
 
 ## Structure
 
-```
+```folders
 kartoffel/
 ├── packages/
 │   └── ui-library/          # React component library
