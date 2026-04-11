@@ -16,9 +16,11 @@
     "build:lib": "npm run build --workspace=packages/ui-library",
     "test": "npm run test --workspaces --if-present",
     "lint": "eslint .",
+    "tsc": "tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
   },
   "devDependencies": {
+    "@types/node": "^24.12.2",
     "@typescript-eslint/eslint-plugin": "^8.58.1",
     "@typescript-eslint/parser": "^8.58.1",
     "eslint": "^9.18.0",
@@ -27,7 +29,8 @@
     "eslint-plugin-storybook": "^10.3.5",
     "prettier": "^3.8.2",
     "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.1"
+    "typescript-eslint": "^8.58.1",
+    "vite": "^8.0.8"
   },
   "engines": {
     "node": ">=24.14.1"

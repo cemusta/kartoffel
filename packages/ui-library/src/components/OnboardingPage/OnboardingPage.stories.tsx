@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 import { OnboardingPage } from './OnboardingPage';
 
 const meta = {
@@ -8,6 +9,9 @@ const meta = {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
+  args: {
+    onContinueAnonymous: fn(),
+  },
   argTypes: {
     onContinueAnonymous: { action: 'onContinueAnonymous' },
     logoSrc: { control: 'text' },

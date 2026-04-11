@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 import { HomePage } from './HomePage';
 
 const meta = {
@@ -8,6 +9,9 @@ const meta = {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
+  args: {
+    onBurgerTest: fn(),
+  },
   argTypes: {
     username: { control: 'text' },
     onBurgerTest: { action: 'onBurgerTest' },
