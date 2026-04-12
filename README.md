@@ -1,3 +1,7 @@
+[![codecov](https://codecov.io/gh/cemusta/kartoffel/branch/main/graph/badge.svg?token=grHT4z5Qym)](https://codecov.io/gh/cemusta/kartoffel)
+[![vibecoding](https://img.shields.io/badge/vibecoding-enabled-blueviolet)](https://github.com/cemusta/kartoffel)
+[![Storybook](https://img.shields.io/badge/storybook-preview-ff4785?logo=storybook&logoColor=white)](https://cemusta.github.io/kartoffel)
+
 <div align="center">
   <img src="assets/logo.png" alt="Kartoffel Logo" width="400">
   
@@ -6,10 +10,7 @@
   **Become German** 🥔
 </div>
 
-[![codecov](https://codecov.io/gh/cemusta/kartoffel/branch/main/graph/badge.svg?token=grHT4z5Qym)](https://codecov.io/gh/cemusta/kartoffel)
-[![vibecoding](https://img.shields.io/badge/vibecoding-enabled-blueviolet)](https://github.com/cemusta/kartoffel)
-
-Monorepo with React component library + Storybook.
+An application for passing B1 German exam and BurgerTest. Instead of studying somehow I thought writing an app would be more fun.
 
 ## Structure
 
@@ -40,9 +41,6 @@ npm install
 
 # Start web app (port 3000)
 npm run dev:app
-
-# Start Storybook component explorer (port 6006)
-npm run storybook
 
 # Build everything
 npm run build
@@ -97,3 +95,17 @@ export function OnboardingScreen() {
 | ----------------------- | --------- |
 | `http://localhost:3000` | Web app   |
 | `http://localhost:6006` | Storybook |
+
+## Storybook
+
+Component library is documented and previewed via Storybook.
+
+```bash
+# Start Storybook component explorer (port 6006)
+npm run storybook
+```
+
+- **Local**: `npm run storybook` → `http://localhost:6006`
+- **Live preview**: [cemusta.github.io/kartoffel](https://cemusta.github.io/kartoffel)
+
+Deployed automatically to GitHub Pages on every push to `main`.
