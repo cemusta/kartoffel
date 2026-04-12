@@ -4,9 +4,18 @@ import { useUser } from '../../hooks/useUser';
 
 export function HomeScreen() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, clearUser } = useUser();
+
+  function handleLogout() {
+    clearUser();
+    window.location.replace('/');
+  }
 
   return (
-    <HomePage username={user?.username ?? null} onBurgerTest={() => navigate('/burger-test')} />
+    <HomePage
+      username={user?.username ?? null}
+      onBurgerTest={() => navigate('/burger-test')}
+      onLogout={handleLogout}
+    />
   );
 }

@@ -1,0 +1,92 @@
+.container {
+  position: relative;
+}
+
+.hamburgerButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background-color 0.15s ease;
+}
+
+.hamburgerButton:active {
+  background-color: var(--md-sys-color-surface-variant);
+}
+
+.bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--md-sys-color-on-surface, #1a1a2e);
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+  flex-shrink: 0;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: var(--md-elevation-3, 0 4px 16px rgba(0, 0, 0, 0.16));
+  padding: 8px;
+  z-index: 100;
+  animation: dropdownEnter 0.12s ease forwards;
+}
+
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.userSection {
+  padding: 8px 4px 12px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
+  margin-bottom: 8px;
+}
+
+.logoutButton {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--md-sys-color-error, #b3261e);
+  text-align: left;
+  transition: background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.logoutButton:hover {
+  background-color: var(--md-sys-color-error-container, #f9dedc);
+}
+
+.logoutButton:active {
+  background-color: var(--md-sys-color-error-container, #f9dedc);
+}

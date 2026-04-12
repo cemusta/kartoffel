@@ -11,10 +11,13 @@ const meta = {
   tags: ['autodocs'],
   args: {
     onBurgerTest: fn(),
+    onLogout: fn(),
+    username: 'SwiftOtter42',
   },
   argTypes: {
     username: { control: 'text' },
     onBurgerTest: { action: 'onBurgerTest' },
+    onLogout: { action: 'onLogout' },
   },
 } satisfies Meta<typeof HomePage>;
 

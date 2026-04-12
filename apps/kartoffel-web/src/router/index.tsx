@@ -4,26 +4,38 @@ import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
 import { BurgerTestScreen } from '../screens/BurgerTestScreen/BurgerTestScreen';
 import { getStoredUser } from '@kartoffel/utils';
 
-function requireUser(element: React.ReactElement): React.ReactElement {
-  return getStoredUser() ? element : <Navigate to="/" replace />;
+function RequireUser({ children }: { children: React.ReactElement }): React.ReactElement {
+  return getStoredUser() ? children : <Navigate to="/" replace />;
 }
 
-function redirectIfUser(element: React.ReactElement): React.ReactElement {
-  return getStoredUser() ? <Navigate to="/home" replace /> : element;
+function RedirectIfUser({ children }: { children: React.ReactElement }): React.ReactElement {
+  return getStoredUser() ? <Navigate to="/home" replace /> : children;
 }
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: redirectIfUser(<OnboardingScreen />),
+    element: (
+      <RedirectIfUser>
+        <OnboardingScreen />
+      </RedirectIfUser>
+    ),
   },
   {
     path: '/home',
-    element: requireUser(<HomeScreen />),
+    element: (
+      <RequireUser>
+        <HomeScreen />
+      </RequireUser>
+    ),
   },
   {
     path: '/burger-test',
-    element: requireUser(<BurgerTestScreen />),
+    element: (
+      <RequireUser>
+        <BurgerTestScreen />
+      </RequireUser>
+    ),
   },
   {
     path: '*',

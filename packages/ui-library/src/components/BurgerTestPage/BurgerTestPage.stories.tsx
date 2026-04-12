@@ -11,9 +11,13 @@ const meta = {
   tags: ['autodocs'],
   args: {
     onBack: fn(),
+    onLogout: fn(),
+    username: 'SwiftOtter42',
   },
   argTypes: {
     onBack: { action: 'onBack' },
+    onLogout: { action: 'onLogout' },
+    username: { control: 'text' },
   },
 } satisfies Meta<typeof BurgerTestPage>;
 

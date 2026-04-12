@@ -10,10 +10,19 @@ vi.mock('react-router-dom', async importOriginal => {
 });
 
 vi.mock('@kartoffel/ui-library', () => ({
-  HomePage: ({ username, onBurgerTest }: { username: string | null; onBurgerTest: () => void }) => (
+  HomePage: ({
+    username,
+    onBurgerTest,
+    onLogout,
+  }: {
+    username: string | null;
+    onBurgerTest: () => void;
+    onLogout: () => void;
+  }) => (
     <div>
       <span data-testid="username">{username ?? 'guest'}</span>
       <button onClick={onBurgerTest}>Burger test</button>
+      <button onClick={onLogout}>Log out</button>
     </div>
   ),
 }));
@@ -77,5 +86,32 @@ describe('HomeScreen', () => {
 
     fireEvent.click(screen.getByText('Burger test'));
     expect(mockNavigate).toHaveBeenCalledWith('/burger-test');
+  });
+
+  it('calls clearUser and replaces location on logout', () => {
+    const clearUser = vi.fn();
+    vi.mocked(useUser).mockReturnValue({
+      user: { username: 'batman', createdAt: '' },
+      createAnonymousUser: vi.fn(),
+      clearUser,
+    });
+
+    const replaceSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({
+      ...window.location,
+      replace: vi.fn(),
+    } as unknown as Location);
+    const replaceFn = window.location.replace as ReturnType<typeof vi.fn>;
+
+    render(
+      <MemoryRouter>
+        <HomeScreen />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByText('Log out'));
+    expect(clearUser).toHaveBeenCalledOnce();
+    expect(replaceFn).toHaveBeenCalledWith('/');
+
+    replaceSpy.mockRestore();
   });
 });

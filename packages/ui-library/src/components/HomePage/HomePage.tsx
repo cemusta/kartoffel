@@ -1,19 +1,20 @@
 import { ModeCard } from '../ModeCard';
 import { TopBar } from '../TopBar';
-import { UserBadge } from '../UserBadge';
+import { HamburgerMenu } from '../HamburgerMenu';
 import styles from './HomePage.module.css';
 
 export interface HomePageProps {
   username: string | null;
   onBurgerTest: () => void;
+  onLogout: () => void;
 }
 
-export function HomePage({ username, onBurgerTest }: HomePageProps) {
+export function HomePage({ username, onBurgerTest, onLogout }: HomePageProps) {
   return (
     <div className={styles.screen}>
       <TopBar
         left={<p className={styles.appTitle}>Kartoffel</p>}
-        right={username ? <UserBadge username={username} /> : undefined}
+        right={<HamburgerMenu username={username} onLogout={onLogout} />}
       />
 
       <div className={styles.content}>
