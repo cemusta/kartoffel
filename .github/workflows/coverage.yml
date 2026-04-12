@@ -41,3 +41,10 @@ jobs:
           files: ./packages/utils/coverage/lcov.info
           flags: utils
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload kartoffel-web coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./apps/kartoffel-web/coverage/lcov.info
+          flags: kartoffel-web
+          token: ${{ secrets.CODECOV_TOKEN }}

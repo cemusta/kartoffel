@@ -6,6 +6,9 @@
   **Become German** 🥔
 </div>
 
+[![codecov](https://codecov.io/gh/cemusta/kartoffel/branch/main/graph/badge.svg?token=grHT4z5Qym)](https://codecov.io/gh/cemusta/kartoffel)
+[![vibecoding](https://img.shields.io/badge/vibecoding-enabled-blueviolet)](https://github.com/cemusta/kartoffel)
+
 Monorepo with React component library + Storybook.
 
 ## Structure
