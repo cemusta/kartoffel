@@ -25,6 +25,11 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build packages
+        run: |
+          npm run build --workspace=@kartoffel/utils
+          npm run build --workspace=@kartoffel/ui-library
+
       - name: Run tests with coverage
         run: npm run test:coverage
 
