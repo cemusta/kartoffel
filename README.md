@@ -1,5 +1,6 @@
 # Kartoffel Project
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![codecov](https://codecov.io/gh/cemusta/kartoffel/branch/main/graph/badge.svg?token=grHT4z5Qym)](https://codecov.io/gh/cemusta/kartoffel)
 [![vibecoding](https://img.shields.io/badge/vibecoding-enabled-blueviolet)](https://github.com/cemusta/kartoffel)
 [![Storybook](https://img.shields.io/badge/storybook-preview-ff4785?logo=storybook&logoColor=white)](https://cemusta.github.io/kartoffel)
