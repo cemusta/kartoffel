@@ -1,14 +1,17 @@
+# Kartoffel Project
+
 [![codecov](https://codecov.io/gh/cemusta/kartoffel/branch/main/graph/badge.svg?token=grHT4z5Qym)](https://codecov.io/gh/cemusta/kartoffel)
 [![vibecoding](https://img.shields.io/badge/vibecoding-enabled-blueviolet)](https://github.com/cemusta/kartoffel)
 [![Storybook](https://img.shields.io/badge/storybook-preview-ff4785?logo=storybook&logoColor=white)](https://cemusta.github.io/kartoffel)
+[![App](https://img.shields.io/badge/app-preview-orange?logo=firebase&logoColor=white)](https://kartoffel-aa909.web.app/)
 
-<div align="center">
+<!-- markdownlint-disable MD033 -->
+<p align="center">
   <img src="assets/logo.png" alt="Kartoffel Logo" width="400">
-  
-# Kartoffel UI Library
-  
-  **Become German** 🥔
-</div>
+</p>
+
+<p align="center"><b>Become German</b> 🥔</p>
+<!-- markdownlint-enable MD033 -->
 
 An application for passing B1 German exam and BurgerTest. Instead of studying somehow I thought writing an app would be more fun.
 
@@ -108,4 +111,11 @@ npm run storybook
 - **Local**: `npm run storybook` → `http://localhost:6006`
 - **Live preview**: [cemusta.github.io/kartoffel](https://cemusta.github.io/kartoffel)
 
-Deployed automatically to GitHub Pages on every push to `main`.
+## Deployment
+
+Both deployments trigger automatically on every push to `main`.
+
+| Target                       | URL                                                                | Workflow               |
+| ---------------------------- | ------------------------------------------------------------------ | ---------------------- |
+| **App** (Firebase Hosting)   | [kartoffel-aa909.web.app](https://kartoffel-aa909.web.app/)        | `deploy-firebase.yml`  |
+| **Storybook** (GitHub Pages) | [cemusta.github.io/kartoffel](https://cemusta.github.io/kartoffel) | `deploy-storybook.yml` |
