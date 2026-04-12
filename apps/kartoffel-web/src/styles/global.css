@@ -42,6 +42,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   touch-action: manipulation;
   overscroll-behavior: none;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 #root {
