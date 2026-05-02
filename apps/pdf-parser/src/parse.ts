@@ -129,6 +129,7 @@ function finalizeQuestion(q: PartialQuestion): Question | null {
     const result: Question = {
         id: q.id,
         type: q.type,
+        page: q.pageNumber,
         text: q.textLines.join(' ').trim(),
         options,
         // correctAnswer intentionally absent — not encoded in PDF
@@ -183,6 +184,9 @@ export async function parsePdf(pdfPath: string): Promise<{
                 currentState = null;
                 continue;
             }
+
+            // ── Page footer: "Seite N von 191" — skip
+            if (/^Seite \d+ von \d+$/.test(text)) continue;
 
             // ── Question start: "Aufgabe N"
             const aufgabeMatch = text.match(/^Aufgabe (\d+)$/);

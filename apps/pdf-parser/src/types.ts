@@ -6,6 +6,7 @@ export interface Question {
     id: number;
     type: QuestionType;
     state?: string; // Only present when type === 'state'
+    page: number;
     text: string;
     options: Record<OptionKey, string>;
     /** Not present in the PDF — must be merged from an external source after parsing. */
