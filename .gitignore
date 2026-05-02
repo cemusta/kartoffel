@@ -36,3 +36,7 @@ coverage/
 # Misc
 .cache/
 .turbo/
+
+# Pdf parser
+apps/pdf-parser/assets/*
+apps/pdf-parser/output/*
