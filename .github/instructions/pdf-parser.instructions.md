@@ -9,17 +9,18 @@ Standalone CLI tool that parses the official BAMF citizenship test PDF into stru
 ## Quick start
 
 ```bash
-cd apps/pdf-parser
-npm run parse
-# interactive: prompts for PDF path and output dir
-# non-interactive: npx tsx src/index.ts assets/gesamtfragenkatalog-lebenindeutschland.pdf output/
+# Always run from the repo root using the workspace flag:
+npm run parse --workspace=apps/pdf-parser -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output 2>&1
+
+# interactive (prompts for PDF path and output dir):
+npm run parse --workspace=apps/pdf-parser
 ```
 
 ## Architecture
 
 - `src/types.ts` — `Question` interface (source of truth for JSON shape)
 - `src/parse.ts` — text extraction; detects questions, options, state headings via font/x-position heuristics
-- `src/extract-images.ts` — image extraction; uses `@napi-rs/canvas` + a `structuredClone` patch for `ImageBitmap` objects (see file header comment)
+- `src/extract-images.ts` — image extraction; no canvas factory needed — pdfjs decodes images as plain `Uint8ClampedArray` without one; cross-page images resolved by calling `getOperatorList()` on the referencing page first, then the defining page; header logo filtered by Y-position of the `cm` op preceding each `Do` op
 - `src/index.ts` — CLI entry: interactive prompts → parse → extract images → write JSON
 - `src/debug.ts` — throwaway debug script, not part of the pipeline
 - `assets/` — PDF committed to repo
