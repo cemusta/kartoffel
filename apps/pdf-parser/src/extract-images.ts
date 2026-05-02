@@ -19,6 +19,52 @@ export interface ExtractionProgress {
     processedPages: number[];
 }
 
+interface RawImageData {
+    data: Uint8ClampedArray;
+    width: number;
+    height: number;
+}
+
+function isRawImage(value: unknown): value is RawImageData {
+    if (value === null || typeof value !== 'object') return false;
+    const v = value as Record<string, unknown>;
+    return (
+        typeof v['width'] === 'number' &&
+        typeof v['height'] === 'number' &&
+        (v['data'] instanceof Uint8ClampedArray || v['data'] instanceof Uint8Array)
+    );
+}
+
+/**
+ * Wraps objs.resolve (an instance method) so that every decoded image is
+ * captured into capturedImages at decode time — before any canvas conversion
+ * and without relying on objs.get() callbacks which require the correct page
+ * context and objs store.
+ *
+ * Chaining-safe: each call wraps the current resolve (which may itself already
+ * be a wrapper from a prior call), so multiple extractPageImages calls on the
+ * same document accumulate wrappers safely.
+ */
+function hookResolve(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    objs: any,
+    capturedImages: Map<string, RawImageData>,
+): void {
+    const orig: (objId: string, data: unknown) => void = objs.resolve.bind(objs);
+    objs.resolve = (objId: string, data: unknown) => {
+        if (isRawImage(data)) {
+            capturedImages.set(objId, {
+                data: data.data instanceof Uint8ClampedArray
+                    ? data.data
+                    : new Uint8ClampedArray(data.data),
+                width: data.width,
+                height: data.height,
+            });
+        }
+        orig(objId, data);
+    };
+}
+
 // Images whose bottom-left Y (in PDF page coords, Y=0 at bottom) is above this
 // fraction of the page height are header decorations (BAMF logo). The logo is
 // always painted in the top ~12 % of the page; content images are in the body.
@@ -141,10 +187,11 @@ export async function buildImageManifest(
 /**
  * Extracts all content images for a single page.
  *
- * Accepts an already-open PDF document so that image objects decoded when
- * rendering the defining page (N-1) are visible to objs.get on the referencing
- * page (N).  Callers should create ONE document per extraction session and reuse
- * it across all pages, then destroy it when done.
+ * pdfjs decodes and resolves all XObject images referenced by a page into that
+ * page's objs/commonObjs stores when getOperatorList() is called on that page.
+ * We intercept page.objs.resolve() BEFORE calling getOperatorList so that every
+ * decoded image is captured at decode time into a local Map, avoiding the race
+ * between callback-based get() and the resolve timing.
  *
  * Header decorations (the BAMF logo) are filtered by their Y position in
  * PDF page coordinates (Y=0 at bottom; logo has high Y = top of page).
@@ -161,10 +208,10 @@ export async function extractPageImages(
     const { default: sharp } = await import('sharp');
     const { createCanvas } = await import('@napi-rs/canvas');
 
-    // Images are defined on page N-1 and referenced on page N.
-    // We render the *defining* page(s) first so pdfjs decodes the image objects
-    // and caches them — then objs.get on the referencing page resolves immediately.
-    // Extract defining page number from image name (e.g. "img_p8_1" → page 8).
+    // ── Step 1: render the defining page(s) ──────────────────────────────────
+    // Images named "img_pN_*" are defined on page N. Rendering page N first
+    // primes the pdfjs decoder so that document-level (commonObjs) images are
+    // already decoded by the time we process the referencing page.
     const definingPages = new Set<number>();
     for (const name of entry.imageNames) {
         const m = /p(\d+)_/.exec(name);
@@ -182,8 +229,7 @@ export async function extractPageImages(
             const dcanvas = createCanvas(Math.round(dvp.width), Math.round(dvp.height));
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await (dp as any).render({ canvasContext: dcanvas.getContext('2d'), viewport: dvp }).promise;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (dp as any).cleanup?.();
+            // Do NOT call dp.cleanup() — it clears page.objs and discards decoded data.
         } catch (err) {
             process.stderr.write(
                 `[WARN] Render of defining page ${defPage} failed: ${(err as Error).message}\n`
@@ -191,16 +237,40 @@ export async function extractPageImages(
         }
     }
 
+    // ── Step 2: get the referencing page and hook its objs BEFORE getOperatorList ─
+    // getOperatorList() is what triggers pdfjs to decode every XObject image
+    // referenced by this page and call page.objs.resolve(name, imageData).
+    // We install the hook BEFORE that call so we capture the data at decode time.
+    const capturedImages = new Map<string, RawImageData>();
     const page = await pdf.getPage(entry.pageNum);
-    const pageHeight = page.getViewport({ scale: 1 }).height;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pageAny = page as any;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ops = await (page as any).getOperatorList();
+    hookResolve(pageAny.objs, capturedImages);
+    hookResolve(pageAny.commonObjs, capturedImages);
+
+    const ops = await pageAny.getOperatorList();
+
+    // ── Step 3: synchronous fallback for images resolved before the hook ──────
+    // If an image was already resolved into page.objs before our hook was
+    // installed (e.g. from a prior getOperatorList call on the same document),
+    // objs.get(name) without a callback returns the data synchronously.
+    for (const name of entry.imageNames) {
+        if (!capturedImages.has(name)) {
+            for (const store of [pageAny.objs, pageAny.commonObjs] as unknown[]) {
+                try {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const d = (store as any).get(name) as unknown;
+                    if (isRawImage(d)) capturedImages.set(name, d);
+                } catch {
+                    // Not resolved in this store — expected, skip.
+                }
+            }
+        }
+    }
+
+    const pageHeight = page.getViewport({ scale: 1 }).height;
     const yPositions = getImageYPositions(ops);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const objs = (page as any).objs;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const commonObjs = (page as any).commonObjs;
 
     // Filter to content images — drop header decorations by Y position.
     const contentImages = entry.imageNames.filter(name => {
@@ -213,31 +283,8 @@ export async function extractPageImages(
     for (let saveIdx = 0; saveIdx < contentImages.length; saveIdx++) {
         const name = contentImages[saveIdx];
         try {
-            // Images live in either page.objs (JPEG etc.) or page.commonObjs (JBIG2/shared).
-            // Try both; whichever resolves first within 3 s wins.
-            const imgData = await Promise.race([
-                new Promise<{
-                    data: Uint8ClampedArray;
-                    width: number;
-                    height: number;
-                } | null>(resolve => {
-                    objs.get(
-                        name,
-                        (img: { data: Uint8ClampedArray; width: number; height: number } | null) => {
-                            if (img?.data) resolve(img);
-                        }
-                    );
-                    commonObjs.get(
-                        name,
-                        (img: { data: Uint8ClampedArray; width: number; height: number } | null) => {
-                            if (img?.data) resolve(img);
-                        }
-                    );
-                }),
-                new Promise<null>(resolve => setTimeout(() => resolve(null), 3_000)),
-            ]);
-
-            if (!imgData?.data) {
+            const imgData = capturedImages.get(name);
+            if (!imgData) {
                 process.stderr.write(
                     `[WARN] Image "${name}" on page ${entry.pageNum} not resolved — skipping.\n`
                 );
@@ -245,8 +292,9 @@ export async function extractPageImages(
             }
 
             const { data, width, height } = imgData;
+            // 1-channel = JBIG2/grayscale, 3 = RGB, 4 = RGBA
             const channels = data.length / (width * height);
-            const validChannels = channels === 4 ? 4 : channels === 3 ? 3 : null;
+            const validChannels = channels === 4 ? 4 : channels === 3 ? 3 : channels === 1 ? 1 : null;
             if (!validChannels) {
                 process.stderr.write(
                     `[WARN] Image "${name}" has unexpected channel count ${channels} — skipping.\n`
@@ -260,7 +308,7 @@ export async function extractPageImages(
             const filePath = path.join(imagesDir, filename);
 
             await sharp(Buffer.from(data), {
-                raw: { width, height, channels: validChannels as 3 | 4 },
+                raw: { width, height, channels: validChannels as 1 | 3 | 4 },
             })
                 .png()
                 .toFile(filePath);
@@ -273,8 +321,7 @@ export async function extractPageImages(
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (page as any).cleanup?.();
+    pageAny.cleanup?.();
     return savedPaths;
 }
 
