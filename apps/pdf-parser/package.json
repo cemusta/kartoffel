@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "clean": "rm -rf ./output",
     "parse": "tsx src/index.ts",
+    "debug": "tsx src/debug.ts",
     "typecheck": "tsc --noEmit",
     "clear": "rm -rf output"
   },

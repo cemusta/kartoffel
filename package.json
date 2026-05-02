@@ -8,6 +8,7 @@
     "apps/*"
   ],
   "scripts": {
+    "clean": "npm run clean --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspace=packages/ui-library",
     "dev:app": "npm run dev --workspace=apps/kartoffel-web",
@@ -18,7 +19,9 @@
     "test:coverage": "npm run test:coverage --workspaces --if-present",
     "lint": "eslint .",
     "tsc": "tsc --noEmit",
-    "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "parse": "npm run parse --workspace=@kartoffel/pdf-parser --",
+    "parse:debug": "npm run debug --workspace=@kartoffel/pdf-parser"
   },
   "devDependencies": {
     "@types/node": "^24.12.2",
