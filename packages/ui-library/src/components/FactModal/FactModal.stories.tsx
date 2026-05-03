@@ -25,6 +25,10 @@ export const Default: Story = {
 };
 
 export const Interactive: Story = {
+  args: {
+    fact: EXAMPLE_FACT,
+    onDismiss: () => {},
+  },
   render: () => {
     const [open, setOpen] = useState(false);
     return (

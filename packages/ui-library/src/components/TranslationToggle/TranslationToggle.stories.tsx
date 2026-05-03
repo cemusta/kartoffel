@@ -32,6 +32,10 @@ export const On: Story = {
 };
 
 export const Interactive: Story = {
+  args: {
+    checked: false,
+    onChange: () => {},
+  },
   render: () => {
     const [checked, setChecked] = useState(false);
     return <TranslationToggle checked={checked} onChange={setChecked} />;
