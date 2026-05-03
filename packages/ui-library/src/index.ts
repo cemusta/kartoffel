@@ -10,6 +10,7 @@ export { OnboardingPage } from './components/OnboardingPage';
 export { HomePage } from './components/HomePage';
 export { BurgerTestPage } from './components/BurgerTestPage';
 export { FactModal } from './components/FactModal';
+export { TranslationToggle } from './components/TranslationToggle';
 
 export type { ButtonProps } from './components/Button';
 export type { AnswerProps } from './components/Answer';
@@ -24,3 +25,4 @@ export type { OnboardingPageProps } from './components/OnboardingPage';
 export type { HomePageProps } from './components/HomePage';
 export type { BurgerTestPageProps } from './components/BurgerTestPage';
 export type { FactModalProps } from './components/FactModal';
+export type { TranslationToggleProps } from './components/TranslationToggle';

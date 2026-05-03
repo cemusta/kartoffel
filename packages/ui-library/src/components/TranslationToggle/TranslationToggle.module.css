@@ -1,0 +1,58 @@
+.translationSwitch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.translateIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--md-sys-color-on-surface-variant, #5f6368);
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.translationSwitch:has(.toggleInput:checked) .translateIcon {
+  color: var(--md-sys-color-primary, #1a73e8);
+}
+
+.toggleInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toggleTrack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 2.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: var(--md-sys-color-outline, #dadce0);
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.translationSwitch:has(.toggleInput:checked) .toggleTrack {
+  background: var(--md-sys-color-primary, #1a73e8);
+}
+
+.toggleThumb {
+  position: absolute;
+  left: 0.15rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.translationSwitch:has(.toggleInput:checked) .toggleThumb {
+  transform: translateX(1rem);
+}
