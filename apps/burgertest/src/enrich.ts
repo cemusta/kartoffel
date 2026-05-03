@@ -59,8 +59,8 @@ function buildPrompt(batch: Question[]): string {
     // Use English text when available, fall back to German
     const items = batch.map(q => ({
         id: q.id,
-        question: q.textEn ?? q.text,
-        correctAnswer: q.correctAnswer ? (q.optionsEn ?? q.options)[q.correctAnswer] : undefined,
+        question: q.translations?.en?.text ?? q.text,
+        correctAnswer: q.correctAnswer ? (q.translations?.en?.options ?? q.options)[q.correctAnswer] : undefined,
     }));
 
     return `You are an engaging educator helping immigrants learn about German civic life and culture.
@@ -123,7 +123,7 @@ async function main() {
             for (const r of results) {
                 const q = byId.get(r.id);
                 if (q) {
-                    q.context = r.context;
+                    q.translations = { ...q.translations, en: { ...q.translations?.en, text: q.translations?.en?.text ?? q.text, options: q.translations?.en?.options ?? q.options, context: r.context } };
                     enriched.add(r.id);
                 }
             }
@@ -142,7 +142,7 @@ async function main() {
         }
     }
 
-    const remaining = questions.filter(q => !q.context).length;
+    const remaining = questions.filter(q => !q.translations?.en?.context).length;
     console.log(`\nDone. ${enriched.size} enriched, ${remaining} remaining.`);
 }
 

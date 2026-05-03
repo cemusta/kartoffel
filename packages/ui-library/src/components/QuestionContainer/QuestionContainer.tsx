@@ -57,7 +57,7 @@ export function QuestionContainer({
     setScore(null);
   };
 
-  const hasTranslation = Boolean(currentQuestion?.textEn);
+  const hasTranslation = Boolean(currentQuestion?.translations?.en);
 
   if (score !== null) {
     return (
@@ -116,7 +116,7 @@ export function QuestionContainer({
 
       <Question
         text={currentQuestion.text}
-        textEn={currentQuestion.textEn}
+        textEn={currentQuestion.translations?.en?.text}
         imageUrl={currentQuestion.image}
         showTranslation={showTranslation}
       />
@@ -127,7 +127,7 @@ export function QuestionContainer({
             key={key}
             label={OPTION_LABELS[key]}
             text={currentQuestion.options[key]}
-            textEn={currentQuestion.optionsEn?.[key]}
+            textEn={currentQuestion.translations?.en?.options?.[key]}
             isSelected={selectedAnswer === key}
             isCorrect={key === currentQuestion.correctAnswer}
             isRevealed={isRevealed}

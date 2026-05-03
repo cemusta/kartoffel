@@ -9,8 +9,13 @@ export interface QuestionData {
   options: { a: string; b: string; c: string; d: string };
   correctAnswer?: 'a' | 'b' | 'c' | 'd';
   image?: string | string[];
-  textEn?: string;
-  optionsEn?: { a: string; b: string; c: string; d: string };
+  translations?: {
+    [lang: string]: {
+      text: string;
+      options: { a: string; b: string; c: string; d: string };
+      context?: string;
+    };
+  };
 }
 
 export interface QuestionProps extends HTMLAttributes<HTMLDivElement> {

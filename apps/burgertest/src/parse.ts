@@ -53,6 +53,7 @@ interface PartialQuestion {
     type: 'general' | 'state';
     state?: string;
     textLines: string[];
+    imageText?: string;           // copyright/attribution credit extracted from © lines
     optionTexts: string[];        // collected in order → a, b, c, d
     currentOptionLines: string[]; // accumulates current option's continuation lines
     pageNumber: number;
@@ -127,16 +128,27 @@ function finalizeQuestion(q: PartialQuestion): Question | null {
         options[OPTION_KEYS[i]] = q.optionTexts[i];
     }
 
+    // Join text lines; if © credit slipped through into the text, split it out
+    let joinedText = q.textLines.join(' ').trim();
+    let imageText = q.imageText;
+    const copyrightIdx = joinedText.indexOf('\u00a9');
+    if (copyrightIdx !== -1) {
+        const credit = joinedText.slice(copyrightIdx).trim();
+        joinedText = joinedText.slice(0, copyrightIdx).trim();
+        imageText = imageText ?? credit;
+    }
+
     const result: Question = {
         id: q.id,
         type: q.type,
         page: q.pageNumber,
-        text: q.textLines.join(' ').trim(),
+        text: joinedText,
         options,
         // correctAnswer intentionally absent — not encoded in PDF
     };
 
     if (q.type === 'state' && q.state) result.state = q.state;
+    if (imageText) result.imageText = imageText;
     return result;
 }
 
@@ -251,8 +263,16 @@ export async function parsePdf(pdfPath: string): Promise<{
                 // Continuation of current option text (wrapped line)
                 currentQ.currentOptionLines.push(text);
             } else if (!currentQ.inOptions && x < OPTION_X_MIN) {
-                // Continuation of question text
-                currentQ.textLines.push(text);
+                // Continuation of question text — split out any © credit line
+                if (text.includes('\u00a9')) {
+                    const idx = text.indexOf('\u00a9');
+                    const before = text.slice(0, idx).trim();
+                    const credit = text.slice(idx).trim();
+                    if (before) currentQ.textLines.push(before);
+                    currentQ.imageText = credit;
+                } else {
+                    currentQ.textLines.push(text);
+                }
             } else if (currentQ.inOptions && x < OPTION_X_MIN) {
                 // Text at question-text x-position while already in options mode.
                 // This happens when the NEXT question's text appears in the PDF before

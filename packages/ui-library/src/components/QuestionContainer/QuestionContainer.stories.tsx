@@ -26,12 +26,16 @@ const sampleQuestions: QuestionData[] = [
       d: 'hier Meinungsfreiheit gilt.',
     },
     correctAnswer: 'd',
-    textEn: 'In Germany, people are allowed to speak openly against the government because...',
-    optionsEn: {
-      a: 'freedom of religion applies here.',
-      b: 'people pay taxes.',
-      c: 'people have the right to vote.',
-      d: 'freedom of speech applies here.',
+    translations: {
+      en: {
+        text: 'In Germany, people are allowed to speak openly against the government because...',
+        options: {
+          a: 'freedom of religion applies here.',
+          b: 'people pay taxes.',
+          c: 'people have the right to vote.',
+          d: 'freedom of speech applies here.',
+        },
+      },
     },
   },
   {
@@ -45,12 +49,16 @@ const sampleQuestions: QuestionData[] = [
       d: 'das Recht auf ein Auto',
     },
     correctAnswer: 'c',
-    textEn: 'Which right belongs to the fundamental rights in Germany?',
-    optionsEn: {
-      a: 'the right to work',
-      b: 'the right to housing',
-      c: 'freedom of opinion',
-      d: 'the right to a car',
+    translations: {
+      en: {
+        text: 'Which right belongs to the fundamental rights in Germany?',
+        options: {
+          a: 'the right to work',
+          b: 'the right to housing',
+          c: 'freedom of opinion',
+          d: 'the right to a car',
+        },
+      },
     },
   },
   {
@@ -64,12 +72,16 @@ const sampleQuestions: QuestionData[] = [
       d: 'eine Geschäftsordnung des Bundestags',
     },
     correctAnswer: 'a',
-    textEn: 'What is the Basic Law (Grundgesetz)?',
-    optionsEn: {
-      a: 'the constitution of Germany',
-      b: 'a school textbook',
-      c: 'a tax law book',
-      d: 'the rules of procedure of the Bundestag',
+    translations: {
+      en: {
+        text: 'What is the Basic Law (Grundgesetz)?',
+        options: {
+          a: 'the constitution of Germany',
+          b: 'a school textbook',
+          c: 'a tax law book',
+          d: 'the rules of procedure of the Bundestag',
+        },
+      },
     },
   },
 ];
@@ -95,7 +107,6 @@ export const WithImage: Story = {
         id: 55,
         type: 'general',
         text: 'Was zeigt dieses Bild? © Deutscher Bundestag/Achim Melde',
-        textEn: 'What does this image show? © German Bundestag/Achim Melde',
         image: '/images/q55.png',
         options: {
           a: 'den Bundestagssitz in Berlin',
@@ -104,11 +115,16 @@ export const WithImage: Story = {
           d: 'das Bundeskanzleramt in Berlin',
         },
         correctAnswer: 'a',
-        optionsEn: {
-          a: 'the Bundestag building in Berlin',
-          b: 'the Federal Constitutional Court in Karlsruhe',
-          c: 'the Bundesrat building in Berlin',
-          d: 'the Federal Chancellery in Berlin',
+        translations: {
+          en: {
+            text: 'What does this image show? © German Bundestag/Achim Melde',
+            options: {
+              a: 'the Bundestag building in Berlin',
+              b: 'the Federal Constitutional Court in Karlsruhe',
+              c: 'the Bundesrat building in Berlin',
+              d: 'the Federal Chancellery in Berlin',
+            },
+          },
         },
       },
     ],
@@ -123,11 +139,15 @@ export const FourImageOptions: Story = {
         id: 21,
         type: 'general',
         text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
-        textEn: 'Which one is the coat of arms of the Federal Republic of Germany?',
         image: ['/images/q21_1.png', '/images/q21_2.png', '/images/q21_3.png', '/images/q21_4.png'],
         options: { a: 'Bild 1', b: 'Bild 2', c: 'Bild 3', d: 'Bild 4' },
         correctAnswer: 'a',
-        optionsEn: { a: 'Image 1', b: 'Image 2', c: 'Image 3', d: 'Image 4' },
+        translations: {
+          en: {
+            text: 'Which one is the coat of arms of the Federal Republic of Germany?',
+            options: { a: 'Image 1', b: 'Image 2', c: 'Image 3', d: 'Image 4' },
+          },
+        },
       },
     ],
     onComplete: score => console.log('Quiz completed! Score:', score),

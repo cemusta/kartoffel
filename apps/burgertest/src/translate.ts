@@ -4,7 +4,7 @@
  * - Reads output/questions.json
  * - Resumable: tracks progress in output/translate-progress.json
  * - Batches 10 questions per Gemini call
- * - Writes textEn + optionsEn back to output/questions.json after each batch
+ * - Writes translations.en back to output/questions.json after each batch
  *
  * Usage:
  *   GEMINI_API_KEY=<key> npm run translate --workspace=apps/burgertest
@@ -38,8 +38,8 @@ interface TranslateProgress {
 
 interface TranslationResult {
     id: number;
-    textEn: string;
-    optionsEn: Record<OptionKey, string>;
+    text: string;
+    options: Record<OptionKey, string>;
 }
 
 function loadProgress(): Set<number> {
@@ -72,7 +72,7 @@ Rules:
 - The JSON must be complete and parseable.
 
 Output format (id=1 is just an example — use the actual ids from the input):
-{"translations":[{"id":1,"textEn":"What is the capital of Germany?","optionsEn":{"a":"Berlin","b":"Hamburg","c":"Munich","d":"Cologne"}}]}
+{"translations":[{"id":1,"text":"What is the capital of Germany?","options":{"a":"Berlin","b":"Hamburg","c":"Munich","d":"Cologne"}}]}
 
 Now translate these questions and return a complete JSON object in that exact format:
 ${JSON.stringify(items, null, 2)}`;
@@ -124,8 +124,7 @@ async function main() {
             for (const r of results) {
                 const q = byId.get(r.id);
                 if (q) {
-                    q.textEn = r.textEn;
-                    q.optionsEn = r.optionsEn;
+                    q.translations = { ...q.translations, en: { text: r.text, options: r.options } };
                     translated.add(r.id);
                 }
             }
@@ -145,7 +144,7 @@ async function main() {
         }
     }
 
-    const remaining = questions.filter(q => !q.textEn).length;
+    const remaining = questions.filter(q => !q.translations?.en).length;
     console.log(`\nDone. ${translated.size} translated, ${remaining} remaining.`);
 }
 
