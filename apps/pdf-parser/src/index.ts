@@ -72,6 +72,7 @@ async function main(): Promise<void> {
     const manifestPath = path.join(outputDir, 'image-manifest.json');
     const progressPath = path.join(outputDir, 'image-progress.json');
     const imagesDir = path.join(outputDir, 'images');
+    const resultsPath = path.join(outputDir, 'parse-results.json');
 
     // ── Phase 1: Text parsing ──────────────────────────────────────────────
     process.stdout.write('Extracting text and questions...');
@@ -98,6 +99,8 @@ async function main(): Promise<void> {
     const pending = manifest.filter(e => !progress.processedPages.includes(e.pageNum));
     const alreadyDone = manifest.length - pending.length;
 
+    const unresolvedImages: Array<{ questionId: number; page: number; names: string[] }> = [];
+
     if (alreadyDone > 0) {
         console.log(`Resuming: ${alreadyDone} page(s) already done, ${pending.length} remaining.`);
     }
@@ -119,11 +122,15 @@ async function main(): Promise<void> {
             ` (q${entry.questionId}, ${entry.imageNames.length} image(s))...`
         );
 
-        const filePaths = await extractPageImages(extractionPdf, entry, imagesDir);
+        const { savedPaths, unresolvedNames } = await extractPageImages(extractionPdf, entry, imagesDir);
 
-        if (filePaths.length > 0) {
+        if (unresolvedNames.length > 0) {
+            unresolvedImages.push({ questionId: entry.questionId, page: entry.pageNum, names: unresolvedNames });
+        }
+
+        if (savedPaths.length > 0) {
             const q = currentQuestions.find(q => q.id === entry.questionId);
-            if (q) q.image = filePaths.length === 1 ? filePaths[0] : filePaths;
+            if (q) q.image = savedPaths.length === 1 ? savedPaths[0] : savedPaths;
             // Persist after every page so a crash doesn't lose prior work
             writeJson(outputPath, currentQuestions);
         }
@@ -131,16 +138,43 @@ async function main(): Promise<void> {
         progress.processedPages.push(entry.pageNum);
         writeJson(progressPath, progress);
 
-        process.stdout.write(` saved ${filePaths.length} image(s).\n`);
+        process.stdout.write(` saved ${savedPaths.length} image(s).\n`);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (extractionPdf as any).destroy?.();
 
     const withImages = currentQuestions.filter(q => q.image).length;
+    const totalImageFiles = fs.existsSync(imagesDir)
+        ? fs.readdirSync(imagesDir).filter(f => f.endsWith('.png')).length
+        : 0;
+
+    const stateNames = [...new Set(
+        questions.filter(q => q.type === 'state' && q.state).map(q => q.state as string)
+    )].sort();
+
+    const parseResults = {
+        timestamp: new Date().toISOString(),
+        questions: {
+            total: questions.length,
+            expected: { general: 300, statePerState: 10, states: stateNames.length, stateTotal: stateNames.length * 10 },
+            extracted: { general: generalCount, state: stateCount },
+            skipped: questions.length < 300 + stateNames.length * 10
+                ? (300 + stateNames.length * 10) - questions.length
+                : 0,
+        },
+        images: {
+            pagesWithImages: manifest.length,
+            questionsWithImages: withImages,
+            totalImageFiles,
+            unresolvedImages,
+        },
+    };
+
+    writeJson(resultsPath, parseResults);
     console.log(`\nDone. ${withImages} question(s) have images.`);
     console.log(`Output: ${outputPath}`);
-
+    console.log(`Parse results: ${resultsPath}`);
     printAnswerNote(currentQuestions);
 }
 

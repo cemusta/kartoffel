@@ -162,11 +162,16 @@ export async function buildImageManifest(
  *   Single image  → q{id}.png
  *   Multiple      → q{id}_1.png … q{id}_4.png
  */
+export interface PageExtractionResult {
+    savedPaths: string[];
+    unresolvedNames: string[];
+}
+
 export async function extractPageImages(
     pdf: PdfDoc,
     entry: ImageManifestEntry,
     imagesDir: string
-): Promise<string[]> {
+): Promise<PageExtractionResult> {
     const { default: sharp } = await import('sharp');
 
     // Step 1: run getOperatorList on the referencing page FIRST.
@@ -249,6 +254,7 @@ export async function extractPageImages(
     });
 
     const savedPaths: string[] = [];
+    const unresolvedNames: string[] = [];
 
     for (let saveIdx = 0; saveIdx < contentImages.length; saveIdx++) {
         const name = contentImages[saveIdx];
@@ -257,6 +263,7 @@ export async function extractPageImages(
             process.stderr.write(
                 `[WARN] Image "${name}" on page ${entry.pageNum} not resolved — skipping.\n`,
             );
+            unresolvedNames.push(name);
             continue;
         }
 
@@ -290,7 +297,7 @@ export async function extractPageImages(
     }
 
     pageAny.cleanup?.();
-    return savedPaths;
+    return { savedPaths, unresolvedNames };
 }
 
 /** Open a PDF document ready for image extraction (no canvas factory needed). */
