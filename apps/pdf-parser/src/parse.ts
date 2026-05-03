@@ -46,9 +46,6 @@ const OPTION_X_MIN = 100;
 interface RawItem {
     str: string;
     transform: number[]; // [scaleX, skewX, skewY, scaleY, x, y]
-    width: number;
-    height: number;
-    fontName: string;
 }
 
 interface PartialQuestion {

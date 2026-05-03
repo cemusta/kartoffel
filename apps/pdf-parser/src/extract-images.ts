@@ -2,12 +2,6 @@ import { getDocumentProxy } from 'unpdf';
 import path from 'path';
 import fs from 'fs';
 
-export interface ExtractedImage {
-    questionId: number;
-    /** Relative path(s) used in JSON, e.g. "images/q55.png" */
-    filePaths: string[];
-}
-
 export interface ImageManifestEntry {
     pageNum: number;
     questionId: number;
