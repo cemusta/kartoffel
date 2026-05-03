@@ -110,7 +110,7 @@ export const WithImage: Story = {
         type: 'general',
         text: 'Was zeigt dieses Bild?',
         imageText: '© Deutscher Bundestag/Achim Melde',
-        image: '/images/q55.png',
+        image: './images/q55.png',
         options: {
           a: 'den Bundestagssitz in Berlin',
           b: 'das Bundesverfassungsgericht in Karlsruhe',
@@ -144,7 +144,7 @@ export const FourImageOptions: Story = {
         id: 21,
         type: 'general',
         text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
-        image: ['/images/q21_1.png', '/images/q21_2.png', '/images/q21_3.png', '/images/q21_4.png'],
+        image: ['./images/q21_1.png', './images/q21_2.png', './images/q21_3.png', './images/q21_4.png'],
         options: { a: 'Bild 1', b: 'Bild 2', c: 'Bild 3', d: 'Bild 4' },
         correctAnswer: 'a',
         translations: {
