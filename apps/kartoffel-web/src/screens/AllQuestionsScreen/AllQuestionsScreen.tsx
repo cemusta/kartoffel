@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { QuizQuestionContainer, TopBar } from '@kartoffel/ui-library';
+import { AllQuestionsContainer, TopBar } from '@kartoffel/ui-library';
 import { questions } from '@cemusta/burgertest';
 import { useUser } from '../../hooks/useUser';
 import styles from './AllQuestionsScreen.module.css';
@@ -30,10 +30,7 @@ export function AllQuestionsScreen() {
         }
       />
       <div className={styles.content}>
-        <QuizQuestionContainer
-          questions={filteredQuestions}
-          onComplete={() => navigate('/burger-test')}
-        />
+        <AllQuestionsContainer questions={filteredQuestions} />
       </div>
     </div>
   );
