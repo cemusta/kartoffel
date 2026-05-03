@@ -40,7 +40,7 @@ describe('OnboardingScreen', () => {
     expect(screen.getByText('Continue anonymous')).toBeTruthy();
   });
 
-  it('calls createAnonymousUser and navigates to /home on continue', () => {
+  it('calls createAnonymousUser and navigates to /onboarding/state on continue', () => {
     render(
       <MemoryRouter>
         <OnboardingScreen />
@@ -50,6 +50,6 @@ describe('OnboardingScreen', () => {
     fireEvent.click(screen.getByText('Continue anonymous'));
 
     expect(mockCreateAnonymousUser).toHaveBeenCalledOnce();
-    expect(mockNavigate).toHaveBeenCalledWith('/home');
+    expect(mockNavigate).toHaveBeenCalledWith('/onboarding/state');
   });
 });

@@ -51,39 +51,45 @@
   padding: 24px 20px max(40px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 32px;
 }
 
-.sectionLabel {
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--md-sys-color-on-surface-variant);
-  margin: 0 0 4px;
-}
-
-.modeCardGrid {
+.section {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-@media (min-width: 768px) {
-  .topBarTitle {
-    font-size: 22px;
-  }
+.sectionHeading {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
 
+.sectionDescription {
+  font-size: 14px;
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+
+.accountCard {
+  background-color: var(--md-sys-color-surface-variant);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+@media (min-width: 768px) {
   .content {
-    max-width: 960px;
+    max-width: 640px;
     margin: 0 auto;
     width: 100%;
-    padding: 40px 48px;
+    padding-top: 40px;
   }
 
-  .modeCardGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+  .topBarTitle {
+    font-size: 22px;
   }
 }

@@ -25,5 +25,22 @@ export function useUser() {
     setUser(null);
   }, []);
 
-  return { user, createAnonymousUser, clearUser };
+  const setGermanState = useCallback(
+    (state: string) => {
+      const current = getStoredUser();
+      if (!current) return;
+      const updated: StoredUser = { ...current, germanState: state };
+      setStoredUser(updated);
+      setUser(updated);
+    },
+    [],
+  );
+
+  return {
+    user,
+    germanState: user?.germanState ?? null,
+    createAnonymousUser,
+    clearUser,
+    setGermanState,
+  };
 }

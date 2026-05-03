@@ -11,6 +11,9 @@ export { HomePage } from './components/HomePage';
 export { BurgerTestPage } from './components/BurgerTestPage';
 export { FactModal } from './components/FactModal';
 export { TranslationToggle } from './components/TranslationToggle';
+export { StateSelector } from './components/StateSelector';
+export { StateSelectionPage } from './components/StateSelectionPage';
+export { SettingsPage } from './components/SettingsPage';
 
 export type { ButtonProps } from './components/Button';
 export type { AnswerProps } from './components/Answer';
@@ -26,3 +29,6 @@ export type { HomePageProps } from './components/HomePage';
 export type { BurgerTestPageProps } from './components/BurgerTestPage';
 export type { FactModalProps } from './components/FactModal';
 export type { TranslationToggleProps } from './components/TranslationToggle';
+export type { StateSelectorProps } from './components/StateSelector';
+export type { StateSelectionPageProps } from './components/StateSelectionPage';
+export type { SettingsPageProps } from './components/SettingsPage';

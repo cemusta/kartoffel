@@ -16,6 +16,7 @@ export function HomeScreen() {
       username={user?.username ?? null}
       onBurgerTest={() => navigate('/burger-test')}
       onLogout={handleLogout}
+      onSettings={() => navigate('/settings')}
     />
   );
 }

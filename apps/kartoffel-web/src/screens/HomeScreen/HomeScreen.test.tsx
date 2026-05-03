@@ -18,6 +18,7 @@ vi.mock('@kartoffel/ui-library', () => ({
     username: string | null;
     onBurgerTest: () => void;
     onLogout: () => void;
+    onSettings: () => void;
   }) => (
     <div>
       <span data-testid="username">{username ?? 'guest'}</span>
@@ -42,8 +43,10 @@ describe('HomeScreen', () => {
   it('renders username from user state', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
+      germanState: null,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
+      setGermanState: vi.fn(),
     });
 
     render(
@@ -58,8 +61,10 @@ describe('HomeScreen', () => {
   it('renders guest when user is null', () => {
     vi.mocked(useUser).mockReturnValue({
       user: null,
+      germanState: null,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
+      setGermanState: vi.fn(),
     });
 
     render(
@@ -74,8 +79,10 @@ describe('HomeScreen', () => {
   it('navigates to /burger-test on burger test button click', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
+      germanState: null,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
+      setGermanState: vi.fn(),
     });
 
     render(
@@ -92,8 +99,10 @@ describe('HomeScreen', () => {
     const clearUser = vi.fn();
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
+      germanState: null,
       createAnonymousUser: vi.fn(),
       clearUser,
+      setGermanState: vi.fn(),
     });
 
     const replaceSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({
