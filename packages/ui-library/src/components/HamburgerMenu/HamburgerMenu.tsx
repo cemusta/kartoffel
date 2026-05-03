@@ -5,9 +5,10 @@ import styles from './HamburgerMenu.module.css';
 export interface HamburgerMenuProps {
   username: string | null;
   onLogout: () => void;
+  onSettings?: () => void;
 }
 
-export function HamburgerMenu({ username, onLogout }: HamburgerMenuProps) {
+export function HamburgerMenu({ username, onLogout, onSettings }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -27,6 +28,11 @@ export function HamburgerMenu({ username, onLogout }: HamburgerMenuProps) {
   function handleLogout() {
     setIsOpen(false);
     onLogout();
+  }
+
+  function handleSettings() {
+    setIsOpen(false);
+    onSettings?.();
   }
 
   return (
@@ -49,6 +55,16 @@ export function HamburgerMenu({ username, onLogout }: HamburgerMenuProps) {
             <div className={styles.userSection}>
               <UserBadge username={username} />
             </div>
+          )}
+          {onSettings && (
+            <button
+              className={styles.settingsButton}
+              onClick={handleSettings}
+              type="button"
+              role="menuitem"
+            >
+              Settings
+            </button>
           )}
           <button
             className={styles.logoutButton}

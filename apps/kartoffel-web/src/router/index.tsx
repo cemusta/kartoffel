@@ -2,6 +2,9 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { OnboardingScreen } from '../screens/OnboardingScreen/OnboardingScreen';
 import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
 import { BurgerTestScreen } from '../screens/BurgerTestScreen/BurgerTestScreen';
+import { StateSelectionScreen } from '../screens/StateSelectionScreen/StateSelectionScreen';
+import { SettingsScreen } from '../screens/SettingsScreen/SettingsScreen';
+import { AllQuestionsScreen } from '../screens/AllQuestionsScreen/AllQuestionsScreen';
 import { getStoredUser } from '@kartoffel/utils';
 
 function RequireUser({ children }: { children: React.ReactElement }): React.ReactElement {
@@ -22,6 +25,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: '/onboarding/state',
+    element: (
+      <RequireUser>
+        <StateSelectionScreen />
+      </RequireUser>
+    ),
+  },
+  {
     path: '/home',
     element: (
       <RequireUser>
@@ -34,6 +45,22 @@ export const router = createBrowserRouter([
     element: (
       <RequireUser>
         <BurgerTestScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/burger-test/all-questions',
+    element: (
+      <RequireUser>
+        <AllQuestionsScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/settings',
+    element: (
+      <RequireUser>
+        <SettingsScreen />
       </RequireUser>
     ),
   },

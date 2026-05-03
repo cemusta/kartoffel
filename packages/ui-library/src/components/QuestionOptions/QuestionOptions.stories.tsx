@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Answer } from './Answer';
+import { QuestionOptions } from './QuestionOptions';
 
 const meta = {
-  title: 'Components/Answer',
-  component: Answer,
+  title: 'Components/QuestionOptions',
+  component: QuestionOptions,
   parameters: {
     layout: 'centered',
   },
@@ -17,7 +17,7 @@ const meta = {
     isRevealed: { control: 'boolean' },
     showTranslation: { control: 'boolean' },
   },
-} satisfies Meta<typeof Answer>;
+} satisfies Meta<typeof QuestionOptions>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

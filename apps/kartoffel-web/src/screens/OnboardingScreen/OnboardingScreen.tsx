@@ -10,7 +10,7 @@ export function OnboardingScreen() {
     <OnboardingPage
       onContinueAnonymous={() => {
         createAnonymousUser();
-        navigate('/home');
+        navigate('/onboarding/state');
       }}
     />
   );

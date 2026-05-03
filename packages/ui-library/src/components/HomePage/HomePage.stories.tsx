@@ -12,12 +12,14 @@ const meta = {
   args: {
     onBurgerTest: fn(),
     onLogout: fn(),
+    onSettings: fn(),
     username: 'SwiftOtter42',
   },
   argTypes: {
     username: { control: 'text' },
     onBurgerTest: { action: 'onBurgerTest' },
     onLogout: { action: 'onLogout' },
+    onSettings: { action: 'onSettings' },
   },
 } satisfies Meta<typeof HomePage>;
 

@@ -9,6 +9,7 @@ const meta = {
   tags: ['autodocs'],
   args: {
     onLogout: fn(),
+    onSettings: fn(),
   },
 } satisfies Meta<typeof HamburgerMenu>;
 
@@ -31,7 +32,19 @@ export const OpenMenu: Story = {
     await userEvent.click(btn);
     await expect(canvas.getByRole('menu')).toBeInTheDocument();
     await expect(canvas.getByText('potato_king')).toBeInTheDocument();
+    await expect(canvas.getByRole('menuitem', { name: 'Settings' })).toBeInTheDocument();
     await expect(canvas.getByRole('menuitem', { name: 'Log out' })).toBeInTheDocument();
+  },
+};
+
+export const SettingsClick: Story = {
+  args: { username: 'potato_king' },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+    await userEvent.click(canvas.getByRole('menuitem', { name: 'Settings' }));
+    await expect(args.onSettings).toHaveBeenCalledOnce();
+    await expect(canvas.queryByRole('menu')).not.toBeInTheDocument();
   },
 };
 

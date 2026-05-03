@@ -1,12 +1,9 @@
 import { HTMLAttributes, useState } from 'react';
-import { Question, QuestionData } from '../Question';
-import { Answer } from '../Answer';
+import { QuestionData } from '../QuestionBody';
+import { QuestionContainer } from '../QuestionContainer';
 import { FactModal } from '../FactModal';
 import { TranslationToggle } from '../TranslationToggle';
 import styles from './QuizQuestionContainer.module.css';
-
-const OPTION_KEYS = ['a', 'b', 'c', 'd'] as const;
-const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' };
 
 export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
   questions: QuestionData[];
@@ -105,29 +102,13 @@ export function QuizQuestionContainer({
         </div>
       </div>
 
-      <Question
-        text={currentQuestion.text}
-        textEn={currentQuestion.translations?.en?.text}
-        imageUrl={currentQuestion.image}
-        imageText={currentQuestion.imageText}
+      <QuestionContainer
+        question={currentQuestion}
+        selectedAnswer={selectedAnswer}
+        isRevealed={isRevealed}
         showTranslation={showTranslation}
+        onSelect={handleSelect}
       />
-
-      <div className={styles.options}>
-        {OPTION_KEYS.map(key => (
-          <Answer
-            key={key}
-            label={OPTION_LABELS[key]}
-            text={currentQuestion.options[key]}
-            textEn={currentQuestion.translations?.en?.options?.[key]}
-            isSelected={selectedAnswer === key}
-            isCorrect={key === currentQuestion.correctAnswer}
-            isRevealed={isRevealed}
-            showTranslation={showTranslation}
-            onSelect={() => handleSelect(key)}
-          />
-        ))}
-      </div>
 
       <div className={styles.actions}>
         {!isRevealed ? (

@@ -17,6 +17,9 @@ vi.mock('@kartoffel/ui-library', () => ({
     onBack: () => void;
     username: string | null;
     onLogout: () => void;
+    onSettings?: () => void;
+    onShowAllQuestions: () => void;
+    userState: string | null;
   }) => (
     <div>
       <button onClick={onBack}>Back</button>
@@ -37,8 +40,10 @@ describe('BurgerTestScreen', () => {
     vi.clearAllMocks();
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
+      germanState: null,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
+      setGermanState: vi.fn(),
     });
   });
 
@@ -66,8 +71,10 @@ describe('BurgerTestScreen', () => {
     const clearUser = vi.fn();
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
+      germanState: null,
       createAnonymousUser: vi.fn(),
       clearUser,
+      setGermanState: vi.fn(),
     });
 
     const replaceSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({

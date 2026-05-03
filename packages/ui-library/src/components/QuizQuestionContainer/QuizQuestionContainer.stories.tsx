@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QuizQuestionContainer } from './QuizQuestionContainer';
-import { QuestionData } from '../Question';
+import { QuestionData } from '../QuestionBody';
 
 const meta = {
   title: 'Containers/QuizQuestionContainer',

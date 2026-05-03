@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Question } from './Question';
+import { QuestionBody } from './QuestionBody';
 
 const meta = {
-  title: 'Components/Question',
-  component: Question,
+  title: 'Components/QuestionBody',
+  component: QuestionBody,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof Question>;
+} satisfies Meta<typeof QuestionBody>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -59,7 +59,12 @@ export const FourImageOptions: Story = {
   args: {
     text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
     textEn: 'Which is the coat of arms of the Federal Republic of Germany?',
-    imageUrl: ['./images/q21_1.png', './images/q21_2.png', './images/q21_3.png', './images/q21_4.png'],
+    imageUrl: [
+      './images/q21_1.png',
+      './images/q21_2.png',
+      './images/q21_3.png',
+      './images/q21_4.png',
+    ],
     showTranslation: false,
   },
 };
@@ -68,7 +73,12 @@ export const FourImageOptionsWithTranslation: Story = {
   args: {
     text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
     textEn: 'Which is the coat of arms of the Federal Republic of Germany?',
-    imageUrl: ['./images/q21_1.png', './images/q21_2.png', './images/q21_3.png', './images/q21_4.png'],
+    imageUrl: [
+      './images/q21_1.png',
+      './images/q21_2.png',
+      './images/q21_3.png',
+      './images/q21_4.png',
+    ],
     showTranslation: true,
   },
 };

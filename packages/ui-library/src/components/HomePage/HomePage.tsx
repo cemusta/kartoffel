@@ -7,14 +7,15 @@ export interface HomePageProps {
   username: string | null;
   onBurgerTest: () => void;
   onLogout: () => void;
+  onSettings: () => void;
 }
 
-export function HomePage({ username, onBurgerTest, onLogout }: HomePageProps) {
+export function HomePage({ username, onBurgerTest, onLogout, onSettings }: HomePageProps) {
   return (
     <div className={styles.screen}>
       <TopBar
         left={<p className={styles.appTitle}>Kartoffel</p>}
-        right={<HamburgerMenu username={username} onLogout={onLogout} />}
+        right={<HamburgerMenu username={username} onLogout={onLogout} onSettings={onSettings} />}
       />
 
       <div className={styles.content}>

@@ -3,6 +3,7 @@ import { USER_STORAGE_KEY } from './keys';
 export interface StoredUser {
   username: string;
   createdAt: string;
+  germanState?: string;
 }
 
 export function getStoredUser(): StoredUser | null {

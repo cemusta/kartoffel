@@ -4,7 +4,7 @@ import { useUser } from '../../hooks/useUser';
 
 export function BurgerTestScreen() {
   const navigate = useNavigate();
-  const { user, clearUser } = useUser();
+  const { user, germanState, clearUser } = useUser();
 
   function handleLogout() {
     clearUser();
@@ -16,6 +16,9 @@ export function BurgerTestScreen() {
       onBack={() => navigate(-1)}
       username={user?.username ?? null}
       onLogout={handleLogout}
+      onSettings={() => navigate('/settings')}
+      onShowAllQuestions={() => navigate('/burger-test/all-questions')}
+      userState={germanState}
     />
   );
 }

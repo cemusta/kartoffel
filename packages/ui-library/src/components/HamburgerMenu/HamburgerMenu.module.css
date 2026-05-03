@@ -66,6 +66,31 @@
   margin-bottom: 8px;
 }
 
+.settingsButton {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+  text-align: left;
+  transition: background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.settingsButton:hover {
+  background-color: var(--md-sys-color-surface-variant);
+}
+
+.settingsButton:active {
+  background-color: var(--md-sys-color-surface-variant);
+}
+
 .logoutButton {
   width: 100%;
   padding: 10px 12px;
