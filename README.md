@@ -18,10 +18,9 @@ An application for passing B1 German exam and BurgerTest. Instead of studying so
 
 ## Important Links
 
-Insprations:
+Thanks:
 
-- <https://foreignvasi.com/>
-- <https://github.com/leben-in-deutschland/leben-in-deutschland-scrapper>
+- <https://github.com/webmansa/german-citizenship-test-data>
 
 ## Structure
 
