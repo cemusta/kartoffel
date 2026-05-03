@@ -100,3 +100,23 @@
   margin: 1rem 0 2rem 0;
   color: #4a90e2;
 }
+
+.passed {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2e7d32;
+  margin: 0 0 1.5rem;
+}
+
+.failed {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #c62828;
+  margin: 0 0 1.5rem;
+}
+
+.passingHint {
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0.8;
+}

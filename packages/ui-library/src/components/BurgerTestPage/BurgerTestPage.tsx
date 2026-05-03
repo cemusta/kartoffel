@@ -1,6 +1,7 @@
 import { ModeCard } from '../ModeCard';
 import { TopBar } from '../TopBar';
 import { HamburgerMenu } from '../HamburgerMenu';
+import { ProgressGrid } from '../ProgressGrid';
 import styles from './BurgerTestPage.module.css';
 
 export interface BurgerTestPageProps {
@@ -9,7 +10,11 @@ export interface BurgerTestPageProps {
   onLogout: () => void;
   onSettings?: () => void;
   onShowAllQuestions: () => void;
+  onStartPractice?: () => void;
   userState: string | null;
+  allQuestionIds?: number[];
+  correctQuestionIds?: number[];
+  incorrectQuestionIds?: number[];
 }
 
 export function BurgerTestPage({
@@ -18,12 +23,18 @@ export function BurgerTestPage({
   onLogout,
   onSettings,
   onShowAllQuestions,
+  onStartPractice,
   userState,
+  allQuestionIds,
+  correctQuestionIds = [],
+  incorrectQuestionIds = [],
 }: BurgerTestPageProps) {
   const questionCount = userState ? 310 : 300;
   const questionDescription = userState
     ? `${questionCount} questions including ${userState}`
     : `${questionCount} general questions`;
+
+  const practiceEnabled = Boolean(onStartPractice && userState);
 
   return (
     <div className={styles.screen}>
@@ -54,10 +65,32 @@ export function BurgerTestPage({
           />
           <ModeCard
             title="Practice Mode"
-            description="Randomised sessions with spaced repetition"
+            description={
+              practiceEnabled
+                ? '33 questions · passing score 17/33'
+                : 'Select a state to start practice'
+            }
             icon="🎯"
-            disabled
+            disabled={!practiceEnabled}
+            onClick={practiceEnabled ? onStartPractice : undefined}
           />
+        </div>
+        {allQuestionIds && allQuestionIds.length > 0 && (
+          <div className={styles.progressSection}>
+            <h2 className={styles.sectionLabel}>Your Progress</h2>
+            <ProgressGrid
+              allQuestionIds={allQuestionIds}
+              correctIds={correctQuestionIds}
+              incorrectIds={incorrectQuestionIds}
+            />
+          </div>
+        )}
+        <div className={styles.factCallout}>
+          <span className={styles.factIcon}>💡</span>
+          <p className={styles.factText}>
+            Historically, the success rate is over 98%, as the questions are public and can be
+            practiced in advance.
+          </p>
         </div>
       </div>
     </div>

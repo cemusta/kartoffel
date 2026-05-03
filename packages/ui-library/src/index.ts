@@ -16,6 +16,7 @@ export { TranslationToggle } from './components/TranslationToggle';
 export { StateSelector } from './components/StateSelector';
 export { StateSelectionPage } from './components/StateSelectionPage';
 export { SettingsPage } from './components/SettingsPage';
+export { ProgressGrid } from './components/ProgressGrid';
 
 export type { ButtonProps } from './components/Button';
 export type { QuestionOptionsProps } from './components/QuestionOptions';
@@ -36,3 +37,4 @@ export type { TranslationToggleProps } from './components/TranslationToggle';
 export type { StateSelectorProps } from './components/StateSelector';
 export type { StateSelectionPageProps } from './components/StateSelectionPage';
 export type { SettingsPageProps } from './components/SettingsPage';
+export type { ProgressGridProps } from './components/ProgressGrid';

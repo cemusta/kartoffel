@@ -11,6 +11,7 @@ export interface SettingsPageProps {
   onBack: () => void;
   onLogout: () => void;
   onSettings: () => void;
+  onClearProgress: () => void;
   states: readonly string[];
 }
 
@@ -21,6 +22,7 @@ export function SettingsPage({
   onBack,
   onLogout,
   onSettings,
+  onClearProgress,
   states,
 }: SettingsPageProps) {
   return (
@@ -56,6 +58,16 @@ export function SettingsPage({
             Your state determines which 10 additional questions are included in the quiz.
           </p>
           <StateSelector value={selectedState} onChange={onStateChange} states={states} />
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionHeading}>Progress</h2>
+          <p className={styles.sectionDescription}>
+            Reset your practice history. This will clear all correct and incorrect answer records.
+          </p>
+          <button className={styles.clearProgressButton} onClick={onClearProgress} type="button">
+            Clear Progress
+          </button>
         </section>
       </div>
     </div>

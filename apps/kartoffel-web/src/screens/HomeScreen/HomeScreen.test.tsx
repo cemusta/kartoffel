@@ -44,9 +44,13 @@ describe('HomeScreen', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
       germanState: null,
+      correctQuestionIds: [],
+      incorrectQuestionIds: [],
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
       setGermanState: vi.fn(),
+      recordQuizAnswers: vi.fn(),
+      clearProgress: vi.fn(),
     });
 
     render(
@@ -62,9 +66,13 @@ describe('HomeScreen', () => {
     vi.mocked(useUser).mockReturnValue({
       user: null,
       germanState: null,
+      correctQuestionIds: [],
+      incorrectQuestionIds: [],
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
       setGermanState: vi.fn(),
+      recordQuizAnswers: vi.fn(),
+      clearProgress: vi.fn(),
     });
 
     render(
@@ -80,9 +88,13 @@ describe('HomeScreen', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
       germanState: null,
+      correctQuestionIds: [],
+      incorrectQuestionIds: [],
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
       setGermanState: vi.fn(),
+      recordQuizAnswers: vi.fn(),
+      clearProgress: vi.fn(),
     });
 
     render(
@@ -100,9 +112,13 @@ describe('HomeScreen', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
       germanState: null,
+      correctQuestionIds: [],
+      incorrectQuestionIds: [],
       createAnonymousUser: vi.fn(),
       clearUser,
       setGermanState: vi.fn(),
+      recordQuizAnswers: vi.fn(),
+      clearProgress: vi.fn(),
     });
 
     const replaceSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({

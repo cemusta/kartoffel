@@ -9,6 +9,10 @@ vi.mock('react-router-dom', async importOriginal => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
+vi.mock('@cemusta/burgertest', () => ({
+  questions: [],
+}));
+
 vi.mock('@kartoffel/ui-library', () => ({
   BurgerTestPage: ({
     onBack,
@@ -19,7 +23,11 @@ vi.mock('@kartoffel/ui-library', () => ({
     onLogout: () => void;
     onSettings?: () => void;
     onShowAllQuestions: () => void;
+    onStartPractice?: () => void;
     userState: string | null;
+    allQuestionIds?: number[];
+    correctQuestionIds?: number[];
+    incorrectQuestionIds?: number[];
   }) => (
     <div>
       <button onClick={onBack}>Back</button>
@@ -41,9 +49,13 @@ describe('BurgerTestScreen', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
       germanState: null,
+      correctQuestionIds: [],
+      incorrectQuestionIds: [],
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
       setGermanState: vi.fn(),
+      recordQuizAnswers: vi.fn(),
+      clearProgress: vi.fn(),
     });
   });
 
@@ -72,9 +84,13 @@ describe('BurgerTestScreen', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { username: 'batman', createdAt: '' },
       germanState: null,
+      correctQuestionIds: [],
+      incorrectQuestionIds: [],
       createAnonymousUser: vi.fn(),
       clearUser,
       setGermanState: vi.fn(),
+      recordQuizAnswers: vi.fn(),
+      clearProgress: vi.fn(),
     });
 
     const replaceSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({

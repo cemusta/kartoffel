@@ -5,6 +5,7 @@ import { BurgerTestScreen } from '../screens/BurgerTestScreen/BurgerTestScreen';
 import { StateSelectionScreen } from '../screens/StateSelectionScreen/StateSelectionScreen';
 import { SettingsScreen } from '../screens/SettingsScreen/SettingsScreen';
 import { AllQuestionsScreen } from '../screens/AllQuestionsScreen/AllQuestionsScreen';
+import { PracticeQuizScreen } from '../screens/PracticeQuizScreen/PracticeQuizScreen';
 import { getStoredUser } from '@kartoffel/utils';
 
 function RequireUser({ children }: { children: React.ReactElement }): React.ReactElement {
@@ -53,6 +54,14 @@ export const router = createBrowserRouter([
     element: (
       <RequireUser>
         <AllQuestionsScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/burger-test/practice',
+    element: (
+      <RequireUser>
+        <PracticeQuizScreen />
       </RequireUser>
     ),
   },
