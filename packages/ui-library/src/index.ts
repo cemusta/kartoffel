@@ -3,6 +3,7 @@ export { Answer } from './components/Answer';
 export { Question } from './components/Question';
 export { QuizQuestionContainer } from './components/QuizQuestionContainer';
 export { QuestionContainer } from './components/QuestionContainer';
+export { AllQuestionsContainer } from './components/AllQuestionsContainer';
 export { ModeCard } from './components/ModeCard';
 export { TopBar } from './components/TopBar';
 export { UserBadge } from './components/UserBadge';
@@ -22,6 +23,7 @@ export type { QuestionProps, QuestionData } from './components/Question';
 
 export type { QuizQuestionContainerProps } from './components/QuizQuestionContainer';
 export type { QuestionContainerProps } from './components/QuestionContainer';
+export type { AllQuestionsContainerProps } from './components/AllQuestionsContainer';
 export type { ModeCardProps } from './components/ModeCard';
 export type { TopBarProps } from './components/TopBar';
 export type { UserBadgeProps } from './components/UserBadge';
