@@ -105,10 +105,19 @@ export async function buildImageManifest(
         }
     }
 
-    // Frequency-based decoration detection: image names that appear on more than
-    // one of the sampled pages are header decorations shared across pages.
-    // This reliably catches the BAMF logo whose JBIG2 stream is defined once on
-    // page 2 and referenced by every subsequent page under the same object name.
+    // IMPORTANT: scan question pages FIRST before the frequency scan touches any
+    // other page. Calling getOperatorList on page N before page N-1 (the defining
+    // page) gives the correct full op list including cross-page image references.
+    // pdfjs caches the operator list per page, so subsequent freq-scan calls on
+    // the same page return the already-computed (correct) list.
+    const questionPageNames = new Map<number, string[]>();
+    for (const pageNum of pageToFirstQuestion.keys()) {
+        questionPageNames.set(pageNum, await getPageImageNames(pdf, pageNum));
+    }
+
+    // Frequency-based decoration detection: scan the first 30 pages.
+    // - BAMF logo (g_d1_img_p2_1): appears on all ~191 pages → freq ≫ 2 → filtered
+    // - Content images: defined on page N, referenced on page N+1 → freq ≤ 2 → kept
     const SAMPLE_PAGES = 30;
     const freq = new Map<string, number>();
     const limit = Math.min(SAMPLE_PAGES, pdf.numPages);
@@ -116,15 +125,16 @@ export async function buildImageManifest(
         const names = await getPageImageNames(pdf, p);
         for (const name of names) freq.set(name, (freq.get(name) ?? 0) + 1);
     }
-    const frequencyDecorations = new Set(
-        [...freq.entries()].filter(([, c]) => c > 1).map(([n]) => n)
+    const globalDecorations = new Set(
+        [...freq.entries()].filter(([, c]) => c > 2).map(([n]) => n)
     );
 
     const manifest: ImageManifestEntry[] = [];
 
     for (const [pageNum, questionId] of pageToFirstQuestion.entries()) {
-        const allNames = await getPageImageNames(pdf, pageNum);
-        const imageNames = allNames.filter(n => !frequencyDecorations.has(n));
+        const imageNames = (questionPageNames.get(pageNum) ?? []).filter(
+            n => !globalDecorations.has(n),
+        );
         if (imageNames.length > 0) {
             manifest.push({ pageNum, questionId, imageNames });
         }

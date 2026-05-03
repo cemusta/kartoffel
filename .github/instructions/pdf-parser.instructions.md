@@ -14,6 +14,9 @@ npm run parse --workspace=apps/pdf-parser -- assets/gesamtfragenkatalog-lebenind
 
 # interactive (prompts for PDF path and output dir):
 npm run parse --workspace=apps/pdf-parser
+
+# clean all output (manifest, progress, images, questions.json):
+npm run clean --workspace=apps/pdf-parser
 ```
 
 ## Architecture
