@@ -34,11 +34,14 @@ const GERMAN_STATES = [
 
 const OPTION_KEYS: OptionKey[] = ['a', 'b', 'c', 'd'];
 
-// Bullet glyph used for all checkboxes in the PDF (U+F0A3 in symbol font g_d0_f4)
-const BULLET_CODEPOINT = 0xf0a3;
+// Bullet glyphs used for checkboxes in the PDF:
+//   U+F0A3 (font g_d0_f4) — used by most questions
+//   U+25A1 □ (font g_d0_f9) — used by ~10 questions (e.g. Aufgabe 59, 66, 96, 111, 288)
+const BULLET_CODEPOINTS = new Set([0xf0a3, 0x25a1]);
 
-// x threshold: option text appears at x≈142, question text at x≈71
-const OPTION_X_MIN = 130;
+// x threshold for continuation lines: option text appears at x≈142 (standard) or x≈106 (alternate layout)
+// Use 100 to cover both layouts; question text starts at x≈71
+const OPTION_X_MIN = 100;
 
 interface RawItem {
     str: string;
@@ -60,7 +63,8 @@ interface PartialQuestion {
 }
 
 function isBullet(item: RawItem): boolean {
-    return item.str.codePointAt(0) === BULLET_CODEPOINT;
+    const cp = item.str.codePointAt(0);
+    return cp !== undefined && BULLET_CODEPOINTS.has(cp);
 }
 
 function detectState(text: string): string | null {
