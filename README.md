@@ -16,6 +16,12 @@
 
 An application for passing B1 German exam and BurgerTest. Instead of studying somehow I thought writing an app would be more fun.
 
+## Important Links
+
+Thanks:
+
+- <https://github.com/webmansa/german-citizenship-test-data>
+
 ## Structure
 
 ```tree

@@ -1,0 +1,29 @@
+{
+  "name": "@kartoffel/burgertest-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf ./output",
+    "clear": "rm -rf output",
+    "parse": "tsx src/index.ts",
+    "merge": "tsx src/merge-answers.ts",
+    "verify": "tsx src/verify.ts",
+    "translate": "tsx --env-file .env src/translate.ts",
+    "enrich": "tsx --env-file .env src/enrich.ts",
+    "bundle": "tsx src/bundle.ts",
+    "pipeline": "npm run parse && npm run merge && npm run verify && npm run translate && npm run enrich && npm run bundle",
+    "debug": "tsx src/debug.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "sharp": "^0.34.2",
+    "unpdf": "^0.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.2",
+    "@types/sharp": "^0.31.1",
+    "tsx": "^4.19.3"
+  }
+}

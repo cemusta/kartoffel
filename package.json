@@ -8,6 +8,7 @@
     "apps/*"
   ],
   "scripts": {
+    "clean": "npm run clean --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspace=packages/ui-library",
     "dev:app": "npm run dev --workspace=apps/kartoffel-web",
@@ -18,7 +19,15 @@
     "test:coverage": "npm run test:coverage --workspaces --if-present",
     "lint": "eslint .",
     "tsc": "tsc --noEmit",
-    "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "parse": "npm run parse --workspace=@kartoffel/burgertest-pipeline --",
+    "parse:debug": "npm run debug --workspace=@kartoffel/burgertest-pipeline",
+    "merge": "npm run merge --workspace=@kartoffel/burgertest-pipeline",
+    "verify": "npm run verify --workspace=@kartoffel/burgertest-pipeline",
+    "translate": "npm run translate --workspace=@kartoffel/burgertest-pipeline",
+    "enrich": "npm run enrich --workspace=@kartoffel/burgertest-pipeline",
+    "bundle": "npm run bundle --workspace=@kartoffel/burgertest-pipeline",
+    "pipeline": "npm run pipeline --workspace=@kartoffel/burgertest-pipeline"
   },
   "devDependencies": {
     "@types/node": "^24.12.2",

@@ -4,11 +4,38 @@
 
 After completing any implementation plan, always run these 4 commands in order and fix any issues before considering the task done:
 
-```
+```bash
 npm run tsc
 npm run lint
 npm run test
 npm run build
+```
+
+For the burgertest pipeline use commands below:
+
+```bash
+npm run parse --workspace=apps/burgertest -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output 2>&1
+
+# interactive (prompts for PDF path and output dir):
+npm run parse --workspace=apps/burgertest
+
+# merge correct answers from webmansa dataset:
+npm run merge --workspace=apps/burgertest
+
+# verify parsed output:
+npm run verify --workspace=apps/burgertest
+
+# translate questions to English (GEMINI_API_KEY loaded automatically from apps/burgertest/.env):
+npm run translate --workspace=apps/burgertest
+
+# enrich questions with context notes (GEMINI_API_KEY loaded automatically from apps/burgertest/.env):
+npm run enrich --workspace=apps/burgertest
+
+# bundle final output:
+npm run bundle --workspace=apps/burgertest
+
+# clean all output (manifest, progress, images, questions.json):
+npm run clean --workspace=apps/burgertest
 ```
 
 All 4 must exit with code 0. Fix errors before marking tasks complete.

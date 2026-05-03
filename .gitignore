@@ -36,3 +36,7 @@ coverage/
 # Misc
 .cache/
 .turbo/
+
+# Burgertest output
+apps/burgertest/assets/*
+apps/burgertest/output/*
