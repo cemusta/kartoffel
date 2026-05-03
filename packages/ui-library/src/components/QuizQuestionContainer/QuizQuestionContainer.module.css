@@ -1,0 +1,109 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f5f5f5;
+  border-radius: 16px;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progress {
+  font-size: 0.875rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.factButton {
+  padding: 0.35rem 0.85rem;
+  border: 1.5px solid var(--md-sys-color-primary, #1a73e8);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--md-sys-color-primary, #1a73e8);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.factButton:hover:not(:disabled) {
+  background: var(--md-sys-color-primary, #1a73e8);
+  color: white;
+}
+
+.factButton:disabled {
+  border-color: #ccc;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  padding: 0.75rem 2rem;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: #357abd;
+}
+
+.button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.results {
+  text-align: center;
+  padding: 2rem;
+}
+
+.resultsTitle {
+  font-size: 2rem;
+  margin: 0 0 1.5rem 0;
+  color: #333;
+}
+
+.score {
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.percentage {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 1rem 0 2rem 0;
+  color: #4a90e2;
+}

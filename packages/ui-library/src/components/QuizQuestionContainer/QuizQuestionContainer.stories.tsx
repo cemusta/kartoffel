@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { QuestionContainer } from './QuestionContainer';
+import { QuizQuestionContainer } from './QuizQuestionContainer';
 import { QuestionData } from '../Question';
 
 const meta = {
-  title: 'Containers/QuestionContainer',
-  component: QuestionContainer,
+  title: 'Containers/QuizQuestionContainer',
+  component: QuizQuestionContainer,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof QuestionContainer>;
+} satisfies Meta<typeof QuizQuestionContainer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -144,7 +144,12 @@ export const FourImageOptions: Story = {
         id: 21,
         type: 'general',
         text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
-        image: ['./images/q21_1.png', './images/q21_2.png', './images/q21_3.png', './images/q21_4.png'],
+        image: [
+          './images/q21_1.png',
+          './images/q21_2.png',
+          './images/q21_3.png',
+          './images/q21_4.png',
+        ],
         options: { a: 'Bild 1', b: 'Bild 2', c: 'Bild 3', d: 'Bild 4' },
         correctAnswer: 'a',
         translations: {

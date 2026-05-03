@@ -1,27 +1,30 @@
 import { HTMLAttributes, useState } from 'react';
 import { Question, QuestionData } from '../Question';
 import { Answer } from '../Answer';
-import styles from './QuestionContainer.module.css';
+import { FactModal } from '../FactModal';
+import { TranslationToggle } from '../TranslationToggle';
+import styles from './QuizQuestionContainer.module.css';
 
 const OPTION_KEYS = ['a', 'b', 'c', 'd'] as const;
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' };
 
-export interface QuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
+export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
   questions: QuestionData[];
   onComplete?: (score: number) => void;
 }
 
-export function QuestionContainer({
+export function QuizQuestionContainer({
   questions,
   onComplete,
   className = '',
   ...props
-}: QuestionContainerProps) {
+}: QuizQuestionContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const [score, setScore] = useState<number | null>(null);
   const [showTranslation, setShowTranslation] = useState(false);
+  const [showFact, setShowFact] = useState(false);
 
   const currentQuestion = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
@@ -58,6 +61,7 @@ export function QuestionContainer({
   };
 
   const hasTranslation = Boolean(currentQuestion?.translations?.en);
+  const factContext = currentQuestion?.translations?.en?.context;
 
   if (score !== null) {
     return (
@@ -78,40 +82,27 @@ export function QuestionContainer({
 
   return (
     <div className={`${styles.container} ${className}`} {...props}>
+      {showFact && factContext && (
+        <FactModal fact={factContext} onDismiss={() => setShowFact(false)} />
+      )}
       <div className={styles.header}>
         <span className={styles.progress}>
           Question {currentIndex + 1} of {questions.length}
         </span>
-        {hasTranslation && (
-          <label className={styles.translationSwitch} aria-label="Toggle English translation">
-            <svg
-              className={styles.translateIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 8l6 6" />
-              <path d="M4 14l6-6 2-3" />
-              <path d="M2 5h12" />
-              <path d="M7 2h1" />
-              <path d="M22 22l-5-10-5 10" />
-              <path d="M14 18h6" />
-            </svg>
-            <span className={styles.toggleTrack}>
-              <input
-                type="checkbox"
-                checked={showTranslation}
-                onChange={e => setShowTranslation(e.target.checked)}
-                className={styles.toggleInput}
-              />
-              <span className={styles.toggleThumb} />
-            </span>
-          </label>
-        )}
+        <div className={styles.controls}>
+          <button
+            className={styles.factButton}
+            onClick={() => setShowFact(true)}
+            disabled={!factContext}
+            type="button"
+            title={factContext ? 'Show a fact about this question' : 'No fact available'}
+          >
+            💡 Fact
+          </button>
+          {hasTranslation && (
+            <TranslationToggle checked={showTranslation} onChange={setShowTranslation} />
+          )}
+        </div>
       </div>
 
       <Question
