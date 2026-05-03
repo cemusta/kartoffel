@@ -37,18 +37,20 @@ export const LongQuestion: Story = {
 
 export const QuestionWithImage: Story = {
   args: {
-    text: 'Was zeigt dieses Bild? © Deutscher Bundestag/Achim Melde',
-    textEn: 'What does this image show? © German Bundestag/Achim Melde',
+    text: 'Was zeigt dieses Bild?',
+    textEn: 'What does this image show?',
     imageUrl: '/images/q55.png',
+    imageText: '© Deutscher Bundestag/Achim Melde',
     showTranslation: false,
   },
 };
 
 export const QuestionWithImageAndTranslation: Story = {
   args: {
-    text: 'Was zeigt dieses Bild? © Deutscher Bundestag/Achim Melde',
-    textEn: 'What does this image show? © German Bundestag/Achim Melde',
+    text: 'Was zeigt dieses Bild?',
+    textEn: 'What does this image show?',
     imageUrl: '/images/q55.png',
+    imageText: '© Deutscher Bundestag/Achim Melde',
     showTranslation: true,
   },
 };
@@ -56,7 +58,7 @@ export const QuestionWithImageAndTranslation: Story = {
 export const FourImageOptions: Story = {
   args: {
     text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
-    textEn: 'Which one is the coat of arms of the Federal Republic of Germany?',
+    textEn: 'Which is the coat of arms of the Federal Republic of Germany?',
     imageUrl: ['/images/q21_1.png', '/images/q21_2.png', '/images/q21_3.png', '/images/q21_4.png'],
     showTranslation: false,
   },
@@ -65,7 +67,7 @@ export const FourImageOptions: Story = {
 export const FourImageOptionsWithTranslation: Story = {
   args: {
     text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
-    textEn: 'Which one is the coat of arms of the Federal Republic of Germany?',
+    textEn: 'Which is the coat of arms of the Federal Republic of Germany?',
     imageUrl: ['/images/q21_1.png', '/images/q21_2.png', '/images/q21_3.png', '/images/q21_4.png'],
     showTranslation: true,
   },

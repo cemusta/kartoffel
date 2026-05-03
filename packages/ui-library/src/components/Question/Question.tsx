@@ -9,6 +9,7 @@ export interface QuestionData {
   options: { a: string; b: string; c: string; d: string };
   correctAnswer?: 'a' | 'b' | 'c' | 'd';
   image?: string | string[];
+  imageText?: string;
   translations?: {
     [lang: string]: {
       text: string;
@@ -22,6 +23,7 @@ export interface QuestionProps extends HTMLAttributes<HTMLDivElement> {
   text?: string;
   textEn?: string;
   imageUrl?: string | string[];
+  imageText?: string;
   showTranslation?: boolean;
 }
 
@@ -29,6 +31,7 @@ export function Question({
   text,
   textEn,
   imageUrl,
+  imageText,
   showTranslation = false,
   className = '',
   ...props
@@ -38,7 +41,12 @@ export function Question({
 
   return (
     <div className={`${styles.question} ${className}`} {...props}>
-      {images.length === 1 && <img src={images[0]} alt="Question" className={styles.image} />}
+      {images.length === 1 && (
+        <>
+          <img src={images[0]} alt="Question" className={styles.image} />
+          {imageText && <p className={styles.imageCaption}>{imageText}</p>}
+        </>
+      )}
       {images.length > 1 && (
         <div className={styles.imageRow}>
           {images.map((src, i) => (

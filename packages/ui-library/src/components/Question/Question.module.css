@@ -28,6 +28,13 @@
   display: block;
 }
 
+.imageCaption {
+  margin: -0.75rem 0 0.75rem 0;
+  font-size: 0.75rem;
+  color: var(--md-sys-color-on-surface-variant, #5f6368);
+  font-style: italic;
+}
+
 .imageRow {
   display: flex;
   flex-direction: row;

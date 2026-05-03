@@ -33,8 +33,10 @@ const sampleQuestions: QuestionData[] = [
           a: 'freedom of religion applies here.',
           b: 'people pay taxes.',
           c: 'people have the right to vote.',
-          d: 'freedom of speech applies here.',
+          d: 'freedom of expression applies here.',
         },
+        context:
+          'Freedom of expression is a fundamental right in Germany, allowing you to share your opinions and criticize the government without fear. It is a cornerstone of a healthy democracy where every voice matters!',
       },
     },
   },
@@ -106,7 +108,8 @@ export const WithImage: Story = {
       {
         id: 55,
         type: 'general',
-        text: 'Was zeigt dieses Bild? © Deutscher Bundestag/Achim Melde',
+        text: 'Was zeigt dieses Bild?',
+        imageText: '© Deutscher Bundestag/Achim Melde',
         image: '/images/q55.png',
         options: {
           a: 'den Bundestagssitz in Berlin',
@@ -117,13 +120,15 @@ export const WithImage: Story = {
         correctAnswer: 'a',
         translations: {
           en: {
-            text: 'What does this image show? © German Bundestag/Achim Melde',
+            text: 'What does this image show?',
             options: {
-              a: 'the Bundestag building in Berlin',
+              a: 'the seat of the Bundestag in Berlin',
               b: 'the Federal Constitutional Court in Karlsruhe',
               c: 'the Bundesrat building in Berlin',
               d: 'the Federal Chancellery in Berlin',
             },
+            context:
+              "The Reichstag building in Berlin is the seat of the Bundestag, where Germany's elected representatives meet to pass laws. Its famous glass dome symbolizes transparency in government. Interestingly, the dome allows citizens to literally look down upon the politicians at work!",
           },
         },
       },
@@ -144,8 +149,10 @@ export const FourImageOptions: Story = {
         correctAnswer: 'a',
         translations: {
           en: {
-            text: 'Which one is the coat of arms of the Federal Republic of Germany?',
+            text: 'Which is the coat of arms of the Federal Republic of Germany?',
             options: { a: 'Image 1', b: 'Image 2', c: 'Image 3', d: 'Image 4' },
+            context:
+              'The Federal Eagle (Bundesadler) is the official national symbol of Germany, representing strength and sovereignty. Interestingly, the eagle has been used as a symbol in German-speaking lands for centuries!',
           },
         },
       },

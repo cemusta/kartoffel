@@ -118,6 +118,7 @@ export function QuestionContainer({
         text={currentQuestion.text}
         textEn={currentQuestion.translations?.en?.text}
         imageUrl={currentQuestion.image}
+        imageText={currentQuestion.imageText}
         showTranslation={showTranslation}
       />
 
