@@ -146,19 +146,15 @@ async function main(): Promise<void> {
         ? fs.readdirSync(imagesDir).filter(f => f.endsWith('.png')).length
         : 0;
 
-    const stateNames = [...new Set(
-        questions.filter(q => q.type === 'state' && q.state).map(q => q.state as string)
-    )].sort();
+    const expected = { general: 300, state: 160 };
+    const extracted = { general: generalCount, state: stateCount };
 
     const parseResults = {
         timestamp: new Date().toISOString(),
         questions: {
             total: questions.length,
-            expected: { general: 300, statePerState: 10, states: stateNames.length, stateTotal: stateNames.length * 10 },
-            extracted: { general: generalCount, state: stateCount },
-            skipped: questions.length < 300 + stateNames.length * 10
-                ? (300 + stateNames.length * 10) - questions.length
-                : 0,
+            expected,
+            extracted,
         },
         images: {
             pagesWithImages: manifest.length,
@@ -169,6 +165,16 @@ async function main(): Promise<void> {
     };
 
     writeJson(resultsPath, parseResults);
+
+    const generalMatch = extracted.general === expected.general;
+    const stateMatch = extracted.state === expected.state;
+    if (generalMatch && stateMatch) {
+        console.log(`\n[OK] Extracted counts match expected (general: ${expected.general}, state: ${expected.state}).`);
+    } else {
+        if (!generalMatch) console.warn(`[WARN] General questions: expected ${expected.general}, got ${extracted.general}.`);
+        if (!stateMatch) console.warn(`[WARN] State questions: expected ${expected.state}, got ${extracted.state}.`);
+    }
+
     console.log(`\nDone. ${withImages} question(s) have images.`);
     console.log(`Output: ${outputPath}`);
     console.log(`Parse results: ${resultsPath}`);

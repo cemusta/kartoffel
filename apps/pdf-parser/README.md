@@ -18,7 +18,7 @@ npm run clean --workspace=apps/pdf-parser
 
 ## Output
 
-```
+```text
 output/
   questions.json       ← all 460 questions
   images/
@@ -80,7 +80,7 @@ Key facts:
 
 ## Architecture
 
-```
+```text
 src/
   types.ts          — Question interface (source of truth for JSON shape)
   parse.ts          — text extraction; detects questions, options, state headings
