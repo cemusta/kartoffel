@@ -3,22 +3,22 @@ import { Question, QuestionData } from '../Question';
 import { Answer } from '../Answer';
 import { FactModal } from '../FactModal';
 import { TranslationToggle } from '../TranslationToggle';
-import styles from './QuestionContainer.module.css';
+import styles from './QuizQuestionContainer.module.css';
 
 const OPTION_KEYS = ['a', 'b', 'c', 'd'] as const;
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' };
 
-export interface QuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
+export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
   questions: QuestionData[];
   onComplete?: (score: number) => void;
 }
 
-export function QuestionContainer({
+export function QuizQuestionContainer({
   questions,
   onComplete,
   className = '',
   ...props
-}: QuestionContainerProps) {
+}: QuizQuestionContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);

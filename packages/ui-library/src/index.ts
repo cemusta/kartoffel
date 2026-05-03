@@ -1,7 +1,7 @@
 export { Button } from './components/Button';
 export { Answer } from './components/Answer';
 export { Question } from './components/Question';
-export { QuestionContainer } from './components/QuestionContainer';
+export { QuizQuestionContainer } from './components/QuizQuestionContainer';
 export { ModeCard } from './components/ModeCard';
 export { TopBar } from './components/TopBar';
 export { UserBadge } from './components/UserBadge';
@@ -16,7 +16,7 @@ export type { ButtonProps } from './components/Button';
 export type { AnswerProps } from './components/Answer';
 export type { QuestionProps, QuestionData } from './components/Question';
 
-export type { QuestionContainerProps } from './components/QuestionContainer';
+export type { QuizQuestionContainerProps } from './components/QuizQuestionContainer';
 export type { ModeCardProps } from './components/ModeCard';
 export type { TopBarProps } from './components/TopBar';
 export type { UserBadgeProps } from './components/UserBadge';
