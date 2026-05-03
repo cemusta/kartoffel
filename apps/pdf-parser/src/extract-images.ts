@@ -86,8 +86,8 @@ async function getPageImageNames(pdf: PdfDoc, pageNum: number): Promise<string[]
 
 /**
  * Fast scan: loads the PDF once and reads operator lists without decoding pixels.
- * Returns one entry per page that has non-decoration images, sorted by page number.
- * Decoration filtering (BAMF logo) is done later by Y-position in extractPageImages.
+ * Returns one entry per page that has non-decoration content images, sorted by page number.
+ * Both frequency-based and Y-position header filtering are applied here.
  */
 export interface BuildManifestResult {
     manifest: ImageManifestEntry[];
@@ -136,12 +136,30 @@ export async function buildImageManifest(
         [...freq.entries()].filter(([, c]) => c > 2).map(([n]) => n)
     );
 
+    // Pre-compute ops and page heights for question pages so we can apply
+    // Y-position header filtering here (same logic as extractPageImages).
+    const questionPageOps = new Map<number, { fnArray: number[]; argsArray: unknown[][] }>();
+    const questionPageHeights = new Map<number, number>();
+    for (const pageNum of pageToFirstQuestion.keys()) {
+        const page = await pdf.getPage(pageNum);
+        const ops = await (page as any).getOperatorList(); // eslint-disable-line @typescript-eslint/no-explicit-any
+        questionPageOps.set(pageNum, ops);
+        questionPageHeights.set(pageNum, page.getViewport({ scale: 1 }).height);
+    }
+
     const manifest: ImageManifestEntry[] = [];
 
     for (const [pageNum, questionId] of pageToFirstQuestion.entries()) {
-        const imageNames = (questionPageNames.get(pageNum) ?? []).filter(
-            n => !globalDecorations.has(n),
-        );
+        const ops = questionPageOps.get(pageNum)!;
+        const pageHeight = questionPageHeights.get(pageNum)!;
+        const yPositions = getImageYPositions(ops);
+
+        const imageNames = (questionPageNames.get(pageNum) ?? []).filter(name => {
+            if (globalDecorations.has(name)) return false;
+            const y = yPositions.get(name);
+            return y === undefined || y <= pageHeight * HEADER_Y_RATIO;
+        });
+
         if (imageNames.length > 0) {
             manifest.push({ pageNum, questionId, imageNames });
         }
@@ -186,7 +204,7 @@ export async function extractPageImages(
     const page = await pdf.getPage(entry.pageNum);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const pageAny = page as any;
-    const ops = await pageAny.getOperatorList();
+    await pageAny.getOperatorList();
 
     // Step 2: run getOperatorList on each defining page AFTER.
     // pdfjs decodes the images on the defining page, which fulfils the
@@ -249,22 +267,11 @@ export async function extractPageImages(
         ),
     );
 
-    // Filter header decorations by Y position.
-    // The cm op immediately before each image paint sets [a,0,0,d,tx,ty] where
-    // ty is the Y coordinate in PDF space (Y=0 at bottom, high Y = top of page).
-    // Images near the top (ty > pageHeight * HEADER_Y_RATIO) are logo/decoration.
-    const pageHeight = page.getViewport({ scale: 1 }).height;
-    const yPositions = getImageYPositions(ops);
-    const contentImages = entry.imageNames.filter(name => {
-        const y = yPositions.get(name);
-        return y === undefined || y <= pageHeight * HEADER_Y_RATIO;
-    });
-
     const savedPaths: string[] = [];
     const unresolvedNames: string[] = [];
 
-    for (let saveIdx = 0; saveIdx < contentImages.length; saveIdx++) {
-        const name = contentImages[saveIdx];
+    for (let saveIdx = 0; saveIdx < entry.imageNames.length; saveIdx++) {
+        const name = entry.imageNames[saveIdx];
         const imgData = capturedImages.get(name);
         if (!imgData) {
             process.stderr.write(
@@ -285,7 +292,7 @@ export async function extractPageImages(
             continue;
         }
 
-        const suffix = contentImages.length > 1 ? `_${saveIdx + 1}` : '';
+        const suffix = entry.imageNames.length > 1 ? `_${saveIdx + 1}` : '';
         const filename = `q${entry.questionId}${suffix}.png`;
         const filePath = path.join(imagesDir, filename);
 
