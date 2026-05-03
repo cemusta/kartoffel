@@ -9,6 +9,7 @@ export { HamburgerMenu } from './components/HamburgerMenu';
 export { OnboardingPage } from './components/OnboardingPage';
 export { HomePage } from './components/HomePage';
 export { BurgerTestPage } from './components/BurgerTestPage';
+export { FactModal } from './components/FactModal';
 
 export type { ButtonProps } from './components/Button';
 export type { AnswerProps } from './components/Answer';
@@ -22,3 +23,4 @@ export type { HamburgerMenuProps } from './components/HamburgerMenu';
 export type { OnboardingPageProps } from './components/OnboardingPage';
 export type { HomePageProps } from './components/HomePage';
 export type { BurgerTestPageProps } from './components/BurgerTestPage';
+export type { FactModalProps } from './components/FactModal';
