@@ -27,6 +27,12 @@ export interface QuestionBodyProps extends HTMLAttributes<HTMLDivElement> {
   showTranslation?: boolean;
 }
 
+function toAbsoluteUrl(url: string): string {
+  if (url.startsWith('http') || url.startsWith('/')) return url;
+  if (url.startsWith('./')) return url.slice(1);
+  return `/${url}`;
+}
+
 export function QuestionBody({
   text,
   textEn,
@@ -37,7 +43,9 @@ export function QuestionBody({
   ...props
 }: QuestionBodyProps) {
   const showTranslated = showTranslation && Boolean(textEn);
-  const images = Array.isArray(imageUrl) ? imageUrl : imageUrl ? [imageUrl] : [];
+  const images = (Array.isArray(imageUrl) ? imageUrl : imageUrl ? [imageUrl] : []).map(
+    toAbsoluteUrl
+  );
 
   return (
     <div className={`${styles.question} ${className}`} {...props}>
