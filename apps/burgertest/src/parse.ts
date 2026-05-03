@@ -156,6 +156,10 @@ export async function parsePdf(pdfPath: string): Promise<{
     // Use a global sequential id so state questions (which restart "Aufgabe 1" per state)
     // don't collide with general question ids.
     let globalId = 0;
+    // Some questions (wappen / bundesland-map) have their question text appearing in the PDF
+    // BEFORE the "Aufgabe N" label rather than after it. We buffer such text here so it can
+    // be assigned to the next question when "Aufgabe N" is encountered.
+    let pendingNextText: string[] = [];
 
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
         const page = await pdf.getPage(pageNum);
@@ -172,7 +176,9 @@ export async function parsePdf(pdfPath: string): Promise<{
             if (!text) continue;
 
             // ── State section heading: "Fragen für das Bundesland Bayern"
-            if (text.includes('Bundesland') || text.includes('Fragen für')) {
+            // Use the specific phrase to avoid matching question texts that contain "Bundesland"
+            // (e.g. "Welches Wappen gehört zum Bundesland Baden-Württemberg?")
+            if (text.includes('Fragen für das Bundesland') || text.startsWith('Fragen für')) {
                 const state = detectState(text);
                 if (state) {
                     currentState = state;
@@ -188,6 +194,9 @@ export async function parsePdf(pdfPath: string): Promise<{
 
             // ── Page footer: "Seite N von 191" — skip
             if (/^Seite \d+ von \d+$/.test(text)) continue;
+
+            // ── Section headings — skip
+            if (text === 'Teil II' || text === 'Teil I') continue;
 
             // ── Question start: "Aufgabe N"
             const aufgabeMatch = text.match(/^Aufgabe (\d+)$/);
@@ -205,12 +214,16 @@ export async function parsePdf(pdfPath: string): Promise<{
                     id: globalId,
                     type: currentState ? 'state' : 'general',
                     state: currentState ?? undefined,
-                    textLines: [],
+                    // Capture text that appeared before this "Aufgabe N" label (unusual PDF layout
+                    // used by wappen / bundesland-map questions where the question sentence
+                    // precedes the question number in the visual flow).
+                    textLines: pendingNextText,
                     optionTexts: [],
                     currentOptionLines: [],
                     pageNumber: pageNum,
                     inOptions: false,
                 };
+                pendingNextText = [];
                 continue;
             }
 
@@ -240,6 +253,14 @@ export async function parsePdf(pdfPath: string): Promise<{
             } else if (!currentQ.inOptions && x < OPTION_X_MIN) {
                 // Continuation of question text
                 currentQ.textLines.push(text);
+            } else if (currentQ.inOptions && x < OPTION_X_MIN) {
+                // Text at question-text x-position while already in options mode.
+                // This happens when the NEXT question's text appears in the PDF before
+                // the next "Aufgabe N" label (wappen / bundesland-map question layout).
+                // Skip photo credits (lines containing ©) — they belong to the current question's image.
+                if (!text.includes('\u00a9') && !text.includes('(c)')) {
+                    pendingNextText.push(text);
+                }
             }
             // else: skip headers, page numbers, image captions at unexpected positions
         }

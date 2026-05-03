@@ -1,19 +1,51 @@
-# pdf-parser
+# burgertest-pipeline
 
-Standalone CLI tool that parses the official BAMF citizenship test PDF
-(_Leben in Deutschland – Gesamtfragenkatalog_) into structured JSON with images.
+Data pipeline that turns the official BAMF citizenship test PDF into a fully
+enriched, publishable dataset used by `@kartoffel/burgertest`.
+
+## Pipeline steps
+
+| Step | Script      | What it does                                                            |
+| ---- | ----------- | ----------------------------------------------------------------------- |
+| 1    | `parse`     | Extract 460 questions + images from the PDF                             |
+| 2    | `merge`     | Inject correct answers from the webmansa community dataset              |
+| 3    | `verify`    | Cross-check parsed output against webmansa; writes `verify-report.json` |
+| 4    | `translate` | Translate questions & options to English via Gemini                     |
+| 5    | `enrich`    | Add a fun-fact context note per question via Gemini                     |
+| 6    | `bundle`    | Copy final `questions.json` → `packages/burgertest/data/`               |
+
+Run all steps in order:
+
+```bash
+GEMINI_API_KEY=<key> npm run pipeline --workspace=apps/burgertest
+```
 
 ## Quick start
 
 ```bash
-# From repo root — non-interactive (recommended):
-npm run parse --workspace=apps/pdf-parser -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output
+# From repo root — parse only, non-interactive:
+npm run parse --workspace=apps/burgertest -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output
 
 # Interactive (prompts for PDF path and output dir):
-npm run parse --workspace=apps/pdf-parser
+npm run parse --workspace=apps/burgertest
 
-# Delete all output (questions.json, images/, manifest, progress):
-npm run clean --workspace=apps/pdf-parser
+# Merge correct answers (requires internet or cached assets/webmansa.ts):
+npm run merge --workspace=apps/burgertest
+
+# Verify parsed output:
+npm run verify --workspace=apps/burgertest
+
+# Translate (requires GEMINI_API_KEY):
+GEMINI_API_KEY=<key> npm run translate --workspace=apps/burgertest
+
+# Enrich (requires GEMINI_API_KEY):
+GEMINI_API_KEY=<key> npm run enrich --workspace=apps/burgertest
+
+# Bundle into @kartoffel/burgertest:
+npm run bundle --workspace=apps/burgertest
+
+# Delete all output:
+npm run clean --workspace=apps/burgertest
 ```
 
 ## Output

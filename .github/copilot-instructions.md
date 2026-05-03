@@ -11,16 +11,22 @@ npm run test
 npm run build
 ```
 
-For parser use commands below:
+For the burgertest pipeline use commands below:
 
 ```bash
-npm run parse --workspace=apps/pdf-parser -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output 2>&1
+npm run parse --workspace=apps/burgertest -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output 2>&1
 
 # interactive (prompts for PDF path and output dir):
-npm run parse --workspace=apps/pdf-parser
+npm run parse --workspace=apps/burgertest
+
+# merge correct answers from webmansa dataset:
+npm run merge --workspace=apps/burgertest
+
+# verify parsed output:
+npm run verify --workspace=apps/burgertest
 
 # clean all output (manifest, progress, images, questions.json):
-npm run clean --workspace=apps/pdf-parser
+npm run clean --workspace=apps/burgertest
 ```
 
 All 4 must exit with code 0. Fix errors before marking tasks complete.

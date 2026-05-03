@@ -1,22 +1,29 @@
 ---
-applyTo: 'apps/pdf-parser/**'
+applyTo: 'apps/burgertest/**'
 ---
 
-# PDF Parser — BAMF Gesamtfragenkatalog
+# Burgertest Pipeline — BAMF Gesamtfragenkatalog
 
-Standalone CLI tool that parses the official BAMF citizenship test PDF into structured JSON.
+Data pipeline that parses the official BAMF citizenship test PDF, merges correct answers,
+translates to English via Gemini, enriches with context, and bundles into `@kartoffel/burgertest`.
 
 ## Quick start
 
 ```bash
 # Always run from the repo root using the workspace flag:
-npm run parse --workspace=apps/pdf-parser -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output 2>&1
+npm run parse --workspace=apps/burgertest -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output 2>&1
 
 # interactive (prompts for PDF path and output dir):
-npm run parse --workspace=apps/pdf-parser
+npm run parse --workspace=apps/burgertest
+
+# merge correct answers from webmansa dataset:
+npm run merge --workspace=apps/burgertest
+
+# verify parsed output:
+npm run verify --workspace=apps/burgertest
 
 # clean all output (manifest, progress, images, questions.json):
-npm run clean --workspace=apps/pdf-parser
+npm run clean --workspace=apps/burgertest
 ```
 
 ## Architecture

@@ -37,6 +37,6 @@ coverage/
 .cache/
 .turbo/
 
-# Pdf parser
-apps/pdf-parser/assets/*
-apps/pdf-parser/output/*
+# Burgertest output
+apps/burgertest/assets/*
+apps/burgertest/output/*

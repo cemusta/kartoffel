@@ -1,0 +1,38 @@
+{
+  "name": "@kartoffel/burgertest",
+  "version": "0.1.0",
+  "description": "German citizenship test (Einbürgerungstest) questions with correct answers, English translations, and educational context.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/",
+    "data/"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "german-citizenship-test",
+    "einbuergerungstest",
+    "bamf",
+    "leben-in-deutschland",
+    "quiz",
+    "kartoffel"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.12.2",
+    "typescript": "^6.0.2"
+  }
+}
