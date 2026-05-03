@@ -65,19 +65,16 @@ function buildPrompt(batch: Question[]): string {
     return `You are a professional German-to-English translator specialising in civic education.
 Translate each question text and its four answer options from German to English.
 Keep the translated text concise, accurate, and natural-sounding.
-Return a JSON object with this exact structure — no extra keys, no markdown fences:
 
-{
-  "translations": [
-    {
-      "id": <number>,
-      "textEn": "<translated question text>",
-      "optionsEn": { "a": "...", "b": "...", "c": "...", "d": "..." }
-    }
-  ]
-}
+Rules:
+- Return ONLY a valid JSON object. No markdown fences, no commentary before or after.
+- Every field must contain the complete translated text. Never use ellipsis (...) or any shorthand.
+- The JSON must be complete and parseable.
 
-Questions to translate:
+Output format (id=1 is just an example — use the actual ids from the input):
+{"translations":[{"id":1,"textEn":"What is the capital of Germany?","optionsEn":{"a":"Berlin","b":"Hamburg","c":"Munich","d":"Cologne"}}]}
+
+Now translate these questions and return a complete JSON object in that exact format:
 ${JSON.stringify(items, null, 2)}`;
 }
 
@@ -87,11 +84,17 @@ async function translateBatch(
 ): Promise<TranslationResult[]> {
     const result = await model.generateContent({
         contents: [{ role: 'user', parts: [{ text: buildPrompt(batch) }] }],
-        generationConfig: { responseMimeType: 'application/json' },
     });
 
     const text = result.response.text();
-    const parsed = JSON.parse(text) as { translations: TranslationResult[] };
+    // Gemma models wrap the JSON in chain-of-thought reasoning. The final answer
+    // is always at the end as {"translations":[...]}. Find the last occurrence.
+    const jsonStart = text.lastIndexOf('{"translations":[');
+    const jsonEnd = text.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) {
+        throw new Error(`No JSON object found in response: ${text.slice(0, 200)}`);
+    }
+    const parsed = JSON.parse(text.slice(jsonStart, jsonEnd + 1)) as { translations: TranslationResult[] };
     return parsed.translations;
 }
 

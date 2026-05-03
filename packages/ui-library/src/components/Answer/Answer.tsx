@@ -2,20 +2,24 @@ import { HTMLAttributes } from 'react';
 import styles from './Answer.module.css';
 
 export interface AnswerProps extends HTMLAttributes<HTMLButtonElement> {
+  label?: string;
   text?: string;
-  imageUrl?: string;
+  textEn?: string;
   isSelected?: boolean;
   isCorrect?: boolean;
   isRevealed?: boolean;
+  showTranslation?: boolean;
   onSelect?: () => void;
 }
 
 export function Answer({
+  label,
   text,
-  imageUrl,
+  textEn,
   isSelected = false,
   isCorrect = false,
   isRevealed = false,
+  showTranslation = false,
   onSelect,
   className = '',
   ...props
@@ -25,16 +29,20 @@ export function Answer({
     isSelected && styles.selected,
     isRevealed && isCorrect && styles.correct,
     isRevealed && !isCorrect && isSelected && styles.incorrect,
-    imageUrl && styles.hasImage,
     className,
   ]
     .filter(Boolean)
     .join(' ');
 
+  const showTranslated = showTranslation && Boolean(textEn);
+
   return (
     <button className={classes} onClick={onSelect} disabled={isRevealed} type="button" {...props}>
-      {imageUrl && <img src={imageUrl} alt={text || 'Answer option'} className={styles.image} />}
-      {text && <span className={styles.text}>{text}</span>}
+      {label && <span className={styles.label}>{label}</span>}
+      <span className={styles.content}>
+        {text && <span className={styles.text}>{text}</span>}
+        {showTranslated && <span className={styles.translation}>{textEn}</span>}
+      </span>
     </button>
   );
 }

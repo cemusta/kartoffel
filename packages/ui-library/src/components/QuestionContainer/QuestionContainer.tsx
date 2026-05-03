@@ -1,12 +1,10 @@
 import { HTMLAttributes, useState } from 'react';
-import { Question, QuestionData, AnswerOption } from '../Question';
+import { Question, QuestionData } from '../Question';
 import { Answer } from '../Answer';
 import styles from './QuestionContainer.module.css';
 
-// Helper to normalize option to string for comparison
-function normalizeOption(option: string | AnswerOption): string {
-  return typeof option === 'string' ? option : option.text || option.imageUrl || '';
-}
+const OPTION_KEYS = ['a', 'b', 'c', 'd'] as const;
+const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' };
 
 export interface QuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
   questions: QuestionData[];
@@ -20,18 +18,16 @@ export function QuestionContainer({
   ...props
 }: QuestionContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const [score, setScore] = useState<number | null>(null);
+  const [showTranslation, setShowTranslation] = useState(false);
 
   const currentQuestion = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
 
-  const handleSelect = (answer: string) => {
-    setSelectedAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: answer,
-    }));
+  const handleSelect = (key: string) => {
+    setSelectedAnswer(key);
     setIsRevealed(false);
   };
 
@@ -41,25 +37,27 @@ export function QuestionContainer({
 
   const handleNext = () => {
     if (isLastQuestion) {
-      // Calculate final score
-      const finalScore = questions.reduce((acc, q) => {
-        const correctAnswer = normalizeOption(q.correctAnswer);
-        return selectedAnswers[q.id] === correctAnswer ? acc + 1 : acc;
+      const finalScore = questions.reduce((acc, q, idx) => {
+        const answer = idx === currentIndex ? selectedAnswer : null;
+        return answer === q.correctAnswer ? acc + 1 : acc;
       }, 0);
       setScore(finalScore);
       onComplete?.(finalScore);
     } else {
       setCurrentIndex(prev => prev + 1);
+      setSelectedAnswer(null);
       setIsRevealed(false);
     }
   };
 
   const handleReset = () => {
     setCurrentIndex(0);
-    setSelectedAnswers({});
+    setSelectedAnswer(null);
     setIsRevealed(false);
     setScore(null);
   };
+
+  const hasTranslation = Boolean(currentQuestion?.textEn);
 
   if (score !== null) {
     return (
@@ -84,28 +82,59 @@ export function QuestionContainer({
         <span className={styles.progress}>
           Question {currentIndex + 1} of {questions.length}
         </span>
+        {hasTranslation && (
+          <label className={styles.translationSwitch} aria-label="Toggle English translation">
+            <svg
+              className={styles.translateIcon}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 8l6 6" />
+              <path d="M4 14l6-6 2-3" />
+              <path d="M2 5h12" />
+              <path d="M7 2h1" />
+              <path d="M22 22l-5-10-5 10" />
+              <path d="M14 18h6" />
+            </svg>
+            <span className={styles.toggleTrack}>
+              <input
+                type="checkbox"
+                checked={showTranslation}
+                onChange={e => setShowTranslation(e.target.checked)}
+                className={styles.toggleInput}
+              />
+              <span className={styles.toggleThumb} />
+            </span>
+          </label>
+        )}
       </div>
 
-      <Question text={currentQuestion.text} imageUrl={currentQuestion.imageUrl} />
+      <Question
+        text={currentQuestion.text}
+        textEn={currentQuestion.textEn}
+        imageUrl={currentQuestion.image}
+        showTranslation={showTranslation}
+      />
 
       <div className={styles.options}>
-        {currentQuestion.options.map((option, index) => {
-          const optionKey = normalizeOption(option);
-          const isString = typeof option === 'string';
-          const correctAnswer = normalizeOption(currentQuestion.correctAnswer);
-
-          return (
-            <Answer
-              key={`${optionKey}-${index}`}
-              text={isString ? option : option.text}
-              imageUrl={isString ? undefined : option.imageUrl}
-              isSelected={selectedAnswers[currentQuestion.id] === optionKey}
-              isCorrect={optionKey === correctAnswer}
-              isRevealed={isRevealed}
-              onSelect={() => handleSelect(optionKey)}
-            />
-          );
-        })}
+        {OPTION_KEYS.map(key => (
+          <Answer
+            key={key}
+            label={OPTION_LABELS[key]}
+            text={currentQuestion.options[key]}
+            textEn={currentQuestion.optionsEn?.[key]}
+            isSelected={selectedAnswer === key}
+            isCorrect={key === currentQuestion.correctAnswer}
+            isRevealed={isRevealed}
+            showTranslation={showTranslation}
+            onSelect={() => handleSelect(key)}
+          />
+        ))}
       </div>
 
       <div className={styles.actions}>
@@ -113,7 +142,7 @@ export function QuestionContainer({
           <button
             className={styles.button}
             onClick={handleCheck}
-            disabled={!selectedAnswers[currentQuestion.id]}
+            disabled={selectedAnswer === null}
           >
             Check Answer
           </button>

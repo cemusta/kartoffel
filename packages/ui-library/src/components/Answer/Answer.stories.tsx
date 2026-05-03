@@ -9,11 +9,13 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
+    label: { control: 'text' },
     text: { control: 'text' },
-    imageUrl: { control: 'text' },
+    textEn: { control: 'text' },
     isSelected: { control: 'boolean' },
     isCorrect: { control: 'boolean' },
     isRevealed: { control: 'boolean' },
+    showTranslation: { control: 'boolean' },
   },
 } satisfies Meta<typeof Answer>;
 
@@ -22,61 +24,48 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    text: 'Paris',
+    label: 'A',
+    text: 'hier Religionsfreiheit gilt.',
+  },
+};
+
+export const WithTranslation: Story = {
+  args: {
+    label: 'D',
+    text: 'hier Meinungsfreiheit gilt.',
+    textEn: 'freedom of speech applies here.',
+    showTranslation: true,
   },
 };
 
 export const Selected: Story = {
   args: {
-    text: 'Paris',
+    label: 'B',
+    text: 'die Menschen Steuern zahlen.',
     isSelected: true,
   },
 };
 
 export const Correct: Story = {
   args: {
-    text: 'Paris',
+    label: 'D',
+    text: 'hier Meinungsfreiheit gilt.',
+    textEn: 'freedom of speech applies here.',
     isSelected: true,
     isCorrect: true,
     isRevealed: true,
+    showTranslation: true,
   },
 };
 
 export const Incorrect: Story = {
   args: {
-    text: 'London',
+    label: 'A',
+    text: 'hier Religionsfreiheit gilt.',
+    textEn: 'freedom of religion applies here.',
     isSelected: true,
     isCorrect: false,
     isRevealed: true,
-  },
-};
-
-export const WithImage: Story = {
-  args: {
-    text: 'Cat',
-    imageUrl: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200',
-  },
-};
-
-export const OnlyImage: Story = {
-  args: {
-    imageUrl: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=200',
-  },
-};
-
-export const ImageSelected: Story = {
-  args: {
-    text: 'Dog',
-    imageUrl: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=200',
-    isSelected: true,
-  },
-};
-
-export const ImageCorrect: Story = {
-  args: {
-    imageUrl: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=200',
-    isSelected: true,
-    isCorrect: true,
-    isRevealed: true,
+    showTranslation: true,
   },
 };

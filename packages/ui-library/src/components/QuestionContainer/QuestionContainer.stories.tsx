@@ -17,27 +17,60 @@ type Story = StoryObj<typeof meta>;
 const sampleQuestions: QuestionData[] = [
   {
     id: 1,
-    text: 'What is the capital of France?',
-    options: ['London', 'Berlin', 'Paris', 'Madrid'],
-    correctAnswer: 'Paris',
+    type: 'general',
+    text: 'In Deutschland dürfen Menschen offen etwas gegen die Regierung sagen, weil …',
+    options: {
+      a: 'hier Religionsfreiheit gilt.',
+      b: 'die Menschen Steuern zahlen.',
+      c: 'die Menschen das Wahlrecht haben.',
+      d: 'hier Meinungsfreiheit gilt.',
+    },
+    correctAnswer: 'd',
+    textEn: 'In Germany, people are allowed to speak openly against the government because...',
+    optionsEn: {
+      a: 'freedom of religion applies here.',
+      b: 'people pay taxes.',
+      c: 'people have the right to vote.',
+      d: 'freedom of speech applies here.',
+    },
   },
   {
     id: 2,
-    text: 'Which planet is known as the Red Planet?',
-    options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
-    correctAnswer: 'Mars',
+    type: 'general',
+    text: 'Welches Recht gehört zu den Grundrechten in Deutschland?',
+    options: {
+      a: 'das Recht auf Arbeit',
+      b: 'das Recht auf Wohnung',
+      c: 'die Meinungsfreiheit',
+      d: 'das Recht auf ein Auto',
+    },
+    correctAnswer: 'c',
+    textEn: 'Which right belongs to the fundamental rights in Germany?',
+    optionsEn: {
+      a: 'the right to work',
+      b: 'the right to housing',
+      c: 'freedom of opinion',
+      d: 'the right to a car',
+    },
   },
   {
     id: 3,
-    text: 'What is 2 + 2?',
-    options: ['3', '4', '5', '6'],
-    correctAnswer: '4',
-  },
-  {
-    id: 4,
-    text: 'Who painted the Mona Lisa?',
-    options: ['Van Gogh', 'Picasso', 'Da Vinci', 'Rembrandt'],
-    correctAnswer: 'Da Vinci',
+    type: 'general',
+    text: 'Was ist das Grundgesetz?',
+    options: {
+      a: 'die Verfassung Deutschlands',
+      b: 'ein Schulbuch',
+      c: 'ein Gesetzbuch für Steuern',
+      d: 'eine Geschäftsordnung des Bundestags',
+    },
+    correctAnswer: 'a',
+    textEn: 'What is the Basic Law (Grundgesetz)?',
+    optionsEn: {
+      a: 'the constitution of Germany',
+      b: 'a school textbook',
+      c: 'a tax law book',
+      d: 'the rules of procedure of the Bundestag',
+    },
   },
 ];
 
@@ -55,26 +88,46 @@ export const SingleQuestion: Story = {
   },
 };
 
-export const WithImages: Story = {
+export const WithImage: Story = {
   args: {
     questions: [
       {
-        id: 1,
-        text: 'What animal is this?',
-        imageUrl: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400',
-        options: ['Dog', 'Cat', 'Rabbit', 'Fox'],
-        correctAnswer: 'Cat',
+        id: 55,
+        type: 'general',
+        text: 'Was zeigt dieses Bild? © Deutscher Bundestag/Achim Melde',
+        textEn: 'What does this image show? © German Bundestag/Achim Melde',
+        image: '/images/q55.png',
+        options: {
+          a: 'den Bundestagssitz in Berlin',
+          b: 'das Bundesverfassungsgericht in Karlsruhe',
+          c: 'das Bundesratsgebäude in Berlin',
+          d: 'das Bundeskanzleramt in Berlin',
+        },
+        correctAnswer: 'a',
+        optionsEn: {
+          a: 'the Bundestag building in Berlin',
+          b: 'the Federal Constitutional Court in Karlsruhe',
+          c: 'the Bundesrat building in Berlin',
+          d: 'the Federal Chancellery in Berlin',
+        },
       },
+    ],
+    onComplete: score => console.log('Quiz completed! Score:', score),
+  },
+};
+
+export const FourImageOptions: Story = {
+  args: {
+    questions: [
       {
-        id: 2,
-        text: 'Which flag belongs to France?',
-        options: [
-          { imageUrl: 'https://flagcdn.com/w80/gb.png', text: 'UK' },
-          { imageUrl: 'https://flagcdn.com/w80/fr.png', text: 'France' },
-          { imageUrl: 'https://flagcdn.com/w80/de.png', text: 'Germany' },
-          { imageUrl: 'https://flagcdn.com/w80/it.png', text: 'Italy' },
-        ],
-        correctAnswer: { imageUrl: 'https://flagcdn.com/w80/fr.png', text: 'France' },
+        id: 21,
+        type: 'general',
+        text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
+        textEn: 'Which one is the coat of arms of the Federal Republic of Germany?',
+        image: ['/images/q21_1.png', '/images/q21_2.png', '/images/q21_3.png', '/images/q21_4.png'],
+        options: { a: 'Bild 1', b: 'Bild 2', c: 'Bild 3', d: 'Bild 4' },
+        correctAnswer: 'a',
+        optionsEn: { a: 'Image 1', b: 'Image 2', c: 'Image 3', d: 'Image 4' },
       },
     ],
     onComplete: score => console.log('Quiz completed! Score:', score),

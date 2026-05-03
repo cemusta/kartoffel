@@ -15,31 +15,58 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    text: 'What is the capital of France?',
+    text: 'In Deutschland dürfen Menschen offen etwas gegen die Regierung sagen, weil …',
+  },
+};
+
+export const WithTranslation: Story = {
+  args: {
+    text: 'In Deutschland dürfen Menschen offen etwas gegen die Regierung sagen, weil …',
+    textEn: 'In Germany, people are allowed to speak openly against the government because...',
+    showTranslation: true,
   },
 };
 
 export const LongQuestion: Story = {
   args: {
-    text: 'Which of the following best describes the primary function of mitochondria in eukaryotic cells?',
-  },
-};
-
-export const ShortQuestion: Story = {
-  args: {
-    text: 'What is 2 + 2?',
+    text: 'Welches Recht gehört zu den Grundrechten in Deutschland?',
+    textEn: 'Which right belongs to the fundamental rights in Germany?',
+    showTranslation: false,
   },
 };
 
 export const QuestionWithImage: Story = {
   args: {
-    text: 'What animal is shown in this image?',
-    imageUrl: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400',
+    text: 'Was zeigt dieses Bild? © Deutscher Bundestag/Achim Melde',
+    textEn: 'What does this image show? © German Bundestag/Achim Melde',
+    imageUrl: '/images/q55.png',
+    showTranslation: false,
   },
 };
 
-export const OnlyImage: Story = {
+export const QuestionWithImageAndTranslation: Story = {
   args: {
-    imageUrl: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=400',
+    text: 'Was zeigt dieses Bild? © Deutscher Bundestag/Achim Melde',
+    textEn: 'What does this image show? © German Bundestag/Achim Melde',
+    imageUrl: '/images/q55.png',
+    showTranslation: true,
+  },
+};
+
+export const FourImageOptions: Story = {
+  args: {
+    text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
+    textEn: 'Which one is the coat of arms of the Federal Republic of Germany?',
+    imageUrl: ['/images/q21_1.png', '/images/q21_2.png', '/images/q21_3.png', '/images/q21_4.png'],
+    showTranslation: false,
+  },
+};
+
+export const FourImageOptionsWithTranslation: Story = {
+  args: {
+    text: 'Welches ist das Wappen der Bundesrepublik Deutschland?',
+    textEn: 'Which one is the coat of arms of the Federal Republic of Germany?',
+    imageUrl: ['/images/q21_1.png', '/images/q21_2.png', '/images/q21_3.png', '/images/q21_4.png'],
+    showTranslation: true,
   },
 };
