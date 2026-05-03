@@ -4,7 +4,8 @@
  * - Reads output/questions.json
  * - Resumable: tracks progress in output/enrich-progress.json
  * - Batches 5 questions per Gemini call
- * - Writes context field back to output/questions.json after each batch
+ * - Sends up to CONCURRENCY batches in parallel, then waits for the next minute window
+ * - Writes translations.en.context back to output/questions.json after each parallel group
  *
  * Usage:
  *   GEMINI_API_KEY=<key> npm run enrich --workspace=apps/burgertest
@@ -25,7 +26,8 @@ const PROGRESS_PATH = path.join(OUTPUT_DIR, 'enrich-progress.json');
 const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
 const BATCH_SIZE = 5;
-const DELAY_MS = 1200;
+const CONCURRENCY = 15;     // max parallel calls per minute window
+const WINDOW_MS = 60_000;   // rate-limit window
 
 if (!API_KEY) {
     console.error('Missing GEMINI_API_KEY environment variable.');
@@ -63,24 +65,18 @@ function buildPrompt(batch: Question[]): string {
         correctAnswer: q.correctAnswer ? (q.translations?.en?.options ?? q.options)[q.correctAnswer] : undefined,
     }));
 
-    return `You are an engaging educator helping immigrants learn about German civic life and culture.
-For each question below, write a short context note (1-3 sentences in English) that:
-- Explains WHY the correct answer is correct, or gives interesting background
-- Adds a memorable fact that makes the topic stick
-- Keeps a friendly, encouraging tone — learning should be fun!
+    return `You are a civic education expert writing short context notes for immigrants learning about Germany.
 
-Return a JSON object — no markdown fences, no extra keys:
+For each question, write 1-3 sentences in English that explain why the correct answer is right and add a memorable fact. Keep the tone friendly and encouraging.
 
-{
-  "enrichments": [
-    {
-      "id": <number>,
-      "context": "<1-3 sentence educational note in English>"
-    }
-  ]
-}
+Rules:
+- Return ONLY a valid JSON object. No markdown fences, no commentary before or after.
+- The JSON must be complete and parseable.
 
-Questions:
+Output format (id=1 is just an example — use the actual ids from the input):
+{"enrichments":[{"id":1,"context":"Germany's Basic Law (Grundgesetz) was adopted in 1949 and is one of the world's most respected constitutions. It places human dignity at its very core — no law in Germany can override it!"}]}
+
+Now write context notes for these questions and return a complete JSON object in that exact format:
 ${JSON.stringify(items, null, 2)}`;
 }
 
@@ -90,11 +86,16 @@ async function enrichBatch(
 ): Promise<EnrichmentResult[]> {
     const result = await model.generateContent({
         contents: [{ role: 'user', parts: [{ text: buildPrompt(batch) }] }],
-        generationConfig: { responseMimeType: 'application/json' },
     });
 
     const text = result.response.text();
-    const parsed = JSON.parse(text) as { enrichments: EnrichmentResult[] };
+    // Gemma models may wrap JSON in chain-of-thought reasoning — find the last occurrence.
+    const jsonStart = text.lastIndexOf('{"enrichments":[');
+    const jsonEnd = text.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) {
+        throw new Error(`No JSON object found in response: ${text.slice(0, 200)}`);
+    }
+    const parsed = JSON.parse(text.slice(jsonStart, jsonEnd + 1)) as { enrichments: EnrichmentResult[] };
     return parsed.enrichments;
 }
 
@@ -109,36 +110,55 @@ async function main() {
     console.log(`Enriching ${todo.length} questions (${enriched.size} already done) using ${MODEL}`);
 
     const byId = new Map<number, Question>(questions.map(q => [q.id, q]));
+    const totalBatches = Math.ceil(todo.length / BATCH_SIZE);
 
-    for (let i = 0; i < todo.length; i += BATCH_SIZE) {
-        const batch = todo.slice(i, i + BATCH_SIZE);
-        const batchNum = Math.floor(i / BATCH_SIZE) + 1;
-        const totalBatches = Math.ceil(todo.length / BATCH_SIZE);
+    for (let i = 0; i < todo.length; i += BATCH_SIZE * CONCURRENCY) {
+        const windowStart = Date.now();
+        const group = [];
+        for (let j = i; j < Math.min(i + BATCH_SIZE * CONCURRENCY, todo.length); j += BATCH_SIZE) {
+            const batch = todo.slice(j, j + BATCH_SIZE);
+            const batchNum = Math.floor(j / BATCH_SIZE) + 1;
+            group.push({ batch, batchNum });
+        }
+
         process.stdout.write(
-            `Batch ${batchNum}/${totalBatches} (ids ${batch[0].id}–${batch[batch.length - 1].id})… `,
+            `Batches ${group[0].batchNum}–${group[group.length - 1].batchNum} of ${totalBatches} (${group.length} parallel)… `,
         );
 
-        try {
-            const results = await enrichBatch(model, batch);
-            for (const r of results) {
-                const q = byId.get(r.id);
-                if (q) {
-                    q.translations = { ...q.translations, en: { ...q.translations?.en, text: q.translations?.en?.text ?? q.text, options: q.translations?.en?.options ?? q.options, context: r.context } };
-                    enriched.add(r.id);
+        const results = await Promise.allSettled(
+            group.map(({ batch }) => enrichBatch(model, batch)),
+        );
+
+        let failed = 0;
+        for (let k = 0; k < results.length; k++) {
+            const result = results[k];
+            if (result.status === 'fulfilled') {
+                for (const r of result.value) {
+                    const q = byId.get(r.id);
+                    if (q) {
+                        q.translations = { ...q.translations, en: { ...q.translations?.en, text: q.translations?.en?.text ?? q.text, options: q.translations?.en?.options ?? q.options, context: r.context } };
+                        enriched.add(r.id);
+                    }
                 }
+            } else {
+                console.error(`\n  Batch ${group[k].batchNum} failed: ${(results[k] as PromiseRejectedResult).reason}`);
+                failed++;
             }
-            console.log('done');
-        } catch (err) {
-            console.error(`\nFailed: ${(err as Error).message}`);
-            console.log('Progress saved — re-run to continue.');
-            break;
         }
 
         writeFileSync(QUESTIONS_PATH, JSON.stringify(questions, null, 2), 'utf8');
         saveProgress(enriched);
 
-        if (i + BATCH_SIZE < todo.length) {
-            await new Promise(res => setTimeout(res, DELAY_MS));
+        console.log(`done (${group.length - failed} ok, ${failed} failed)`);
+
+        if (i + BATCH_SIZE * CONCURRENCY < todo.length) {
+            const elapsed = Date.now() - windowStart;
+            const wait = Math.max(0, WINDOW_MS - elapsed);
+            if (wait > 0) {
+                process.stdout.write(`  Rate-limit pause ${(wait / 1000).toFixed(1)}s… `);
+                await new Promise(res => setTimeout(res, wait));
+                console.log('resuming');
+            }
         }
     }
 

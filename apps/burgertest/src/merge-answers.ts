@@ -89,7 +89,8 @@ function normAnswer(text: string): string {
     // (not full phrases) so "Senatorin/Senator für X" === "Senator / Senatorin für X".
     // Also strip German genitive -es suffix (Senates → Senats) for lax matching.
     s = s.replace(/\s*\/\s*/g, '/');
-    s = s.replace(/(\S+)\/(\S+)/g, (_, a: string, b: string) => [a, b].sort().join('/'));
+    s = s.replace(/([^\s/]+(?:\s[^\s/]+)?)\/([^\s/]+(?:\s[^\s/]+)?)/g,
+        (_, a: string, b: string) => [a, b].sort().join('/'));
     s = s.replace(/(\S{4,})es\b/g, '$1s');  // genitive: "Senates" → "Senats"
     return s;
 }

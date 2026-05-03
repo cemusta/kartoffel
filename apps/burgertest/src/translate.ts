@@ -4,7 +4,8 @@
  * - Reads output/questions.json
  * - Resumable: tracks progress in output/translate-progress.json
  * - Batches 10 questions per Gemini call
- * - Writes translations.en back to output/questions.json after each batch
+ * - Sends up to CONCURRENCY batches in parallel, then waits for the next minute window
+ * - Writes translations.en back to output/questions.json after each parallel group
  *
  * Usage:
  *   GEMINI_API_KEY=<key> npm run translate --workspace=apps/burgertest
@@ -25,7 +26,8 @@ const PROGRESS_PATH = path.join(OUTPUT_DIR, 'translate-progress.json');
 const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
 const BATCH_SIZE = 10;
-const DELAY_MS = 1000; // 1 s between batches
+const CONCURRENCY = 15;       // max parallel calls per minute window
+const WINDOW_MS = 60_000;     // rate-limit window
 
 if (!API_KEY) {
     console.error('Missing GEMINI_API_KEY environment variable.');
@@ -112,35 +114,57 @@ async function main() {
 
     // Index questions by id for fast update
     const byId = new Map<number, Question>(questions.map(q => [q.id, q]));
+    const totalBatches = Math.ceil(todo.length / BATCH_SIZE);
 
-    for (let i = 0; i < todo.length; i += BATCH_SIZE) {
-        const batch = todo.slice(i, i + BATCH_SIZE);
-        const batchNum = Math.floor(i / BATCH_SIZE) + 1;
-        const totalBatches = Math.ceil(todo.length / BATCH_SIZE);
-        process.stdout.write(`Batch ${batchNum}/${totalBatches} (ids ${batch[0].id}–${batch[batch.length - 1].id})… `);
-
-        try {
-            const results = await translateBatch(model, batch);
-            for (const r of results) {
-                const q = byId.get(r.id);
-                if (q) {
-                    q.translations = { ...q.translations, en: { text: r.text, options: r.options } };
-                    translated.add(r.id);
-                }
-            }
-            console.log('done');
-        } catch (err) {
-            console.error(`\nFailed: ${(err as Error).message}`);
-            console.log('Progress saved — re-run to continue.');
-            break;
+    // Process CONCURRENCY batches in parallel, then wait for the next minute window
+    for (let i = 0; i < todo.length; i += BATCH_SIZE * CONCURRENCY) {
+        const windowStart = Date.now();
+        const group = [];
+        for (let j = i; j < Math.min(i + BATCH_SIZE * CONCURRENCY, todo.length); j += BATCH_SIZE) {
+            const batch = todo.slice(j, j + BATCH_SIZE);
+            const batchNum = Math.floor(j / BATCH_SIZE) + 1;
+            group.push({ batch, batchNum });
         }
 
-        // Persist after every batch
+        process.stdout.write(
+            `Batches ${group[0].batchNum}–${group[group.length - 1].batchNum} of ${totalBatches} (${group.length} parallel)… `,
+        );
+
+        const results = await Promise.allSettled(
+            group.map(({ batch }) => translateBatch(model, batch)),
+        );
+
+        let failed = 0;
+        for (let k = 0; k < results.length; k++) {
+            const result = results[k];
+            if (result.status === 'fulfilled') {
+                for (const r of result.value) {
+                    const q = byId.get(r.id);
+                    if (q) {
+                        q.translations = { ...q.translations, en: { text: r.text, options: r.options } };
+                        translated.add(r.id);
+                    }
+                }
+            } else {
+                console.error(`\n  Batch ${group[k].batchNum} failed: ${result.reason}`);
+                failed++;
+            }
+        }
+
         writeFileSync(QUESTIONS_PATH, JSON.stringify(questions, null, 2), 'utf8');
         saveProgress(translated);
 
-        if (i + BATCH_SIZE < todo.length) {
-            await new Promise(res => setTimeout(res, DELAY_MS));
+        console.log(`done (${group.length - failed} ok, ${failed} failed)`);
+
+        // If there are more batches, wait out the remainder of the minute window
+        if (i + BATCH_SIZE * CONCURRENCY < todo.length) {
+            const elapsed = Date.now() - windowStart;
+            const wait = Math.max(0, WINDOW_MS - elapsed);
+            if (wait > 0) {
+                process.stdout.write(`  Rate-limit pause ${(wait / 1000).toFixed(1)}s… `);
+                await new Promise(res => setTimeout(res, wait));
+                console.log('resuming');
+            }
         }
     }
 

@@ -25,6 +25,15 @@ npm run merge --workspace=apps/burgertest
 # verify parsed output:
 npm run verify --workspace=apps/burgertest
 
+# translate questions to English (GEMINI_API_KEY loaded automatically from apps/burgertest/.env):
+npm run translate --workspace=apps/burgertest
+
+# enrich questions with context notes (GEMINI_API_KEY loaded automatically from apps/burgertest/.env):
+npm run enrich --workspace=apps/burgertest
+
+# bundle final output:
+npm run bundle --workspace=apps/burgertest
+
 # clean all output (manifest, progress, images, questions.json):
 npm run clean --workspace=apps/burgertest
 ```

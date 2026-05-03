@@ -1,5 +1,5 @@
 {
-  "name": "@kartoffel/burgertest",
+  "name": "@cemusta/burgertest",
   "version": "0.1.0",
   "description": "German citizenship test (Einbürgerungstest) questions with correct answers, English translations, and educational context.",
   "type": "module",
