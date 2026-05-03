@@ -23,7 +23,7 @@ jobs:
         run: npm ci
 
       - name: Build packages
-        run: npm run build --workspace=packages/utils --workspace=packages/ui-library
+        run: npm run build
 
       - name: Build app
         run: npm run build:app
