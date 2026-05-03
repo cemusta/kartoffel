@@ -89,10 +89,17 @@ async function getPageImageNames(pdf: PdfDoc, pageNum: number): Promise<string[]
  * Returns one entry per page that has non-decoration images, sorted by page number.
  * Decoration filtering (BAMF logo) is done later by Y-position in extractPageImages.
  */
+export interface BuildManifestResult {
+    manifest: ImageManifestEntry[];
+    /** The PDF document instance used for scanning — reuse this for extraction
+     *  so image names and CopyLocalImage state stay consistent. */
+    pdf: PdfDoc;
+}
+
 export async function buildImageManifest(
     pdfPath: string,
     questionPages: Map<number, number> // questionId -> pageNumber
-): Promise<ImageManifestEntry[]> {
+): Promise<BuildManifestResult> {
     const pdfData = new Uint8Array(fs.readFileSync(pdfPath));
     const pdf = await getDocumentProxy(pdfData);
 
@@ -141,7 +148,7 @@ export async function buildImageManifest(
     }
 
     manifest.sort((a, b) => a.pageNum - b.pageNum);
-    return manifest;
+    return { manifest, pdf };
 }
 
 /**
@@ -300,8 +307,4 @@ export async function extractPageImages(
     return { savedPaths, unresolvedNames };
 }
 
-/** Open a PDF document ready for image extraction (no canvas factory needed). */
-export async function openPdfForExtraction(pdfPath: string): Promise<PdfDoc> {
-    const pdfData = new Uint8Array(fs.readFileSync(pdfPath));
-    return getDocumentProxy(pdfData);
-}
+

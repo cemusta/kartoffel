@@ -4,11 +4,23 @@
 
 After completing any implementation plan, always run these 4 commands in order and fix any issues before considering the task done:
 
-```
+```bash
 npm run tsc
 npm run lint
 npm run test
 npm run build
+```
+
+For parser use commands below:
+
+```bash
+npm run parse --workspace=apps/pdf-parser -- assets/gesamtfragenkatalog-lebenindeutschland.pdf output 2>&1
+
+# interactive (prompts for PDF path and output dir):
+npm run parse --workspace=apps/pdf-parser
+
+# clean all output (manifest, progress, images, questions.json):
+npm run clean --workspace=apps/pdf-parser
 ```
 
 All 4 must exit with code 0. Fix errors before marking tasks complete.

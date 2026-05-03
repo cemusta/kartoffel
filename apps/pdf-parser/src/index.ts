@@ -2,7 +2,7 @@ import readline from 'readline';
 import path from 'path';
 import fs from 'fs';
 import { parsePdf } from './parse.js';
-import { buildImageManifest, extractPageImages, openPdfForExtraction } from './extract-images.js';
+import { buildImageManifest, extractPageImages } from './extract-images.js';
 import type { ExtractionProgress } from './extract-images.js';
 import type { Question } from './types.js';
 
@@ -88,8 +88,10 @@ async function main(): Promise<void> {
     console.log(`Wrote questions to: ${outputPath}`);
 
     // ── Phase 2: Image manifest (fast scan, no pixel decoding) ─────────────
+    // The returned pdf is reused for extraction — same instance ensures image
+    // names and CopyLocalImage state are consistent between manifest and extraction.
     process.stdout.write('Scanning PDF for images...');
-    const manifest = await buildImageManifest(pdfPath, questionPages);
+    const { manifest, pdf: extractionPdf } = await buildImageManifest(pdfPath, questionPages);
     writeJson(manifestPath, manifest);
     process.stdout.write(` found ${manifest.length} page(s) with images.\n`);
 
@@ -106,11 +108,6 @@ async function main(): Promise<void> {
     }
 
     fs.mkdirSync(imagesDir, { recursive: true });
-
-    // Open ONE shared PDF document for all page extractions.
-    // Image objects are cached at the document level, so rendering page N-1
-    // (where images are defined) makes them available when extracting page N.
-    const extractionPdf = await openPdfForExtraction(pdfPath);
 
     // Work on a mutable copy that may already have image paths from a previous run
     const currentQuestions: Question[] = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
