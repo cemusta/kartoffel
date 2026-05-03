@@ -81,6 +81,28 @@
   padding: 16px;
 }
 
+.clearProgressButton {
+  align-self: flex-start;
+  padding: 10px 20px;
+  border: 1.5px solid var(--md-sys-color-error, #c62828);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--md-sys-color-error, #c62828);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.clearProgressButton:active {
+  background-color: var(--md-sys-color-error, #c62828);
+  color: white;
+}
+
 @media (min-width: 768px) {
   .content {
     max-width: 640px;

@@ -7,9 +7,11 @@ vi.mock('@kartoffel/utils', () => ({
   getStoredUser: vi.fn(() => null),
   setStoredUser: vi.fn(),
   clearStoredUser: vi.fn(),
+  recordQuizAnswers: vi.fn(),
+  clearQuizProgress: vi.fn(),
 }));
 
-import { generateUsername, getStoredUser, setStoredUser, clearStoredUser } from '@kartoffel/utils';
+import { generateUsername, getStoredUser, setStoredUser, clearStoredUser, recordQuizAnswers, clearQuizProgress } from '@kartoffel/utils';
 import { useUser } from './useUser';
 
 const storedUser: StoredUser = { username: 'stored-user', createdAt: '2024-01-01T00:00:00.000Z' };
@@ -71,5 +73,56 @@ describe('useUser', () => {
 
     expect(clearStoredUser).toHaveBeenCalled();
     expect(result.current.user).toBeNull();
+  });
+
+  it('exposes empty correctQuestionIds and incorrectQuestionIds when not stored', () => {
+    const { result } = renderHook(() => useUser());
+    expect(result.current.correctQuestionIds).toEqual([]);
+    expect(result.current.incorrectQuestionIds).toEqual([]);
+  });
+
+  it('exposes stored correctQuestionIds and incorrectQuestionIds', () => {
+    const userWithIds: StoredUser = {
+      ...storedUser,
+      correctQuestionIds: [1, 2],
+      incorrectQuestionIds: [3],
+    };
+    vi.mocked(getStoredUser).mockReturnValue(userWithIds);
+    const { result } = renderHook(() => useUser());
+    expect(result.current.correctQuestionIds).toEqual([1, 2]);
+    expect(result.current.incorrectQuestionIds).toEqual([3]);
+  });
+
+  it('recordQuizAnswers calls storage function and re-reads user', () => {
+    const userWithIds: StoredUser = {
+      ...storedUser,
+      correctQuestionIds: [1],
+      incorrectQuestionIds: [],
+    };
+    vi.mocked(getStoredUser).mockReturnValueOnce(storedUser).mockReturnValue(userWithIds);
+
+    const { result } = renderHook(() => useUser());
+
+    act(() => {
+      result.current.recordQuizAnswers([1], []);
+    });
+
+    expect(recordQuizAnswers).toHaveBeenCalledWith([1], []);
+    expect(result.current.correctQuestionIds).toEqual([1]);
+  });
+
+  it('clearProgress calls storage clearQuizProgress and re-reads user', () => {
+    const clearedUser: StoredUser = { ...storedUser, correctQuestionIds: [], incorrectQuestionIds: [] };
+    vi.mocked(getStoredUser).mockReturnValueOnce(storedUser).mockReturnValue(clearedUser);
+
+    const { result } = renderHook(() => useUser());
+
+    act(() => {
+      result.current.clearProgress();
+    });
+
+    expect(clearQuizProgress).toHaveBeenCalled();
+    expect(result.current.correctQuestionIds).toEqual([]);
+    expect(result.current.incorrectQuestionIds).toEqual([]);
   });
 });

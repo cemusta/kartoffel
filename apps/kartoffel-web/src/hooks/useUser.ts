@@ -4,6 +4,8 @@ import {
   getStoredUser,
   setStoredUser,
   clearStoredUser,
+  recordQuizAnswers as storageRecordQuizAnswers,
+  clearQuizProgress as storageClearQuizProgress,
   type StoredUser,
 } from '@kartoffel/utils';
 
@@ -36,11 +38,27 @@ export function useUser() {
     [],
   );
 
+  const recordQuizAnswers = useCallback((correctIds: number[], incorrectIds: number[]) => {
+    storageRecordQuizAnswers(correctIds, incorrectIds);
+    const updated = getStoredUser();
+    setUser(updated);
+  }, []);
+
+  const clearProgress = useCallback(() => {
+    storageClearQuizProgress();
+    const updated = getStoredUser();
+    setUser(updated);
+  }, []);
+
   return {
     user,
     germanState: user?.germanState ?? null,
+    correctQuestionIds: user?.correctQuestionIds ?? [],
+    incorrectQuestionIds: user?.incorrectQuestionIds ?? [],
     createAnonymousUser,
     clearUser,
     setGermanState,
+    recordQuizAnswers,
+    clearProgress,
   };
 }

@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary {
+  margin: 0;
+  font-size: 13px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.masteredCount {
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  font-size: 15px;
+}
+
+.total {
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+}
+
+.label {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.cube {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.correct {
+  background-color: #2e7d32;
+}
+
+.incorrect {
+  background-color: #c62828;
+}
+
+.untouched {
+  background-color: var(--md-sys-color-surface-variant, #e0e0e0);
+}

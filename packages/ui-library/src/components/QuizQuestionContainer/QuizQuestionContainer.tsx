@@ -7,11 +7,13 @@ import styles from './QuizQuestionContainer.module.css';
 
 export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
   questions: QuestionData[];
-  onComplete?: (score: number) => void;
+  passingScore?: number;
+  onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
 }
 
 export function QuizQuestionContainer({
   questions,
+  passingScore,
   onComplete,
   className = '',
   ...props
@@ -19,9 +21,11 @@ export function QuizQuestionContainer({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
-  const [score, setScore] = useState<number | null>(null);
+  const [answeredCorrect, setAnsweredCorrect] = useState<number[]>([]);
+  const [answeredIncorrect, setAnsweredIncorrect] = useState<number[]>([]);
   const [showTranslation, setShowTranslation] = useState(false);
   const [showFact, setShowFact] = useState(false);
+  const [finished, setFinished] = useState(false);
 
   const currentQuestion = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
@@ -33,16 +37,18 @@ export function QuizQuestionContainer({
 
   const handleCheck = () => {
     setIsRevealed(true);
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+    if (isCorrect) {
+      setAnsweredCorrect(prev => [...prev, currentQuestion.id]);
+    } else {
+      setAnsweredIncorrect(prev => [...prev, currentQuestion.id]);
+    }
   };
 
   const handleNext = () => {
     if (isLastQuestion) {
-      const finalScore = questions.reduce((acc, q, idx) => {
-        const answer = idx === currentIndex ? selectedAnswer : null;
-        return answer === q.correctAnswer ? acc + 1 : acc;
-      }, 0);
-      setScore(finalScore);
-      onComplete?.(finalScore);
+      setFinished(true);
+      onComplete?.(answeredCorrect.length, answeredCorrect, answeredIncorrect);
     } else {
       setCurrentIndex(prev => prev + 1);
       setSelectedAnswer(null);
@@ -54,13 +60,17 @@ export function QuizQuestionContainer({
     setCurrentIndex(0);
     setSelectedAnswer(null);
     setIsRevealed(false);
-    setScore(null);
+    setAnsweredCorrect([]);
+    setAnsweredIncorrect([]);
+    setFinished(false);
   };
 
   const hasTranslation = Boolean(currentQuestion?.translations?.en);
   const factContext = currentQuestion?.translations?.en?.context;
 
-  if (score !== null) {
+  if (finished) {
+    const score = answeredCorrect.length;
+    const passed = passingScore !== undefined ? score >= passingScore : undefined;
     return (
       <div className={`${styles.container} ${className}`} {...props}>
         <div className={styles.results}>
@@ -69,6 +79,14 @@ export function QuizQuestionContainer({
             Score: {score} / {questions.length}
           </p>
           <p className={styles.percentage}>{Math.round((score / questions.length) * 100)}%</p>
+          {passed !== undefined && (
+            <p className={passed ? styles.passed : styles.failed}>
+              {passed ? '✓ Passed' : '✗ Failed'}
+              {passingScore !== undefined && (
+                <span className={styles.passingHint}> · {passingScore} correct answers needed</span>
+              )}
+            </p>
+          )}
           <button className={styles.button} onClick={handleReset}>
             Try Again
           </button>

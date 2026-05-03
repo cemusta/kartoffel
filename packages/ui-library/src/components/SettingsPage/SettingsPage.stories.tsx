@@ -32,6 +32,7 @@ const meta = {
     onBack: fn(),
     onLogout: fn(),
     onSettings: fn(),
+    onClearProgress: fn(),
     states: STATES,
   },
 } satisfies Meta<typeof SettingsPage>;
