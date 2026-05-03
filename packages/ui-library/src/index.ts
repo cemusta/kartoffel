@@ -1,6 +1,6 @@
 export { Button } from './components/Button';
-export { Answer } from './components/Answer';
-export { Question } from './components/Question';
+export { QuestionOptions } from './components/QuestionOptions';
+export { QuestionBody } from './components/QuestionBody';
 export { QuizQuestionContainer } from './components/QuizQuestionContainer';
 export { QuestionContainer } from './components/QuestionContainer';
 export { AllQuestionsContainer } from './components/AllQuestionsContainer';
@@ -18,8 +18,8 @@ export { StateSelectionPage } from './components/StateSelectionPage';
 export { SettingsPage } from './components/SettingsPage';
 
 export type { ButtonProps } from './components/Button';
-export type { AnswerProps } from './components/Answer';
-export type { QuestionProps, QuestionData } from './components/Question';
+export type { QuestionOptionsProps } from './components/QuestionOptions';
+export type { QuestionBodyProps, QuestionData } from './components/QuestionBody';
 
 export type { QuizQuestionContainerProps } from './components/QuizQuestionContainer';
 export type { QuestionContainerProps } from './components/QuestionContainer';

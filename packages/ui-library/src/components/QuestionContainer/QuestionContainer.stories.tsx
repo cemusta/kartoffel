@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { QuestionContainer } from './QuestionContainer';
-import type { QuestionData } from '../Question';
+import type { QuestionData } from '../QuestionBody';
 
 const meta = {
   title: 'Containers/QuestionContainer',

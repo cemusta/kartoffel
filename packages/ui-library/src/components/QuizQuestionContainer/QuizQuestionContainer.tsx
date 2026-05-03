@@ -1,5 +1,5 @@
 import { HTMLAttributes, useState } from 'react';
-import { QuestionData } from '../Question';
+import { QuestionData } from '../QuestionBody';
 import { QuestionContainer } from '../QuestionContainer';
 import { FactModal } from '../FactModal';
 import { TranslationToggle } from '../TranslationToggle';

@@ -1,5 +1,5 @@
 import { HTMLAttributes, useState } from 'react';
-import { QuestionData } from '../Question';
+import { QuestionData } from '../QuestionBody';
 import { QuestionContainer } from '../QuestionContainer';
 import { TranslationToggle } from '../TranslationToggle';
 import styles from './AllQuestionsContainer.module.css';

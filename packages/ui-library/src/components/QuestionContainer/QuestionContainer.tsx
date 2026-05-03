@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react';
-import { Question, QuestionData } from '../Question';
-import { Answer } from '../Answer';
+import { QuestionBody, QuestionData } from '../QuestionBody';
+import { QuestionOptions } from '../QuestionOptions';
 import styles from './QuestionContainer.module.css';
 
 const OPTION_KEYS = ['a', 'b', 'c', 'd'] as const;
@@ -25,7 +25,7 @@ export function QuestionContainer({
 }: QuestionContainerProps) {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
-      <Question
+      <QuestionBody
         text={question.text}
         textEn={question.translations?.en?.text}
         imageUrl={question.image}
@@ -35,7 +35,7 @@ export function QuestionContainer({
 
       <div className={styles.options}>
         {OPTION_KEYS.map(key => (
-          <Answer
+          <QuestionOptions
             key={key}
             label={OPTION_LABELS[key]}
             text={question.options[key]}

@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import styles from './Question.module.css';
+import styles from './QuestionBody.module.css';
 
 export interface QuestionData {
   id: number;
@@ -19,7 +19,7 @@ export interface QuestionData {
   };
 }
 
-export interface QuestionProps extends HTMLAttributes<HTMLDivElement> {
+export interface QuestionBodyProps extends HTMLAttributes<HTMLDivElement> {
   text?: string;
   textEn?: string;
   imageUrl?: string | string[];
@@ -27,7 +27,7 @@ export interface QuestionProps extends HTMLAttributes<HTMLDivElement> {
   showTranslation?: boolean;
 }
 
-export function Question({
+export function QuestionBody({
   text,
   textEn,
   imageUrl,
@@ -35,7 +35,7 @@ export function Question({
   showTranslation = false,
   className = '',
   ...props
-}: QuestionProps) {
+}: QuestionBodyProps) {
   const showTranslated = showTranslation && Boolean(textEn);
   const images = Array.isArray(imageUrl) ? imageUrl : imageUrl ? [imageUrl] : [];
 

@@ -1,7 +1,7 @@
 import { HTMLAttributes } from 'react';
-import styles from './Answer.module.css';
+import styles from './QuestionOptions.module.css';
 
-export interface AnswerProps extends HTMLAttributes<HTMLButtonElement> {
+export interface QuestionOptionsProps extends HTMLAttributes<HTMLButtonElement> {
   label?: string;
   text?: string;
   textEn?: string;
@@ -12,7 +12,7 @@ export interface AnswerProps extends HTMLAttributes<HTMLButtonElement> {
   onSelect?: () => void;
 }
 
-export function Answer({
+export function QuestionOptions({
   label,
   text,
   textEn,
@@ -23,7 +23,7 @@ export function Answer({
   onSelect,
   className = '',
   ...props
-}: AnswerProps) {
+}: QuestionOptionsProps) {
   const classes = [
     styles.answer,
     isSelected && styles.selected,
