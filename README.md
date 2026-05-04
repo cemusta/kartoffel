@@ -27,12 +27,24 @@ Thanks:
 ```tree
 kartoffel/
 ├── apps/
-│   └── kartoffel-web/       # React web app (mobile-first)
+│   ├── kartoffel-web/       # React web app (mobile-first)
+│   │   └── src/
+│   │       ├── screens/     # Thin wiring layers (hooks → Page props)
+│   │       ├── hooks/       # App-specific hooks (useUser)
+│   │       └── styles/      # Global CSS + MD3 tokens
+│   └── burgertest/          # PDF data pipeline (parse → merge → verify → translate → enrich → bundle)
+│       ├── assets/          # Source PDFs and raw datasets
+│       ├── output/          # Generated questions, images, progress files
 │       └── src/
-│           ├── screens/     # Thin wiring layers (hooks → Page props)
-│           ├── hooks/       # App-specific hooks (useUser)
-│           └── styles/      # Global CSS + MD3 tokens
+│           ├── parse.ts     # Extracts questions from PDF
+│           ├── merge-answers.ts  # Merges correct answers from webmansa dataset
+│           ├── verify.ts    # Validates parsed output
+│           ├── translate.ts # Translates questions to English (Gemini)
+│           ├── enrich.ts    # Adds context notes (Gemini)
+│           └── bundle.ts    # Produces final questions.json
 ├── packages/
+│   ├── burgertest/          # Bundled question data package (consumed by kartoffel-web)
+│   │   └── data/            # questions.json + images
 │   ├── ui-library/          # Presentational component + page library
 │   │   ├── src/
 │   │   │   ├── components/  # Atoms + Pages (Button, Card, OnboardingPage…)
