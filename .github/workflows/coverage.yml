@@ -28,6 +28,7 @@ jobs:
       - name: Build packages
         run: |
           npm run build --workspace=@kartoffel/utils
+          npm run build --workspace=@cemusta/burgertest
           npm run build --workspace=@kartoffel/ui-library
 
       - name: Run tests with coverage
