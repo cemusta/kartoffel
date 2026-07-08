@@ -1294,14 +1294,14 @@
     "correctAnswer": "a",
     "translations": {
       "en": {
-        "text": "What does \"popular sovereignty\" mean? All state authority emanates from the...",
+        "text": "What does \"sovereignty of the people\" mean? All state authority emanates from the...",
         "options": {
           "a": "people.",
           "b": "Bundestag.",
           "c": "Prussian King.",
           "d": "Federal Constitutional Court."
         },
-        "context": "Popular sovereignty means that the ultimate power in a democracy rests with the citizens, who exercise it through elections. It ensures that the government represents the will of the people! In Germany, this is most clearly seen during the federal elections."
+        "context": "Sovereignty of the people means that the ultimate power in a democracy rests with the citizens, who exercise it through elections. It ensures that the government represents the will of the people! In Germany, this is most clearly seen during the federal elections."
       }
     }
   },
