@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMemo, useState, useEffect } from 'react';
+import { useNavigate, useBlocker } from 'react-router-dom';
 import { PracticeQuizPage } from '@kartoffel/ui-library';
 import { questions } from '@cemusta/burgertest';
 import { useUser } from '../../hooks/useUser';
@@ -20,6 +20,27 @@ function sampleN<T>(arr: T[], n: number): T[] {
 export function PracticeQuizScreen() {
   const navigate = useNavigate();
   const { germanState, recordQuizAnswers } = useUser();
+  const [quizInProgress, setQuizInProgress] = useState(false);
+
+  // Block browser back/forward navigation when quiz is in progress
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      quizInProgress && currentLocation.pathname !== nextLocation.pathname
+  );
+
+  // Handle blocker confirmation
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      const confirmed = window.confirm(
+        'Are you sure you want to quit? Your progress will be lost.'
+      );
+      if (confirmed) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
+    }
+  }, [blocker]);
 
   const quizQuestions = useMemo(() => {
     const general = questions.filter(q => q.type === 'general');
@@ -28,6 +49,7 @@ export function PracticeQuizScreen() {
   }, [germanState]);
 
   function handleComplete(_score: number, correctIds: number[], incorrectIds: number[]) {
+    setQuizInProgress(false);
     recordQuizAnswers(correctIds, incorrectIds);
   }
 
@@ -41,6 +63,7 @@ export function PracticeQuizScreen() {
       questions={quizQuestions}
       passingScore={PASSING_SCORE}
       onComplete={handleComplete}
+      onQuizStarted={setQuizInProgress}
     />
   );
 }

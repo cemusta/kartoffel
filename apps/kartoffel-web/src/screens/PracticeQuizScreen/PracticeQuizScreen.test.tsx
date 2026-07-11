@@ -4,10 +4,19 @@ import { MemoryRouter } from 'react-router-dom';
 
 const mockNavigate = vi.fn();
 const mockRecordQuizAnswers = vi.fn();
+const mockBlocker = {
+  state: 'unblocked' as const,
+  proceed: vi.fn(),
+  reset: vi.fn(),
+};
 
 vi.mock('react-router-dom', async importOriginal => {
   const actual = await importOriginal<typeof import('react-router-dom')>();
-  return { ...actual, useNavigate: () => mockNavigate };
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    useBlocker: () => mockBlocker,
+  };
 });
 
 vi.mock('@cemusta/burgertest', () => ({
@@ -35,11 +44,13 @@ vi.mock('@kartoffel/ui-library', () => ({
     questions,
     onBack,
     onComplete,
+    onQuizStarted,
   }: {
     questions: { id: number }[];
     passingScore?: number;
     onBack?: () => void;
     onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
+    onQuizStarted?: (started: boolean) => void;
   }) => (
     <div>
       <button onClick={onBack} aria-label="Go back">
@@ -47,6 +58,7 @@ vi.mock('@kartoffel/ui-library', () => ({
       </button>
       <span data-testid="question-count">{questions.length}</span>
       <button onClick={() => onComplete?.(17, [1], [2])}>Finish</button>
+      <button onClick={() => onQuizStarted?.(true)}>Start Quiz</button>
     </div>
   ),
 }));
