@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { QuizQuestionContainer, TopBar } from '@kartoffel/ui-library';
+import { PracticeQuizPage } from '@kartoffel/ui-library';
 import { questions } from '@cemusta/burgertest';
 import { useUser } from '../../hooks/useUser';
-import styles from './PracticeQuizScreen.module.css';
 
 const GENERAL_COUNT = 30;
 const STATE_COUNT = 3;
@@ -32,30 +31,16 @@ export function PracticeQuizScreen() {
     recordQuizAnswers(correctIds, incorrectIds);
   }
 
+  function handleBack() {
+    navigate(-1);
+  }
+
   return (
-    <div className={styles.screen}>
-      <TopBar
-        left={
-          <>
-            <button
-              className={styles.backButton}
-              onClick={() => navigate(-1)}
-              aria-label="Go back"
-              type="button"
-            >
-              ‹
-            </button>
-            <p className={styles.topBarTitle}>Practice Quiz</p>
-          </>
-        }
-      />
-      <div className={styles.content}>
-        <QuizQuestionContainer
-          questions={quizQuestions}
-          passingScore={PASSING_SCORE}
-          onComplete={handleComplete}
-        />
-      </div>
-    </div>
+    <PracticeQuizPage
+      onBack={handleBack}
+      questions={quizQuestions}
+      passingScore={PASSING_SCORE}
+      onComplete={handleComplete}
+    />
   );
 }

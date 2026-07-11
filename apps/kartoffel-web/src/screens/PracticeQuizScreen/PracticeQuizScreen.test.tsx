@@ -31,20 +31,24 @@ vi.mock('@cemusta/burgertest', () => ({
 }));
 
 vi.mock('@kartoffel/ui-library', () => ({
-  QuizQuestionContainer: ({
+  PracticeQuizPage: ({
     questions,
+    onBack,
     onComplete,
   }: {
     questions: { id: number }[];
     passingScore?: number;
+    onBack?: () => void;
     onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
   }) => (
     <div>
+      <button onClick={onBack} aria-label="Go back">
+        Back
+      </button>
       <span data-testid="question-count">{questions.length}</span>
       <button onClick={() => onComplete?.(17, [1], [2])}>Finish</button>
     </div>
   ),
-  TopBar: ({ left }: { left: React.ReactNode }) => <div>{left}</div>,
 }));
 
 vi.mock('../../hooks/useUser', () => ({
