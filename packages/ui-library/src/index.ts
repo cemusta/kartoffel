@@ -23,6 +23,7 @@ export { StateSelectionPage } from './components/StateSelectionPage';
 export { SettingsPage } from './components/SettingsPage';
 export { ProgressGrid } from './components/ProgressGrid';
 export { PracticeQuizPage } from './components/PracticeQuizPage';
+export { FactCallout } from './components/FactCallout';
 
 export type { ButtonProps } from './components/Button';
 export type { QuestionOptionsProps } from './components/QuestionOptions';
@@ -48,3 +49,4 @@ export type { StateSelectionPageProps } from './components/StateSelectionPage';
 export type { SettingsPageProps } from './components/SettingsPage';
 export type { ProgressGridProps } from './components/ProgressGrid';
 export type { PracticeQuizPageProps } from './components/PracticeQuizPage';
+export type { FactCalloutProps } from './components/FactCallout';

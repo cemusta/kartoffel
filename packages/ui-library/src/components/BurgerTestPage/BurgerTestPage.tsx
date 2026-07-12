@@ -2,6 +2,7 @@ import { ModeCard } from '../ModeCard';
 import { TopBar } from '../TopBar';
 import { HamburgerMenu } from '../HamburgerMenu';
 import { ProgressGrid } from '../ProgressGrid';
+import { FactCallout } from '../FactCallout';
 import styles from './BurgerTestPage.module.css';
 
 export interface BurgerTestPageProps {
@@ -85,13 +86,7 @@ export function BurgerTestPage({
             />
           </div>
         )}
-        <div className={styles.factCallout}>
-          <span className={styles.factIcon}>💡</span>
-          <p className={styles.factText}>
-            Historically, the success rate is over 98%, as the questions are public and can be
-            practiced in advance.
-          </p>
-        </div>
+        <FactCallout text="Historically, the success rate is over 98%, as the questions are public and can be practiced in advance." />
       </div>
     </div>
   );
