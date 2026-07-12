@@ -1,4 +1,4 @@
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, useState, useEffect, useCallback } from 'react';
 import { QuestionData } from '../QuestionBody';
 import { QuestionContainer } from '../QuestionContainer';
 import { FactModal } from '../FactModal';
@@ -34,11 +34,11 @@ export function QuizQuestionContainer({
   const selectedAnswer = answers.get(currentIndex) ?? null;
   const isRevealed = revealedQuestions.has(currentIndex);
 
-  const handleSelect = (key: string) => {
+  const handleSelect = useCallback((key: string) => {
     setAnswers(prev => new Map(prev).set(currentIndex, key));
-  };
+  }, [currentIndex]);
 
-  const handleCheck = () => {
+  const handleCheck = useCallback(() => {
     setRevealedQuestions(prev => new Set(prev).add(currentIndex));
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     if (isCorrect) {
@@ -46,22 +46,22 @@ export function QuizQuestionContainer({
     } else {
       setAnsweredIncorrect(prev => [...prev, currentQuestion.id]);
     }
-  };
+  }, [currentIndex, selectedAnswer, currentQuestion]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (isLastQuestion) {
       setFinished(true);
       onComplete?.(answeredCorrect.length, answeredCorrect, answeredIncorrect);
     } else {
       setCurrentIndex(prev => prev + 1);
     }
-  };
+  }, [isLastQuestion, onComplete, answeredCorrect, answeredIncorrect]);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex(prev => prev - 1);
     }
-  };
+  }, [currentIndex]);
 
   const handleReset = () => {
     setCurrentIndex(0);
@@ -74,6 +74,80 @@ export function QuizQuestionContainer({
 
   const hasTranslation = Boolean(currentQuestion?.translations?.en);
   const factContext = currentQuestion?.translations?.en?.context;
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    if (finished || showFact) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input/textarea
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+
+      // T - Toggle translation
+      if (key === 't' && hasTranslation) {
+        e.preventDefault();
+        setShowTranslation(prev => !prev);
+        return;
+      }
+
+      // F - Show fact
+      if (key === 'f' && factContext) {
+        e.preventDefault();
+        setShowFact(true);
+        return;
+      }
+
+      // Left arrow - Previous question
+      if (key === 'arrowleft') {
+        e.preventDefault();
+        handlePrevious();
+        return;
+      }
+
+      // Right arrow - Next question (only if revealed)
+      if (key === 'arrowright' && isRevealed) {
+        e.preventDefault();
+        handleNext();
+        return;
+      }
+
+      // Enter - Check answer
+      if (key === 'enter' && selectedAnswer && !isRevealed) {
+        e.preventDefault();
+        handleCheck();
+        return;
+      }
+
+      // 1-4 - Select answers A-D (only if not revealed)
+      if (!isRevealed) {
+        const numKey = parseInt(key, 10);
+        if (numKey >= 1 && numKey <= 4) {
+          e.preventDefault();
+          const answerKey = ['a', 'b', 'c', 'd'][numKey - 1];
+          handleSelect(answerKey);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [
+    finished,
+    showFact,
+    hasTranslation,
+    factContext,
+    isRevealed,
+    selectedAnswer,
+    handleSelect,
+    handleCheck,
+    handleNext,
+    handlePrevious,
+  ]);
 
   if (finished) {
     const score = answeredCorrect.length;

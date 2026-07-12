@@ -230,3 +230,66 @@ export const WithNavigation: Story = {
   },
 };
 
+export const WithKeyboardShortcuts: Story = {
+  args: {
+    questions: sampleQuestions,
+    onComplete: score => console.log('Quiz completed! Score:', score),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Check that we're on question 1
+    await expect(canvas.getByText(/Question 1 of 3/i)).toBeInTheDocument();
+
+    // Select answer D using keyboard shortcut '4'
+    await userEvent.keyboard('4');
+
+    // Verify answer D is selected (hier Meinungsfreiheit gilt)
+    const option4 = canvas.getByRole('button', { name: /hier Meinungsfreiheit gilt/i });
+    await expect(option4).toBeInTheDocument();
+
+    // Check answer using Enter key
+    await userEvent.keyboard('{Enter}');
+
+    // Verify the answer was checked (Next Question button appears)
+    await expect(canvas.getByText(/Next Question/i)).toBeInTheDocument();
+
+    // Navigate to next question using right arrow
+    await userEvent.keyboard('{ArrowRight}');
+
+    // Check we're on question 2
+    await expect(canvas.getByText(/Question 2 of 3/i)).toBeInTheDocument();
+
+    // Select answer C (die Meinungsfreiheit) using keyboard shortcut '3'
+    await userEvent.keyboard('3');
+
+    // Check using Enter
+    await userEvent.keyboard('{Enter}');
+
+    // Navigate back using left arrow
+    await userEvent.keyboard('{ArrowLeft}');
+
+    // Verify we're back on question 1
+    await expect(canvas.getByText(/Question 1 of 3/i)).toBeInTheDocument();
+
+    // Try toggling translation with 'T' key
+    await userEvent.keyboard('t');
+
+    // The translation should now be visible in the question body
+    await expect(
+      canvas.getByText(/In Germany, people are allowed to speak openly against the government/i)
+    ).toBeInTheDocument();
+
+    // Toggle translation off
+    await userEvent.keyboard('t');
+
+    // Try showing fact with 'F' key
+    await userEvent.keyboard('f');
+
+    // Fact modal should be visible
+    await expect(
+      canvas.getByText(/Freedom of expression is a fundamental right in Germany/i)
+    ).toBeInTheDocument();
+  },
+};
+
