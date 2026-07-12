@@ -25,6 +25,9 @@ export interface QuestionBodyProps extends HTMLAttributes<HTMLDivElement> {
   imageUrl?: string | string[];
   imageText?: string;
   showTranslation?: boolean;
+  questionId?: number;
+  questionType?: 'general' | 'state';
+  stateName?: string;
 }
 
 function toAbsoluteUrl(url: string): string {
@@ -39,6 +42,9 @@ export function QuestionBody({
   imageUrl,
   imageText,
   showTranslation = false,
+  questionId,
+  questionType,
+  stateName,
   className = '',
   ...props
 }: QuestionBodyProps) {
@@ -47,8 +53,21 @@ export function QuestionBody({
     toAbsoluteUrl
   );
 
+  const showQuestionLabel = questionId !== undefined;
+  let questionLabel = '';
+  if (showQuestionLabel) {
+    if (questionType === 'state' && stateName) {
+      questionLabel = `${stateName} ${questionId}`;
+    } else if (questionType === 'general') {
+      questionLabel = `General ${questionId}`;
+    } else {
+      questionLabel = `${questionId}`;
+    }
+  }
+
   return (
     <div className={`${styles.question} ${className}`} {...props}>
+      {showQuestionLabel && <p className={styles.questionLabel}>{questionLabel}</p>}
       {images.length === 1 && (
         <>
           <img src={images[0]} alt="Question" className={styles.image} />

@@ -31,6 +31,9 @@ export function QuestionContainer({
         imageUrl={question.image}
         imageText={question.imageText}
         showTranslation={showTranslation}
+        questionId={question.id}
+        questionType={question.type}
+        stateName={question.state}
       />
 
       <div className={styles.options}>
