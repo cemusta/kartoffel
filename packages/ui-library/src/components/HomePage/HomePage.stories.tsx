@@ -13,9 +13,11 @@ const meta = {
     onLogout: fn(),
     onSettings: fn(),
     username: 'SwiftOtter42',
+    version: '0.1.0',
   },
   argTypes: {
     username: { control: 'text' },
+    version: { control: 'text' },
     onBurgerTest: { action: 'onBurgerTest' },
     onLogout: { action: 'onLogout' },
     onSettings: { action: 'onSettings' },

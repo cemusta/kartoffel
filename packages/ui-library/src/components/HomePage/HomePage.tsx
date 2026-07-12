@@ -5,12 +5,13 @@ import styles from './HomePage.module.css';
 
 export interface HomePageProps {
   username: string | null;
+  version?: string;
   onBurgerTest: () => void;
   onLogout: () => void;
   onSettings: () => void;
 }
 
-export function HomePage({ username, onBurgerTest, onLogout, onSettings }: HomePageProps) {
+export function HomePage({ username, version, onBurgerTest, onLogout, onSettings }: HomePageProps) {
   return (
     <div className={styles.screen}>
       <TopBar
@@ -39,6 +40,10 @@ export function HomePage({ username, onBurgerTest, onLogout, onSettings }: HomeP
             disabled
           />
         </div>
+
+        {version && (
+          <p className={styles.version}>made with love - v{version}</p>
+        )}
       </div>
     </div>
   );

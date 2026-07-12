@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { HomePage } from '@kartoffel/ui-library';
 import { useUser } from '../../hooks/useUser';
+import packageJson from '../../../package.json';
 
 export function HomeScreen() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export function HomeScreen() {
   return (
     <HomePage
       username={user?.username ?? null}
+      version={packageJson.version}
       onBurgerTest={() => navigate('/burger-test')}
       onLogout={handleLogout}
       onSettings={() => navigate('/settings')}
