@@ -59,7 +59,8 @@ export function QuestionBody({
   let questionLabel = '';
   if (showQuestionLabel) {
     if (questionType === 'state' && stateName) {
-      questionLabel = `${stateName} ${questionId}`;
+      const stateDisplayId = ((questionId - 1) % 10) + 1;
+      questionLabel = `${stateName} ${stateDisplayId}`;
     } else if (questionType === 'general') {
       questionLabel = `General ${questionId}`;
     } else {
