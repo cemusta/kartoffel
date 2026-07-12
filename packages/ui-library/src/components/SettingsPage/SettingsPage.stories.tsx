@@ -25,7 +25,6 @@ const meta = {
   title: 'Pages/SettingsPage',
   component: SettingsPage,
   parameters: { layout: 'fullscreen' },
-  tags: ['autodocs'],
   args: {
     username: 'SwiftOtter42',
     onStateChange: fn(),

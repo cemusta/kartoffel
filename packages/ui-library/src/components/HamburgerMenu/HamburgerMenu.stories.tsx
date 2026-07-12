@@ -6,7 +6,6 @@ const meta = {
   title: 'Components/HamburgerMenu',
   component: HamburgerMenu,
   parameters: { layout: 'padded' },
-  tags: ['autodocs'],
   args: {
     onLogout: fn(),
     onSettings: fn(),

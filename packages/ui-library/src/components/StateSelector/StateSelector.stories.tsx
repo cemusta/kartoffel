@@ -26,7 +26,6 @@ const meta = {
   title: 'Components/StateSelector',
   component: StateSelector,
   parameters: { layout: 'padded' },
-  tags: ['autodocs'],
   args: {
     onChange: fn(),
     states: STATES,

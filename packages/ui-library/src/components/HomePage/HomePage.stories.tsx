@@ -8,7 +8,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-  tags: ['autodocs'],
   args: {
     onBurgerTest: fn(),
     onLogout: fn(),

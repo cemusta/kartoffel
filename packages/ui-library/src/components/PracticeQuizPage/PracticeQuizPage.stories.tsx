@@ -73,7 +73,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-  tags: ['autodocs'],
   args: {
     onBack: fn(),
     onComplete: fn(),

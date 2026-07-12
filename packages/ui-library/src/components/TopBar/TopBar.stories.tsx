@@ -7,7 +7,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-  tags: ['autodocs'],
 } satisfies Meta<typeof TopBar>;
 
 export default meta;

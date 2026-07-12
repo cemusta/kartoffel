@@ -25,7 +25,6 @@ const meta = {
   title: 'Pages/StateSelectionPage',
   component: StateSelectionPage,
   parameters: { layout: 'fullscreen' },
-  tags: ['autodocs'],
   args: {
     onContinue: fn(),
     onBack: fn(),
