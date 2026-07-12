@@ -13,6 +13,8 @@ export interface PracticeQuizPageProps {
   onQuizStarted?: (started: boolean) => void;
   randomizeOptions?: boolean;
   showGoogleSearch?: boolean;
+  correctQuestionIds?: number[];
+  incorrectQuestionIds?: number[];
 }
 
 export function PracticeQuizPage({
@@ -24,6 +26,8 @@ export function PracticeQuizPage({
   onQuizStarted,
   randomizeOptions = false,
   showGoogleSearch = true,
+  correctQuestionIds,
+  incorrectQuestionIds,
 }: PracticeQuizPageProps) {
   const quizStartedRef = useRef(false);
 
@@ -91,6 +95,8 @@ export function PracticeQuizPage({
           onClick={handleQuizStart}
           randomizeOptions={randomizeOptions}
           showGoogleSearch={showGoogleSearch}
+          correctQuestionIds={correctQuestionIds}
+          incorrectQuestionIds={incorrectQuestionIds}
         />
       </div>
     </div>

@@ -293,3 +293,85 @@ export const WithKeyboardShortcuts: Story = {
   },
 };
 
+export const WithNewQuestionBadge: Story = {
+  args: {
+    questions: sampleQuestions,
+    onComplete: score => console.log('Quiz completed! Score:', score),
+    correctQuestionIds: [],
+    incorrectQuestionIds: [],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Verify the "New" badge is displayed
+    await expect(canvas.getByText(/New/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/✨/)).toBeInTheDocument();
+  },
+};
+
+export const WithCorrectQuestionBadge: Story = {
+  args: {
+    questions: sampleQuestions,
+    onComplete: score => console.log('Quiz completed! Score:', score),
+    correctQuestionIds: [1], // First question was answered correctly
+    incorrectQuestionIds: [],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Verify the "Correct" badge is displayed
+    await expect(canvas.getByText(/Correct/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/✓/)).toBeInTheDocument();
+  },
+};
+
+export const WithWrongQuestionBadge: Story = {
+  args: {
+    questions: sampleQuestions,
+    onComplete: score => console.log('Quiz completed! Score:', score),
+    correctQuestionIds: [],
+    incorrectQuestionIds: [1], // First question was answered incorrectly
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Verify the "Wrong" badge is displayed
+    await expect(canvas.getByText(/Wrong/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/✗/)).toBeInTheDocument();
+  },
+};
+
+export const WithMixedQuestionStatuses: Story = {
+  args: {
+    questions: sampleQuestions,
+    onComplete: score => console.log('Quiz completed! Score:', score),
+    correctQuestionIds: [1], // First question correct
+    incorrectQuestionIds: [2], // Second question wrong, third is new
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    
+    // Question 1 should show "Correct" badge
+    await expect(canvas.getByText(/Question 1 of 3/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/Correct/i)).toBeInTheDocument();
+    
+    // Select an answer and move to next question
+    const option = canvas.getByRole('button', { name: /hier Meinungsfreiheit gilt/i });
+    await userEvent.click(option);
+    await userEvent.click(canvas.getByText(/Check Answer/i));
+    await userEvent.click(canvas.getByText(/Next Question/i));
+    
+    // Question 2 should show "Wrong" badge
+    await expect(canvas.getByText(/Question 2 of 3/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/Wrong/i)).toBeInTheDocument();
+    
+    // Move to question 3
+    const option2 = canvas.getByRole('button', { name: /die Meinungsfreiheit/i });
+    await userEvent.click(option2);
+    await userEvent.click(canvas.getByText(/Check Answer/i));
+    await userEvent.click(canvas.getByText(/Next Question/i));
+    
+    // Question 3 should show "New" badge
+    await expect(canvas.getByText(/Question 3 of 3/i)).toBeInTheDocument();
+    await expect(canvas.getByText(/New/i)).toBeInTheDocument();
+  },
+};
+
+

@@ -19,7 +19,7 @@ function sampleN<T>(arr: T[], n: number): T[] {
 
 export function PracticeQuizScreen() {
   const navigate = useNavigate();
-  const { germanState, recordQuizAnswers, showGoogleSearch } = useUser();
+  const { germanState, recordQuizAnswers, showGoogleSearch, correctQuestionIds, incorrectQuestionIds } = useUser();
   const [quizInProgress, setQuizInProgress] = useState(false);
 
   // Block browser back/forward navigation when quiz is in progress
@@ -66,6 +66,8 @@ export function PracticeQuizScreen() {
       onQuizStarted={setQuizInProgress}
       randomizeOptions={true}
       showGoogleSearch={showGoogleSearch}
+      correctQuestionIds={correctQuestionIds}
+      incorrectQuestionIds={incorrectQuestionIds}
     />
   );
 }

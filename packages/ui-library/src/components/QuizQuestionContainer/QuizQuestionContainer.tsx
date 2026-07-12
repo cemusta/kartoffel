@@ -1,8 +1,9 @@
-import { HTMLAttributes, useState, useEffect, useCallback } from 'react';
+import { HTMLAttributes, useState, useEffect, useCallback, useMemo } from 'react';
 import { QuestionData } from '../QuestionBody';
 import { QuestionContainer } from '../QuestionContainer';
 import { FactModal } from '../FactModal';
 import { TranslationToggle } from '../TranslationToggle';
+import { QuestionStatusBadge, QuestionStatus } from '../QuestionStatusBadge';
 import styles from './QuizQuestionContainer.module.css';
 
 export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElement> {
@@ -11,6 +12,8 @@ export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElemen
   onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
   randomizeOptions?: boolean;
   showGoogleSearch?: boolean;
+  correctQuestionIds?: number[];
+  incorrectQuestionIds?: number[];
 }
 
 export function QuizQuestionContainer({
@@ -19,6 +22,8 @@ export function QuizQuestionContainer({
   onComplete,
   randomizeOptions = false,
   showGoogleSearch = true,
+  correctQuestionIds,
+  incorrectQuestionIds,
   className = '',
   ...props
 }: QuizQuestionContainerProps) {
@@ -35,6 +40,14 @@ export function QuizQuestionContainer({
   const isLastQuestion = currentIndex === questions.length - 1;
   const selectedAnswer = answers.get(currentIndex) ?? null;
   const isRevealed = revealedQuestions.has(currentIndex);
+
+  // Calculate question status based on history
+  const questionStatus: QuestionStatus | null = useMemo(() => {
+    if (!correctQuestionIds && !incorrectQuestionIds) return null;
+    if (correctQuestionIds?.includes(currentQuestion.id)) return 'correct';
+    if (incorrectQuestionIds?.includes(currentQuestion.id)) return 'wrong';
+    return 'new';
+  }, [currentQuestion.id, correctQuestionIds, incorrectQuestionIds]);
 
   const handleSelect = useCallback((key: string) => {
     setAnswers(prev => new Map(prev).set(currentIndex, key));
@@ -186,6 +199,12 @@ export function QuizQuestionContainer({
       <div className={styles.header}>
         <span className={styles.progress}>
           Question {currentIndex + 1} of {questions.length}
+          {questionStatus && (
+            <>
+              {' '}
+              <QuestionStatusBadge status={questionStatus} />
+            </>
+          )}
         </span>
         <div className={styles.controls}>
           <button
