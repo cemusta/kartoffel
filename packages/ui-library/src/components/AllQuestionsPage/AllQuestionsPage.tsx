@@ -3,20 +3,20 @@ import { QuestionData } from '../QuestionBody';
 import { AllQuestionsContainer } from '../AllQuestionsContainer';
 import { TopBar } from '../TopBar';
 import { TranslationToggle } from '../TranslationToggle';
+import { RandomizeToggle } from '../RandomizeToggle';
 import styles from './AllQuestionsPage.module.css';
 
 export interface AllQuestionsPageProps {
   questions: QuestionData[];
   onBack: () => void;
-  randomizeOptions?: boolean;
 }
 
 export function AllQuestionsPage({
   questions,
   onBack,
-  randomizeOptions = false,
 }: AllQuestionsPageProps) {
   const [showTranslation, setShowTranslation] = useState(false);
+  const [randomizeOptions, setRandomizeOptions] = useState(false);
   const currentQuestionIndexRef = useRef(0);
   const questionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -68,6 +68,11 @@ export function AllQuestionsPage({
             setShowTranslation(prev => !prev);
           }
           break;
+        case 'r':
+        case 'R':
+          e.preventDefault();
+          setRandomizeOptions(prev => !prev);
+          break;
       }
     };
 
@@ -92,9 +97,12 @@ export function AllQuestionsPage({
           </>
         }
         right={
-          hasAnyTranslation ? (
-            <TranslationToggle checked={showTranslation} onChange={setShowTranslation} />
-          ) : undefined
+          <div className={styles.toggleGroup}>
+            <RandomizeToggle checked={randomizeOptions} onChange={setRandomizeOptions} />
+            {hasAnyTranslation && (
+              <TranslationToggle checked={showTranslation} onChange={setShowTranslation} />
+            )}
+          </div>
         }
       />
       <div className={styles.content} ref={contentRef}>

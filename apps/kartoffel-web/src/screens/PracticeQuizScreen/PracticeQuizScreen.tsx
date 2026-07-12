@@ -64,6 +64,7 @@ export function PracticeQuizScreen() {
       passingScore={PASSING_SCORE}
       onComplete={handleComplete}
       onQuizStarted={setQuizInProgress}
+      randomizeOptions={true}
     />
   );
 }

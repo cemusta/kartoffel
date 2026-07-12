@@ -14,7 +14,6 @@ const meta = {
   },
   argTypes: {
     onBack: { action: 'onBack' },
-    randomizeOptions: { control: 'boolean' },
   },
 } satisfies Meta<typeof AllQuestionsPage>;
 
@@ -98,13 +97,6 @@ const sampleQuestions: QuestionData[] = [
 export const Default: Story = {
   args: {
     questions: sampleQuestions,
-  },
-};
-
-export const WithRandomizedOptions: Story = {
-  args: {
-    questions: sampleQuestions,
-    randomizeOptions: true,
   },
 };
 
