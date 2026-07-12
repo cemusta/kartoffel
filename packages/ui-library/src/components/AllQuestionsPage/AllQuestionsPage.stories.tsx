@@ -1,21 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AllQuestionsContainer } from './AllQuestionsContainer';
+import { fn } from 'storybook/test';
+import { AllQuestionsPage } from './AllQuestionsPage';
 import type { QuestionData } from '../QuestionBody';
 
 const meta = {
-  title: 'Containers/AllQuestionsContainer',
-  component: AllQuestionsContainer,
+  title: 'Pages/AllQuestionsPage',
+  component: AllQuestionsPage,
   parameters: {
-    layout: 'padded',
+    layout: 'fullscreen',
   },
   args: {
-    showTranslation: false,
+    onBack: fn(),
   },
   argTypes: {
-    showTranslation: { control: 'boolean' },
+    onBack: { action: 'onBack' },
     randomizeOptions: { control: 'boolean' },
   },
-} satisfies Meta<typeof AllQuestionsContainer>;
+} satisfies Meta<typeof AllQuestionsPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -85,7 +86,7 @@ const sampleQuestions: QuestionData[] = [
         text: 'What is the Basic Law (Grundgesetz)?',
         options: {
           a: 'the constitution of Germany',
-          b: 'a school textbook',
+          b: 'a textbook',
           c: 'a tax law book',
           d: 'the rules of procedure of the Bundestag',
         },
@@ -97,22 +98,21 @@ const sampleQuestions: QuestionData[] = [
 export const Default: Story = {
   args: {
     questions: sampleQuestions,
-    showTranslation: false,
-    style: { maxHeight: '600px' },
   },
 };
 
-export const WithTranslation: Story = {
+export const WithRandomizedOptions: Story = {
   args: {
     questions: sampleQuestions,
-    showTranslation: true,
-    style: { maxHeight: '600px' },
+    randomizeOptions: true,
   },
 };
 
-export const SingleQuestion: Story = {
+export const NoTranslations: Story = {
   args: {
-    questions: [sampleQuestions[0]],
-    showTranslation: false,
+    questions: sampleQuestions.map(q => ({
+      ...q,
+      translations: undefined,
+    })),
   },
 };

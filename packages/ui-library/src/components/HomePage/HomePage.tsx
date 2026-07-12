@@ -42,7 +42,7 @@ export function HomePage({ username, version, onBurgerTest, onLogout, onSettings
         </div>
 
         {version && (
-          <p className={styles.version}>made with love - v{version}</p>
+          <p className={styles.version}>made with ❤️ - v{version}</p>
         )}
       </div>
     </div>

@@ -6,6 +6,7 @@ export { QuestionBody } from './components/QuestionBody';
 export { QuizQuestionContainer } from './components/QuizQuestionContainer';
 export { QuestionContainer } from './components/QuestionContainer';
 export { AllQuestionsContainer } from './components/AllQuestionsContainer';
+export { AllQuestionsPage } from './components/AllQuestionsPage';
 export { ModeCard } from './components/ModeCard';
 export { TopBar } from './components/TopBar';
 export { UserBadge } from './components/UserBadge';
@@ -28,6 +29,7 @@ export type { QuestionBodyProps, QuestionData } from './components/QuestionBody'
 export type { QuizQuestionContainerProps } from './components/QuizQuestionContainer';
 export type { QuestionContainerProps } from './components/QuestionContainer';
 export type { AllQuestionsContainerProps } from './components/AllQuestionsContainer';
+export type { AllQuestionsPageProps } from './components/AllQuestionsPage';
 export type { ModeCardProps } from './components/ModeCard';
 export type { TopBarProps } from './components/TopBar';
 export type { UserBadgeProps } from './components/UserBadge';

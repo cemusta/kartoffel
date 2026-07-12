@@ -4,13 +4,6 @@
   min-height: 0;
 }
 
-.header {
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: 1rem;
-  flex-shrink: 0;
-}
-
 .scroll {
   display: flex;
   flex-direction: column;
