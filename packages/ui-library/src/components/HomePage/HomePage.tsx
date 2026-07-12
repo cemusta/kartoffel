@@ -1,6 +1,7 @@
 import { ModeCard } from '../ModeCard';
 import { TopBar } from '../TopBar';
 import { HamburgerMenu } from '../HamburgerMenu';
+import { AppFooter } from '../AppFooter';
 import styles from './HomePage.module.css';
 
 export interface HomePageProps {
@@ -41,9 +42,7 @@ export function HomePage({ username, version, onBurgerTest, onLogout, onSettings
           />
         </div>
 
-        {version && (
-          <p className={styles.version}>made with ❤️ - v{version}</p>
-        )}
+        {version && <AppFooter version={version} />}
       </div>
     </div>
   );

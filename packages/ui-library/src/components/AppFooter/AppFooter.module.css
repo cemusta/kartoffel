@@ -1,0 +1,37 @@
+.footer {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.version {
+  font-size: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  text-align: center;
+  opacity: 0.7;
+  margin: 0;
+  user-select: none;
+}
+
+.links {
+  display: flex;
+  gap: 20px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.link:hover {
+  opacity: 1;
+}

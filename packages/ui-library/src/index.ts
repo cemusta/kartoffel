@@ -18,6 +18,7 @@ export { BurgerTestPage } from './components/BurgerTestPage';
 export { FactModal } from './components/FactModal';
 export { TranslationToggle } from './components/TranslationToggle';
 export { RandomizeToggle } from './components/RandomizeToggle';
+export { AppFooter } from './components/AppFooter';
 export { StateSelector } from './components/StateSelector';
 export { StateSelectionPage } from './components/StateSelectionPage';
 export { SettingsPage } from './components/SettingsPage';
