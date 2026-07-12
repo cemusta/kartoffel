@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, MutableRefObject } from 'react';
 import { QuestionData } from '../QuestionBody';
 import { QuestionContainer } from '../QuestionContainer';
 import styles from './AllQuestionsContainer.module.css';
@@ -7,12 +7,14 @@ export interface AllQuestionsContainerProps extends HTMLAttributes<HTMLDivElemen
   questions: QuestionData[];
   showTranslation: boolean;
   randomizeOptions?: boolean;
+  questionRefs?: MutableRefObject<(HTMLDivElement | null)[]>;
 }
 
 export function AllQuestionsContainer({
   questions,
   showTranslation,
   randomizeOptions = false,
+  questionRefs,
   className = '',
   ...props
 }: AllQuestionsContainerProps) {
@@ -20,7 +22,15 @@ export function AllQuestionsContainer({
     <div className={`${styles.wrapper} ${className}`} {...props}>
       <div className={styles.scroll}>
         {questions.map((question, index) => (
-          <div key={question.id} className={styles.item}>
+          <div
+            key={question.id}
+            className={styles.item}
+            ref={el => {
+              if (questionRefs) {
+                questionRefs.current[index] = el;
+              }
+            }}
+          >
             <span className={styles.index}>{index + 1}</span>
             <QuestionContainer
               question={question}
