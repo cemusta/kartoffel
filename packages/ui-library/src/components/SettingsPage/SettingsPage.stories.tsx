@@ -33,6 +33,8 @@ const meta = {
     onSettings: fn(),
     onClearProgress: fn(),
     states: STATES,
+    showGoogleSearch: true,
+    onShowGoogleSearchChange: fn(),
   },
 } satisfies Meta<typeof SettingsPage>;
 

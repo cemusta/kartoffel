@@ -1,7 +1,36 @@
 .question {
+  position: relative;
   padding: 1.5rem;
   background: white;
   border-radius: 12px;
+}
+
+.googleButton {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: var(--md-sys-color-surface-variant, #e8eaed);
+  color: var(--md-sys-color-on-surface-variant, #5f6368);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.googleButton:hover {
+  background: var(--md-sys-color-secondary-container, #d3e3fd);
+  color: var(--md-sys-color-on-secondary-container, #1a73e8);
+  transform: scale(1.05);
+}
+
+.googleButton:active {
+  transform: scale(0.95);
 }
 
 .questionLabel {

@@ -5,7 +5,7 @@ import { useUser } from '../../hooks/useUser';
 
 export function SettingsScreen() {
   const navigate = useNavigate();
-  const { user, germanState, clearUser, setGermanState, clearProgress } = useUser();
+  const { user, germanState, clearUser, setGermanState, clearProgress, showGoogleSearch, setShowGoogleSearch } = useUser();
 
   function handleLogout() {
     clearUser();
@@ -22,6 +22,8 @@ export function SettingsScreen() {
       onLogout={handleLogout}
       onSettings={() => navigate('/settings')}
       onClearProgress={clearProgress}
+      showGoogleSearch={showGoogleSearch}
+      onShowGoogleSearchChange={setShowGoogleSearch}
     />
   );
 }

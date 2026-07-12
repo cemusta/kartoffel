@@ -78,11 +78,13 @@ describe('PracticeQuizScreen', () => {
       germanState: 'Bayern',
       correctQuestionIds: [],
       incorrectQuestionIds: [],
+      showGoogleSearch: true,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
       setGermanState: vi.fn(),
       recordQuizAnswers: mockRecordQuizAnswers,
       clearProgress: vi.fn(),
+      setShowGoogleSearch: vi.fn(),
     });
   });
 

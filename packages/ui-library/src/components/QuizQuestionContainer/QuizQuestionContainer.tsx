@@ -10,6 +10,7 @@ export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElemen
   passingScore?: number;
   onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
   randomizeOptions?: boolean;
+  showGoogleSearch?: boolean;
 }
 
 export function QuizQuestionContainer({
@@ -17,6 +18,7 @@ export function QuizQuestionContainer({
   passingScore,
   onComplete,
   randomizeOptions = false,
+  showGoogleSearch = true,
   className = '',
   ...props
 }: QuizQuestionContainerProps) {
@@ -208,6 +210,7 @@ export function QuizQuestionContainer({
         showTranslation={showTranslation}
         onSelect={handleSelect}
         randomizeOptions={randomizeOptions}
+        showGoogleSearch={showGoogleSearch}
       />
 
       <div className={styles.actions}>

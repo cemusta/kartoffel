@@ -25,6 +25,7 @@ export interface QuestionContainerProps extends Omit<HTMLAttributes<HTMLDivEleme
   showTranslation: boolean;
   onSelect: (key: string) => void;
   randomizeOptions?: boolean;
+  showGoogleSearch?: boolean;
 }
 
 export function QuestionContainer({
@@ -34,6 +35,7 @@ export function QuestionContainer({
   showTranslation,
   onSelect,
   randomizeOptions = false,
+  showGoogleSearch = true,
   className = '',
   ...props
 }: QuestionContainerProps) {
@@ -54,6 +56,7 @@ export function QuestionContainer({
         questionId={question.id}
         questionType={question.type}
         stateName={question.state}
+        showGoogleSearch={showGoogleSearch}
       />
 
       <div className={styles.options}>

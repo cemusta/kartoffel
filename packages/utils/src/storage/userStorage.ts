@@ -6,13 +6,19 @@ export interface StoredUser {
   germanState?: string;
   correctQuestionIds?: number[];
   incorrectQuestionIds?: number[];
+  showGoogleSearch?: boolean;
 }
 
 export function getStoredUser(): StoredUser | null {
   try {
     const raw = localStorage.getItem(USER_STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as StoredUser;
+    const user = JSON.parse(raw) as StoredUser;
+    // Default showGoogleSearch to true if missing
+    if (user.showGoogleSearch === undefined) {
+      user.showGoogleSearch = true;
+    }
+    return user;
   } catch {
     return null;
   }
@@ -47,4 +53,10 @@ export function clearQuizProgress(): void {
   const current = getStoredUser();
   if (!current) return;
   setStoredUser({ ...current, correctQuestionIds: [], incorrectQuestionIds: [] });
+}
+
+export function setShowGoogleSearch(show: boolean): void {
+  const current = getStoredUser();
+  if (!current) return;
+  setStoredUser({ ...current, showGoogleSearch: show });
 }

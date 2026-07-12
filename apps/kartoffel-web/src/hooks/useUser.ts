@@ -6,6 +6,7 @@ import {
   clearStoredUser,
   recordQuizAnswers as storageRecordQuizAnswers,
   clearQuizProgress as storageClearQuizProgress,
+  setShowGoogleSearch as storageSetShowGoogleSearch,
   type StoredUser,
 } from '@kartoffel/utils';
 
@@ -50,15 +51,23 @@ export function useUser() {
     setUser(updated);
   }, []);
 
+  const setShowGoogleSearch = useCallback((show: boolean) => {
+    storageSetShowGoogleSearch(show);
+    const updated = getStoredUser();
+    setUser(updated);
+  }, []);
+
   return {
     user,
     germanState: user?.germanState ?? null,
     correctQuestionIds: user?.correctQuestionIds ?? [],
     incorrectQuestionIds: user?.incorrectQuestionIds ?? [],
+    showGoogleSearch: user?.showGoogleSearch ?? true,
     createAnonymousUser,
     clearUser,
     setGermanState,
     recordQuizAnswers,
     clearProgress,
+    setShowGoogleSearch,
   };
 }

@@ -13,6 +13,8 @@ export interface SettingsPageProps {
   onSettings: () => void;
   onClearProgress: () => void;
   states: readonly string[];
+  showGoogleSearch: boolean;
+  onShowGoogleSearchChange: (show: boolean) => void;
 }
 
 export function SettingsPage({
@@ -24,6 +26,8 @@ export function SettingsPage({
   onSettings,
   onClearProgress,
   states,
+  showGoogleSearch,
+  onShowGoogleSearchChange,
 }: SettingsPageProps) {
   return (
     <div className={styles.screen}>
@@ -58,6 +62,26 @@ export function SettingsPage({
             Your state determines which 10 additional questions are included in the quiz.
           </p>
           <StateSelector value={selectedState} onChange={onStateChange} states={states} />
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionHeading}>Questions</h2>
+          <div className={styles.settingRow}>
+            <div className={styles.settingInfo}>
+              <p className={styles.settingLabel}>Show Google Search Button</p>
+              <p className={styles.settingDescription}>
+                Display a search button in the top-right of each question
+              </p>
+            </div>
+            <label className={styles.toggle}>
+              <input
+                type="checkbox"
+                checked={showGoogleSearch}
+                onChange={e => onShowGoogleSearchChange(e.target.checked)}
+              />
+              <span className={styles.toggleSlider}></span>
+            </label>
+          </div>
         </section>
 
         <section className={styles.section}>

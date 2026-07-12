@@ -8,6 +8,7 @@ export interface AllQuestionsContainerProps extends HTMLAttributes<HTMLDivElemen
   showTranslation: boolean;
   randomizeOptions?: boolean;
   questionRefs?: MutableRefObject<(HTMLDivElement | null)[]>;
+  showGoogleSearch?: boolean;
 }
 
 export function AllQuestionsContainer({
@@ -15,6 +16,7 @@ export function AllQuestionsContainer({
   showTranslation,
   randomizeOptions = false,
   questionRefs,
+  showGoogleSearch = true,
   className = '',
   ...props
 }: AllQuestionsContainerProps) {
@@ -38,6 +40,7 @@ export function AllQuestionsContainer({
               showTranslation={showTranslation}
               onSelect={() => {}}
               randomizeOptions={randomizeOptions}
+              showGoogleSearch={showGoogleSearch}
             />
           </div>
         ))}

@@ -9,11 +9,13 @@ import styles from './AllQuestionsPage.module.css';
 export interface AllQuestionsPageProps {
   questions: QuestionData[];
   onBack: () => void;
+  showGoogleSearch?: boolean;
 }
 
 export function AllQuestionsPage({
   questions,
   onBack,
+  showGoogleSearch = true,
 }: AllQuestionsPageProps) {
   const [showTranslation, setShowTranslation] = useState(false);
   const [randomizeOptions, setRandomizeOptions] = useState(false);
@@ -111,6 +113,7 @@ export function AllQuestionsPage({
           randomizeOptions={randomizeOptions}
           showTranslation={showTranslation}
           questionRefs={questionRefs}
+          showGoogleSearch={showGoogleSearch}
         />
       </div>
     </div>

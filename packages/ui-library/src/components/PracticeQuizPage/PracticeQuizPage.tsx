@@ -12,6 +12,7 @@ export interface PracticeQuizPageProps {
   title?: string;
   onQuizStarted?: (started: boolean) => void;
   randomizeOptions?: boolean;
+  showGoogleSearch?: boolean;
 }
 
 export function PracticeQuizPage({
@@ -22,6 +23,7 @@ export function PracticeQuizPage({
   title = 'Practice Quiz',
   onQuizStarted,
   randomizeOptions = false,
+  showGoogleSearch = true,
 }: PracticeQuizPageProps) {
   const quizStartedRef = useRef(false);
 
@@ -88,6 +90,7 @@ export function PracticeQuizPage({
           onComplete={handleComplete}
           onClick={handleQuizStart}
           randomizeOptions={randomizeOptions}
+          showGoogleSearch={showGoogleSearch}
         />
       </div>
     </div>
