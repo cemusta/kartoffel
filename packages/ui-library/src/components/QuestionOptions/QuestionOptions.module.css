@@ -1,29 +1,29 @@
 .answer {
-  padding: 0.75rem 1rem;
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1.25rem, 2.5vw, 1.75rem);
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 12px;
   background: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 1rem;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
   text-align: left;
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .label {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 2rem;
-  height: 2rem;
+  min-width: clamp(2.5rem, 4vw, 3rem);
+  height: clamp(2.5rem, 4vw, 3rem);
   border-radius: 50%;
   background: var(--md-sys-color-surface-variant, #e8eaed);
   color: var(--md-sys-color-on-surface-variant, #5f6368);
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
   flex-shrink: 0;
   transition:
     background 0.2s ease,
@@ -57,10 +57,10 @@
 }
 
 .translation {
-  font-size: 0.8rem;
+  font-size: clamp(0.95rem, 1.7vw, 1.15rem);
   color: var(--md-sys-color-on-surface-variant, #5f6368);
   font-style: italic;
-  line-height: 1.3;
+  line-height: 1.4;
 }
 
 .answer:hover:not(:disabled) {
