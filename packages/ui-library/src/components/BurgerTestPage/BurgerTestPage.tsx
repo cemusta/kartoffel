@@ -5,6 +5,17 @@ import { ProgressGrid } from '../ProgressGrid';
 import { FactCallout } from '../FactCallout';
 import styles from './BurgerTestPage.module.css';
 
+const FACTS = [
+  'Historically, the success rate is over 98%, as the questions are public and can be practiced in advance.',
+  'To pass, you need to answer at least 17 of 33 questions correctly.',
+  'The test has 33 questions total — 30 from a pool of general questions and 3 tailored to your specific German state.',
+  'The complete question catalog is publicly available, so you can study every possible question in advance.',
+  'The Einbürgerungstest has been mandatory for German citizenship applicants since September 2008.',
+  'Each test session lasts up to 60 minutes. It is little bit shorter than 2 minutes per question, so no rush... 😊',
+  'The test fee is €25 per attempt, regardless of how many times you take it. It`s almost impossible to find these cheap tests though...',
+  'Tests are administered at local Volkshochschulen (VHS) — Germany\'s adult education centers.',
+];
+
 export interface BurgerTestPageProps {
   onBack: () => void;
   username: string | null;
@@ -86,7 +97,7 @@ export function BurgerTestPage({
             />
           </div>
         )}
-        <FactCallout text="Historically, the success rate is over 98%, as the questions are public and can be practiced in advance." />
+        <FactCallout facts={FACTS} />
       </div>
     </div>
   );
