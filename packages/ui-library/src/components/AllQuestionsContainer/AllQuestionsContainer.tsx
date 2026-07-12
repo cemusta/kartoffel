@@ -31,7 +31,6 @@ export function AllQuestionsContainer({
               }
             }}
           >
-            <span className={styles.index}>{index + 1}</span>
             <QuestionContainer
               question={question}
               selectedAnswer={null}
