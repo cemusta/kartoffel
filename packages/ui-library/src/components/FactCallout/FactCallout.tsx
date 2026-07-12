@@ -8,7 +8,7 @@ export interface FactCalloutProps {
 
 const CHAR_INTERVAL_MS = 20;
 
-export function FactCallout({ facts, icon = '💡' }: FactCalloutProps) {
+export function FactCallout({ facts, icon = '🥔' }: FactCalloutProps) {
   const [factIndex, setFactIndex] = useState(() =>
     Math.floor(Math.random() * Math.max(facts.length, 1)),
   );
