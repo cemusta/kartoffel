@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { QuizQuestionContainer } from './QuizQuestionContainer';
 import { QuestionData } from '../QuestionBody';
 
@@ -164,3 +165,68 @@ export const FourImageOptions: Story = {
     onComplete: score => console.log('Quiz completed! Score:', score),
   },
 };
+
+export const RandomizedOptions: Story = {
+  args: {
+    questions: sampleQuestions,
+    onComplete: score => console.log('Quiz completed! Score:', score),
+    randomizeOptions: true,
+  },
+};
+
+export const WithNavigation: Story = {
+  args: {
+    questions: sampleQuestions,
+    onComplete: score => console.log('Quiz completed! Score:', score),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Check that we're on question 1
+    await expect(canvas.getByText(/Question 1 of 3/i)).toBeInTheDocument();
+
+    // Previous button should not exist on first question
+    expect(canvas.queryByText(/Previous Question/i)).not.toBeInTheDocument();
+
+    // Select an answer for question 1 by finding the button with the option text
+    const option1 = canvas.getByRole('button', { name: /hier Meinungsfreiheit gilt/i });
+    await userEvent.click(option1);
+
+    // Check the answer
+    const checkButton = canvas.getByText(/Check Answer/i);
+    await userEvent.click(checkButton);
+
+    // Move to next question
+    const nextButton = canvas.getByText(/Next Question/i);
+    await userEvent.click(nextButton);
+
+    // Check we're on question 2
+    await expect(canvas.getByText(/Question 2 of 3/i)).toBeInTheDocument();
+
+    // Previous button should now be visible
+    await expect(canvas.getByText(/Previous Question/i)).toBeInTheDocument();
+
+    // Select an answer for question 2
+    const option2 = canvas.getByRole('button', { name: /die Meinungsfreiheit/i });
+    await userEvent.click(option2);
+
+    // Check the answer
+    await userEvent.click(canvas.getByText(/Check Answer/i));
+
+    // Go back to question 1
+    const previousButton = canvas.getByText(/Previous Question/i);
+    await userEvent.click(previousButton);
+
+    // Verify we're back on question 1
+    await expect(canvas.getByText(/Question 1 of 3/i)).toBeInTheDocument();
+
+    // Verify the answer is still selected and revealed
+    const selectedOption = canvas.getByRole('button', { name: /hier Meinungsfreiheit gilt/i });
+    // The button should have the selected class
+    await expect(selectedOption).toBeInTheDocument();
+
+    // The "Next Question" button should be visible (since it was already revealed)
+    await expect(canvas.getByText(/Next Question/i)).toBeInTheDocument();
+  },
+};
+

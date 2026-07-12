@@ -6,10 +6,12 @@ import styles from './AllQuestionsContainer.module.css';
 
 export interface AllQuestionsContainerProps extends HTMLAttributes<HTMLDivElement> {
   questions: QuestionData[];
+  randomizeOptions?: boolean;
 }
 
 export function AllQuestionsContainer({
   questions,
+  randomizeOptions = false,
   className = '',
   ...props
 }: AllQuestionsContainerProps) {
@@ -34,6 +36,7 @@ export function AllQuestionsContainer({
               isRevealed={true}
               showTranslation={showTranslation}
               onSelect={() => {}}
+              randomizeOptions={randomizeOptions}
             />
           </div>
         ))}

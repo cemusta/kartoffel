@@ -76,3 +76,26 @@ export const WithTranslation: Story = {
     onSelect: () => {},
   },
 };
+
+export const RandomizedOptions: Story = {
+  render: args => <Wrapper {...args} />,
+  args: {
+    question: sampleQuestion,
+    selectedAnswer: null,
+    isRevealed: false,
+    showTranslation: false,
+    onSelect: () => {},
+    randomizeOptions: true,
+  },
+};
+
+export const RandomizedRevealed: Story = {
+  args: {
+    question: sampleQuestion,
+    selectedAnswer: 'b',
+    isRevealed: true,
+    showTranslation: false,
+    onSelect: () => {},
+    randomizeOptions: true,
+  },
+};

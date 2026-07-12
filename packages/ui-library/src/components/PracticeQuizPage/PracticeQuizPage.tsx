@@ -11,6 +11,7 @@ export interface PracticeQuizPageProps {
   onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
   title?: string;
   onQuizStarted?: (started: boolean) => void;
+  randomizeOptions?: boolean;
 }
 
 export function PracticeQuizPage({
@@ -20,6 +21,7 @@ export function PracticeQuizPage({
   onComplete,
   title = 'Practice Quiz',
   onQuizStarted,
+  randomizeOptions = false,
 }: PracticeQuizPageProps) {
   const quizStartedRef = useRef(false);
 
@@ -85,6 +87,7 @@ export function PracticeQuizPage({
           passingScore={passingScore}
           onComplete={handleComplete}
           onClick={handleQuizStart}
+          randomizeOptions={randomizeOptions}
         />
       </div>
     </div>

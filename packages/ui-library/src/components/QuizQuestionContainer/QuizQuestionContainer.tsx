@@ -9,18 +9,20 @@ export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElemen
   questions: QuestionData[];
   passingScore?: number;
   onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
+  randomizeOptions?: boolean;
 }
 
 export function QuizQuestionContainer({
   questions,
   passingScore,
   onComplete,
+  randomizeOptions = false,
   className = '',
   ...props
 }: QuizQuestionContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [answers, setAnswers] = useState<Map<number, string>>(new Map());
+  const [revealedQuestions, setRevealedQuestions] = useState<Set<number>>(new Set());
   const [answeredCorrect, setAnsweredCorrect] = useState<number[]>([]);
   const [answeredIncorrect, setAnsweredIncorrect] = useState<number[]>([]);
   const [showTranslation, setShowTranslation] = useState(false);
@@ -29,14 +31,15 @@ export function QuizQuestionContainer({
 
   const currentQuestion = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
+  const selectedAnswer = answers.get(currentIndex) ?? null;
+  const isRevealed = revealedQuestions.has(currentIndex);
 
   const handleSelect = (key: string) => {
-    setSelectedAnswer(key);
-    setIsRevealed(false);
+    setAnswers(prev => new Map(prev).set(currentIndex, key));
   };
 
   const handleCheck = () => {
-    setIsRevealed(true);
+    setRevealedQuestions(prev => new Set(prev).add(currentIndex));
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     if (isCorrect) {
       setAnsweredCorrect(prev => [...prev, currentQuestion.id]);
@@ -51,15 +54,19 @@ export function QuizQuestionContainer({
       onComplete?.(answeredCorrect.length, answeredCorrect, answeredIncorrect);
     } else {
       setCurrentIndex(prev => prev + 1);
-      setSelectedAnswer(null);
-      setIsRevealed(false);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
     }
   };
 
   const handleReset = () => {
     setCurrentIndex(0);
-    setSelectedAnswer(null);
-    setIsRevealed(false);
+    setAnswers(new Map());
+    setRevealedQuestions(new Set());
     setAnsweredCorrect([]);
     setAnsweredIncorrect([]);
     setFinished(false);
@@ -126,9 +133,15 @@ export function QuizQuestionContainer({
         isRevealed={isRevealed}
         showTranslation={showTranslation}
         onSelect={handleSelect}
+        randomizeOptions={randomizeOptions}
       />
 
       <div className={styles.actions}>
+        {currentIndex > 0 && (
+          <button className={styles.button} onClick={handlePrevious}>
+            Previous Question
+          </button>
+        )}
         {!isRevealed ? (
           <button
             className={styles.button}
