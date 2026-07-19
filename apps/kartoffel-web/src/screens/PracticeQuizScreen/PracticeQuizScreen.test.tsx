@@ -85,6 +85,8 @@ describe('PracticeQuizScreen', () => {
       recordQuizAnswers: mockRecordQuizAnswers,
       clearProgress: vi.fn(),
       setShowGoogleSearch: vi.fn(),
+      keepTranslationsOn: false,
+      setKeepTranslationsOn: vi.fn(),
     });
   });
 

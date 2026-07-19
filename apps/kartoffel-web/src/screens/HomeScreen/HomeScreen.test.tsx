@@ -53,6 +53,8 @@ describe('HomeScreen', () => {
       recordQuizAnswers: vi.fn(),
       clearProgress: vi.fn(),
       setShowGoogleSearch: vi.fn(),
+      keepTranslationsOn: false,
+      setKeepTranslationsOn: vi.fn(),
     });
 
     render(
@@ -77,6 +79,8 @@ describe('HomeScreen', () => {
       recordQuizAnswers: vi.fn(),
       clearProgress: vi.fn(),
       setShowGoogleSearch: vi.fn(),
+      keepTranslationsOn: false,
+      setKeepTranslationsOn: vi.fn(),
     });
 
     render(
@@ -101,6 +105,8 @@ describe('HomeScreen', () => {
       recordQuizAnswers: vi.fn(),
       clearProgress: vi.fn(),
       setShowGoogleSearch: vi.fn(),
+      keepTranslationsOn: false,
+      setKeepTranslationsOn: vi.fn(),
     });
 
     render(
@@ -127,6 +133,8 @@ describe('HomeScreen', () => {
       recordQuizAnswers: vi.fn(),
       clearProgress: vi.fn(),
       setShowGoogleSearch: vi.fn(),
+      keepTranslationsOn: false,
+      setKeepTranslationsOn: vi.fn(),
     });
 
     const replaceSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({

@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate, useParams } from 'react-router-dom';
 import { OnboardingScreen } from '../screens/OnboardingScreen/OnboardingScreen';
 import { HomeScreen } from '../screens/HomeScreen/HomeScreen';
 import { BurgerTestScreen } from '../screens/BurgerTestScreen/BurgerTestScreen';
@@ -6,7 +6,17 @@ import { StateSelectionScreen } from '../screens/StateSelectionScreen/StateSelec
 import { SettingsScreen } from '../screens/SettingsScreen/SettingsScreen';
 import { AllQuestionsScreen } from '../screens/AllQuestionsScreen/AllQuestionsScreen';
 import { PracticeQuizScreen } from '../screens/PracticeQuizScreen/PracticeQuizScreen';
+import { RealExamIntroScreen } from '../screens/RealExamIntroScreen/RealExamIntroScreen';
+import { RealExamQuizScreen } from '../screens/RealExamQuizScreen/RealExamQuizScreen';
+import { ExamReviewScreen } from '../screens/ExamReviewScreen/ExamReviewScreen';
 import { getStoredUser } from '@kartoffel/utils';
+
+// Remounts RealExamQuizScreen when the seed param changes,
+// so phase resets to 'intro' whenever a new exam code is generated.
+function KeyedRealExamQuizScreen() {
+  const { seed } = useParams<{ seed: string }>();
+  return <RealExamQuizScreen key={seed} />;
+}
 
 function RequireUser({ children }: { children: React.ReactElement }): React.ReactElement {
   return getStoredUser() ? children : <Navigate to="/" replace />;
@@ -62,6 +72,30 @@ export const router = createBrowserRouter([
     element: (
       <RequireUser>
         <PracticeQuizScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/burger-test/real-exam',
+    element: (
+      <RequireUser>
+        <RealExamIntroScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/burger-test/real-exam/:seed',
+    element: (
+      <RequireUser>
+        <KeyedRealExamQuizScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/burger-test/real-exam/:seed/review',
+    element: (
+      <RequireUser>
+        <ExamReviewScreen />
       </RequireUser>
     ),
   },

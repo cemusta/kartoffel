@@ -20,7 +20,7 @@ describe('userStorage', () => {
     it('returns parsed user when stored', () => {
       const user = { username: 'TestUser42', createdAt: '2026-01-01T00:00:00.000Z' };
       localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-      expect(getStoredUser()).toEqual({ ...user, showGoogleSearch: true });
+      expect(getStoredUser()).toEqual({ ...user, showGoogleSearch: true, keepTranslationsOn: false });
     });
   });
 
@@ -37,7 +37,7 @@ describe('userStorage', () => {
       const second = { username: 'NewUser99', createdAt: '2026-04-11T00:00:00.000Z' };
       setStoredUser(first);
       setStoredUser(second);
-      expect(getStoredUser()).toEqual({ ...second, showGoogleSearch: true });
+      expect(getStoredUser()).toEqual({ ...second, showGoogleSearch: true, keepTranslationsOn: false });
     });
   });
 

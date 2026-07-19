@@ -1,75 +1,59 @@
 import { useRef, useEffect } from 'react';
-import { QuizQuestionContainer } from '../QuizQuestionContainer';
+import { ExamQuestionContainer } from '../ExamQuestionContainer';
 import { TopBar } from '../TopBar';
 import { QuestionData } from '../QuestionBody';
-import styles from './PracticeQuizPage.module.css';
+import styles from './RealExamQuizPage.module.css';
 
-export interface PracticeQuizPageProps {
+export interface RealExamQuizPageProps {
   onBack: () => void;
   questions: QuestionData[];
   passingScore?: number;
   onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
-  title?: string;
+  onReviewWrong?: (wrongIds: number[], userAnswers: Record<number, string>) => void;
   onQuizStarted?: (started: boolean) => void;
-  randomizeOptions?: boolean;
-  showGoogleSearch?: boolean;
-  keepTranslationsOn?: boolean;
-  correctQuestionIds?: number[];
-  incorrectQuestionIds?: number[];
 }
 
-export function PracticeQuizPage({
+export function RealExamQuizPage({
   onBack,
   questions,
   passingScore,
   onComplete,
-  title = 'Practice Quiz',
+  onReviewWrong,
   onQuizStarted,
-  randomizeOptions = false,
-  showGoogleSearch = true,
-  keepTranslationsOn = false,
-  correctQuestionIds,
-  incorrectQuestionIds,
-}: PracticeQuizPageProps) {
-  const quizStartedRef = useRef(false);
+}: RealExamQuizPageProps) {
+  const examStartedRef = useRef(false);
 
-  // Prevent page refresh/close when quiz is in progress
+  // Warn on browser refresh/close during an active exam
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (quizStartedRef.current) {
+      if (examStartedRef.current) {
         e.preventDefault();
-        // Modern browsers ignore custom messages, but setting returnValue is required
         e.returnValue = '';
       }
     };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
   const handleBack = () => {
-    if (quizStartedRef.current) {
+    if (examStartedRef.current) {
       const confirmed = window.confirm(
-        'Are you sure you want to quit? Your progress will be lost.'
+        'Are you sure you want to quit? Your exam progress will be lost.',
       );
-      if (!confirmed) {
-        return;
-      }
+      if (!confirmed) return;
     }
     onBack();
   };
 
-  const handleComplete = (score: number, correctIds: number[], incorrectIds: number[]) => {
-    quizStartedRef.current = false;
-    onQuizStarted?.(false);
-    onComplete?.(score, correctIds, incorrectIds);
+  const handleExamStarted = (started: boolean) => {
+    examStartedRef.current = started;
+    onQuizStarted?.(started);
   };
 
-  const handleQuizStart = () => {
-    if (!quizStartedRef.current) {
-      quizStartedRef.current = true;
-      onQuizStarted?.(true);
-    }
+  const handleComplete = (score: number, correctIds: number[], incorrectIds: number[]) => {
+    examStartedRef.current = false;
+    onQuizStarted?.(false);
+    onComplete?.(score, correctIds, incorrectIds);
   };
 
   return (
@@ -85,21 +69,18 @@ export function PracticeQuizPage({
             >
               ‹
             </button>
-            <p className={styles.topBarTitle}>{title}</p>
+            <p className={styles.topBarTitle}>Real Exam</p>
           </>
         }
       />
       <div className={styles.content}>
-        <QuizQuestionContainer
+        <ExamQuestionContainer
           questions={questions}
           passingScore={passingScore}
           onComplete={handleComplete}
-          onClick={handleQuizStart}
-          randomizeOptions={randomizeOptions}
-          showGoogleSearch={showGoogleSearch}
-          keepTranslationsOn={keepTranslationsOn}
-          correctQuestionIds={correctQuestionIds}
-          incorrectQuestionIds={incorrectQuestionIds}
+          onReviewWrong={onReviewWrong}
+          onExamStarted={handleExamStarted}
+          randomizeOptions={false}
         />
       </div>
     </div>
