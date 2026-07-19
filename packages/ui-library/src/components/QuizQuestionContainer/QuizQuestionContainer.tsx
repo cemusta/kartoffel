@@ -12,6 +12,7 @@ export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElemen
   onComplete?: (score: number, correctIds: number[], incorrectIds: number[]) => void;
   randomizeOptions?: boolean;
   showGoogleSearch?: boolean;
+  keepTranslationsOn?: boolean;
   correctQuestionIds?: number[];
   incorrectQuestionIds?: number[];
 }
@@ -22,12 +23,14 @@ export function QuizQuestionContainer({
   onComplete,
   randomizeOptions = false,
   showGoogleSearch = true,
+  keepTranslationsOn = false,
   correctQuestionIds,
   incorrectQuestionIds,
   className = '',
   ...props
 }: QuizQuestionContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [maxIndexReached, setMaxIndexReached] = useState(0);
   const [answers, setAnswers] = useState<Map<number, string>>(new Map());
   const [revealedQuestions, setRevealedQuestions] = useState<Set<number>>(new Set());
   const [answeredCorrect, setAnsweredCorrect] = useState<number[]>([]);
@@ -68,9 +71,15 @@ export function QuizQuestionContainer({
       setFinished(true);
       onComplete?.(answeredCorrect.length, answeredCorrect, answeredIncorrect);
     } else {
-      setCurrentIndex(prev => prev + 1);
+      const nextIndex = currentIndex + 1;
+      const isNewQuestion = nextIndex > maxIndexReached;
+      if (!keepTranslationsOn && isNewQuestion) {
+        setShowTranslation(false);
+      }
+      setMaxIndexReached(prev => Math.max(prev, nextIndex));
+      setCurrentIndex(nextIndex);
     }
-  }, [isLastQuestion, onComplete, answeredCorrect, answeredIncorrect]);
+  }, [isLastQuestion, onComplete, answeredCorrect, answeredIncorrect, keepTranslationsOn, currentIndex, maxIndexReached]);
 
   const handlePrevious = useCallback(() => {
     if (currentIndex > 0) {
@@ -80,6 +89,7 @@ export function QuizQuestionContainer({
 
   const handleReset = () => {
     setCurrentIndex(0);
+    setMaxIndexReached(0);
     setAnswers(new Map());
     setRevealedQuestions(new Set());
     setAnsweredCorrect([]);

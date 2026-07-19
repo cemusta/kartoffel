@@ -35,6 +35,8 @@ const meta = {
     states: STATES,
     showGoogleSearch: true,
     onShowGoogleSearchChange: fn(),
+    keepTranslationsOn: false,
+    onKeepTranslationsOnChange: fn(),
   },
 } satisfies Meta<typeof SettingsPage>;
 

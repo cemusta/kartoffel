@@ -13,6 +13,7 @@ export interface PracticeQuizPageProps {
   onQuizStarted?: (started: boolean) => void;
   randomizeOptions?: boolean;
   showGoogleSearch?: boolean;
+  keepTranslationsOn?: boolean;
   correctQuestionIds?: number[];
   incorrectQuestionIds?: number[];
 }
@@ -26,6 +27,7 @@ export function PracticeQuizPage({
   onQuizStarted,
   randomizeOptions = false,
   showGoogleSearch = true,
+  keepTranslationsOn = false,
   correctQuestionIds,
   incorrectQuestionIds,
 }: PracticeQuizPageProps) {
@@ -95,6 +97,7 @@ export function PracticeQuizPage({
           onClick={handleQuizStart}
           randomizeOptions={randomizeOptions}
           showGoogleSearch={showGoogleSearch}
+          keepTranslationsOn={keepTranslationsOn}
           correctQuestionIds={correctQuestionIds}
           incorrectQuestionIds={incorrectQuestionIds}
         />

@@ -15,6 +15,8 @@ export interface SettingsPageProps {
   states: readonly string[];
   showGoogleSearch: boolean;
   onShowGoogleSearchChange: (show: boolean) => void;
+  keepTranslationsOn: boolean;
+  onKeepTranslationsOnChange: (on: boolean) => void;
 }
 
 export function SettingsPage({
@@ -28,6 +30,8 @@ export function SettingsPage({
   states,
   showGoogleSearch,
   onShowGoogleSearchChange,
+  keepTranslationsOn,
+  onKeepTranslationsOnChange,
 }: SettingsPageProps) {
   return (
     <div className={styles.screen}>
@@ -78,6 +82,22 @@ export function SettingsPage({
                 type="checkbox"
                 checked={showGoogleSearch}
                 onChange={e => onShowGoogleSearchChange(e.target.checked)}
+              />
+              <span className={styles.toggleSlider}></span>
+            </label>
+          </div>
+          <div className={styles.settingRow}>
+            <div className={styles.settingInfo}>
+              <p className={styles.settingLabel}>Keep Translations On</p>
+              <p className={styles.settingDescription}>
+                When enabled, the English translation stays visible when moving to the next question
+              </p>
+            </div>
+            <label className={styles.toggle}>
+              <input
+                type="checkbox"
+                checked={keepTranslationsOn}
+                onChange={e => onKeepTranslationsOnChange(e.target.checked)}
               />
               <span className={styles.toggleSlider}></span>
             </label>

@@ -7,6 +7,7 @@ export interface StoredUser {
   correctQuestionIds?: number[];
   incorrectQuestionIds?: number[];
   showGoogleSearch?: boolean;
+  keepTranslationsOn?: boolean;
 }
 
 export function getStoredUser(): StoredUser | null {
@@ -17,6 +18,10 @@ export function getStoredUser(): StoredUser | null {
     // Default showGoogleSearch to true if missing
     if (user.showGoogleSearch === undefined) {
       user.showGoogleSearch = true;
+    }
+    // Default keepTranslationsOn to false if missing
+    if (user.keepTranslationsOn === undefined) {
+      user.keepTranslationsOn = false;
     }
     return user;
   } catch {
@@ -59,4 +64,10 @@ export function setShowGoogleSearch(show: boolean): void {
   const current = getStoredUser();
   if (!current) return;
   setStoredUser({ ...current, showGoogleSearch: show });
+}
+
+export function setKeepTranslationsOn(on: boolean): void {
+  const current = getStoredUser();
+  if (!current) return;
+  setStoredUser({ ...current, keepTranslationsOn: on });
 }

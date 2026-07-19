@@ -7,6 +7,7 @@ import {
   recordQuizAnswers as storageRecordQuizAnswers,
   clearQuizProgress as storageClearQuizProgress,
   setShowGoogleSearch as storageSetShowGoogleSearch,
+  setKeepTranslationsOn as storageSetKeepTranslationsOn,
   type StoredUser,
 } from '@kartoffel/utils';
 
@@ -57,17 +58,25 @@ export function useUser() {
     setUser(updated);
   }, []);
 
+  const setKeepTranslationsOn = useCallback((on: boolean) => {
+    storageSetKeepTranslationsOn(on);
+    const updated = getStoredUser();
+    setUser(updated);
+  }, []);
+
   return {
     user,
     germanState: user?.germanState ?? null,
     correctQuestionIds: user?.correctQuestionIds ?? [],
     incorrectQuestionIds: user?.incorrectQuestionIds ?? [],
     showGoogleSearch: user?.showGoogleSearch ?? true,
+    keepTranslationsOn: user?.keepTranslationsOn ?? false,
     createAnonymousUser,
     clearUser,
     setGermanState,
     recordQuizAnswers,
     clearProgress,
     setShowGoogleSearch,
+    setKeepTranslationsOn,
   };
 }

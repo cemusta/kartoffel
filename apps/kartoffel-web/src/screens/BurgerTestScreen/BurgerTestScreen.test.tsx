@@ -52,12 +52,14 @@ describe('BurgerTestScreen', () => {
       correctQuestionIds: [],
       incorrectQuestionIds: [],
       showGoogleSearch: true,
+      keepTranslationsOn: false,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
       setGermanState: vi.fn(),
       recordQuizAnswers: vi.fn(),
       clearProgress: vi.fn(),
       setShowGoogleSearch: vi.fn(),
+      setKeepTranslationsOn: vi.fn(),
     });
   });
 
@@ -89,12 +91,14 @@ describe('BurgerTestScreen', () => {
       correctQuestionIds: [],
       incorrectQuestionIds: [],
       showGoogleSearch: true,
+      keepTranslationsOn: false,
       createAnonymousUser: vi.fn(),
       clearUser,
       setGermanState: vi.fn(),
       recordQuizAnswers: vi.fn(),
       clearProgress: vi.fn(),
       setShowGoogleSearch: vi.fn(),
+      setKeepTranslationsOn: vi.fn(),
     });
 
     const replaceSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({

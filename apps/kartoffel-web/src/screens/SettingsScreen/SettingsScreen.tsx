@@ -5,7 +5,7 @@ import { useUser } from '../../hooks/useUser';
 
 export function SettingsScreen() {
   const navigate = useNavigate();
-  const { user, germanState, clearUser, setGermanState, clearProgress, showGoogleSearch, setShowGoogleSearch } = useUser();
+  const { user, germanState, clearUser, setGermanState, clearProgress, showGoogleSearch, setShowGoogleSearch, keepTranslationsOn, setKeepTranslationsOn } = useUser();
 
   function handleLogout() {
     clearUser();
@@ -24,6 +24,8 @@ export function SettingsScreen() {
       onClearProgress={clearProgress}
       showGoogleSearch={showGoogleSearch}
       onShowGoogleSearchChange={setShowGoogleSearch}
+      keepTranslationsOn={keepTranslationsOn}
+      onKeepTranslationsOnChange={setKeepTranslationsOn}
     />
   );
 }
