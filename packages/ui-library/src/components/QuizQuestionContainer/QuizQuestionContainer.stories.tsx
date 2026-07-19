@@ -297,8 +297,7 @@ export const WithNewQuestionBadge: Story = {
   args: {
     questions: sampleQuestions,
     onComplete: score => console.log('Quiz completed! Score:', score),
-    correctQuestionIds: [],
-    incorrectQuestionIds: [],
+    questionAnswers: { 1: [] },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -312,8 +311,7 @@ export const WithCorrectQuestionBadge: Story = {
   args: {
     questions: sampleQuestions,
     onComplete: score => console.log('Quiz completed! Score:', score),
-    correctQuestionIds: [1], // First question was answered correctly
-    incorrectQuestionIds: [],
+    questionAnswers: { 1: [true] }, // First question answered correctly
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -327,8 +325,7 @@ export const WithWrongQuestionBadge: Story = {
   args: {
     questions: sampleQuestions,
     onComplete: score => console.log('Quiz completed! Score:', score),
-    correctQuestionIds: [],
-    incorrectQuestionIds: [1], // First question was answered incorrectly
+    questionAnswers: { 1: [false] }, // First question answered incorrectly
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -342,8 +339,7 @@ export const WithMixedQuestionStatuses: Story = {
   args: {
     questions: sampleQuestions,
     onComplete: score => console.log('Quiz completed! Score:', score),
-    correctQuestionIds: [1], // First question correct
-    incorrectQuestionIds: [2], // Second question wrong, third is new
+    questionAnswers: { 1: [true], 2: [false] }, // Q1 correct, Q2 wrong, Q3 new
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

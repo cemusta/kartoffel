@@ -42,10 +42,9 @@ describe('HomeScreen', () => {
 
   it('renders username from user state', () => {
     vi.mocked(useUser).mockReturnValue({
-      user: { username: 'batman', createdAt: '' },
+      user: { version: 2, username: 'batman', createdAt: '', generalAnswers: {}, stateAnswers: {} },
       germanState: null,
-      correctQuestionIds: [],
-      incorrectQuestionIds: [],
+      questionAnswers: {},
       showGoogleSearch: true,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
@@ -70,8 +69,7 @@ describe('HomeScreen', () => {
     vi.mocked(useUser).mockReturnValue({
       user: null,
       germanState: null,
-      correctQuestionIds: [],
-      incorrectQuestionIds: [],
+      questionAnswers: {},
       showGoogleSearch: true,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
@@ -94,10 +92,9 @@ describe('HomeScreen', () => {
 
   it('navigates to /burger-test on burger test button click', () => {
     vi.mocked(useUser).mockReturnValue({
-      user: { username: 'batman', createdAt: '' },
+      user: { version: 2, username: 'batman', createdAt: '', generalAnswers: {}, stateAnswers: {} },
       germanState: null,
-      correctQuestionIds: [],
-      incorrectQuestionIds: [],
+      questionAnswers: {},
       showGoogleSearch: true,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),
@@ -122,10 +119,9 @@ describe('HomeScreen', () => {
   it('calls clearUser and replaces location on logout', () => {
     const clearUser = vi.fn();
     vi.mocked(useUser).mockReturnValue({
-      user: { username: 'batman', createdAt: '' },
+      user: { version: 2, username: 'batman', createdAt: '', generalAnswers: {}, stateAnswers: {} },
       germanState: null,
-      correctQuestionIds: [],
-      incorrectQuestionIds: [],
+      questionAnswers: {},
       showGoogleSearch: true,
       createAnonymousUser: vi.fn(),
       clearUser,

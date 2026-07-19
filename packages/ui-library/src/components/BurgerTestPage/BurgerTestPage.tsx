@@ -27,8 +27,8 @@ export interface BurgerTestPageProps {
   onStartRealExam?: () => void;
   userState: string | null;
   allQuestionIds?: number[];
-  correctQuestionIds?: number[];
-  incorrectQuestionIds?: number[];
+  questionAnswers?: Record<number, boolean[]>;
+  stateQuestionIds?: number[];
 }
 
 export function BurgerTestPage({
@@ -42,8 +42,8 @@ export function BurgerTestPage({
   onStartRealExam,
   userState,
   allQuestionIds,
-  correctQuestionIds = [],
-  incorrectQuestionIds = [],
+  questionAnswers = {},
+  stateQuestionIds,
 }: BurgerTestPageProps) {
   const questionCount = userState ? 310 : 300;
   const questionDescription = userState
@@ -114,8 +114,8 @@ export function BurgerTestPage({
             <h2 className={styles.sectionLabel}>Your Progress</h2>
             <ProgressGrid
               allQuestionIds={allQuestionIds}
-              correctIds={correctQuestionIds}
-              incorrectIds={incorrectQuestionIds}
+              questionAnswers={questionAnswers}
+              stateQuestionIds={stateQuestionIds}
             />
           </div>
         )}

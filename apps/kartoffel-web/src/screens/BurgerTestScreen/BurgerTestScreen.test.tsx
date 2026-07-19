@@ -26,8 +26,7 @@ vi.mock('@kartoffel/ui-library', () => ({
     onStartPractice?: () => void;
     userState: string | null;
     allQuestionIds?: number[];
-    correctQuestionIds?: number[];
-    incorrectQuestionIds?: number[];
+    questionAnswers?: Record<number, boolean[]>;
   }) => (
     <div>
       <button onClick={onBack}>Back</button>
@@ -47,10 +46,9 @@ describe('BurgerTestScreen', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(useUser).mockReturnValue({
-      user: { username: 'batman', createdAt: '' },
+      user: { version: 2, username: 'batman', createdAt: '', generalAnswers: {}, stateAnswers: {} },
       germanState: null,
-      correctQuestionIds: [],
-      incorrectQuestionIds: [],
+      questionAnswers: {},
       showGoogleSearch: true,
       keepTranslationsOn: false,
       createAnonymousUser: vi.fn(),
@@ -86,10 +84,9 @@ describe('BurgerTestScreen', () => {
   it('calls clearUser and replaces location on logout', () => {
     const clearUser = vi.fn();
     vi.mocked(useUser).mockReturnValue({
-      user: { username: 'batman', createdAt: '' },
+      user: { version: 2, username: 'batman', createdAt: '', generalAnswers: {}, stateAnswers: {} },
       germanState: null,
-      correctQuestionIds: [],
-      incorrectQuestionIds: [],
+      questionAnswers: {},
       showGoogleSearch: true,
       keepTranslationsOn: false,
       createAnonymousUser: vi.fn(),

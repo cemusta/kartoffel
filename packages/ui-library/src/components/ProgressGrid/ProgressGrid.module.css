@@ -25,6 +25,12 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
+.gridsWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -40,13 +46,35 @@
 }
 
 .correct {
+  background-color: #66bb6a;
+}
+
+.mastered {
   background-color: #2e7d32;
 }
 
+.mixed {
+  background-color: #f9a825;
+}
+
 .incorrect {
+  background-color: #ef9a9a;
+}
+
+.struggling {
   background-color: #c62828;
 }
 
 .untouched {
   background-color: var(--md-sys-color-surface-variant, #e0e0e0);
+}
+
+.divider {
+  display: block;
+  width: 2px;
+  align-self: stretch;
+  background-color: var(--md-sys-color-outline-variant, #cac4d0);
+  margin: 0 8px;
+  border-radius: 1px;
+  flex-shrink: 0;
 }

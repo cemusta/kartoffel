@@ -5,7 +5,7 @@ import { useUser } from '../../hooks/useUser';
 
 export function BurgerTestScreen() {
   const navigate = useNavigate();
-  const { user, germanState, clearUser, correctQuestionIds, incorrectQuestionIds } = useUser();
+  const { user, germanState, clearUser, questionAnswers } = useUser();
 
   function handleLogout() {
     clearUser();
@@ -16,6 +16,7 @@ export function BurgerTestScreen() {
     q => q.type === 'general' || (q.type === 'state' && q.state === germanState)
   );
   const allQuestionIds = allQuestions.map(q => q.id);
+  const stateQuestionIds = allQuestions.filter(q => q.type === 'state').map(q => q.id);
 
   return (
     <BurgerTestPage
@@ -28,8 +29,8 @@ export function BurgerTestScreen() {
       onStartRealExam={() => navigate('/burger-test/real-exam')}
       userState={germanState}
       allQuestionIds={allQuestionIds}
-      correctQuestionIds={correctQuestionIds}
-      incorrectQuestionIds={incorrectQuestionIds}
+      questionAnswers={questionAnswers}
+      stateQuestionIds={stateQuestionIds}
     />
   );
 }

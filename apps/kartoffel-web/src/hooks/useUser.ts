@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   generateUsername,
   getStoredUser,
@@ -8,16 +8,29 @@ import {
   clearQuizProgress as storageClearQuizProgress,
   setShowGoogleSearch as storageSetShowGoogleSearch,
   setKeepTranslationsOn as storageSetKeepTranslationsOn,
+  migrateUserToV2,
   type StoredUser,
+  type QuestionTypeMap,
 } from '@kartoffel/utils';
+import { questions } from '@cemusta/burgertest';
+
+const questionTypeMap: QuestionTypeMap = Object.fromEntries(
+  questions.map(q => [q.id, q.type as 'general' | 'state']),
+);
 
 export function useUser() {
-  const [user, setUser] = useState<StoredUser | null>(() => getStoredUser());
+  const [user, setUser] = useState<StoredUser | null>(() => {
+    migrateUserToV2(questionTypeMap);
+    return getStoredUser();
+  });
 
   const createAnonymousUser = useCallback(() => {
     const newUser: StoredUser = {
+      version: 2,
       username: generateUsername(),
       createdAt: new Date().toISOString(),
+      generalAnswers: {},
+      stateAnswers: {},
     };
     setStoredUser(newUser);
     setUser(newUser);
@@ -41,7 +54,7 @@ export function useUser() {
   );
 
   const recordQuizAnswers = useCallback((correctIds: number[], incorrectIds: number[]) => {
-    storageRecordQuizAnswers(correctIds, incorrectIds);
+    storageRecordQuizAnswers(correctIds, incorrectIds, questionTypeMap);
     const updated = getStoredUser();
     setUser(updated);
   }, []);
@@ -64,11 +77,15 @@ export function useUser() {
     setUser(updated);
   }, []);
 
+  const questionAnswers = useMemo<Record<number, boolean[]>>(() => {
+    if (!user) return {};
+    return { ...user.generalAnswers, ...user.stateAnswers };
+  }, [user]);
+
   return {
     user,
     germanState: user?.germanState ?? null,
-    correctQuestionIds: user?.correctQuestionIds ?? [],
-    incorrectQuestionIds: user?.incorrectQuestionIds ?? [],
+    questionAnswers,
     showGoogleSearch: user?.showGoogleSearch ?? true,
     keepTranslationsOn: user?.keepTranslationsOn ?? false,
     createAnonymousUser,

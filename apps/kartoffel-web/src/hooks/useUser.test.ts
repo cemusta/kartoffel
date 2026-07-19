@@ -9,12 +9,23 @@ vi.mock('@kartoffel/utils', () => ({
   clearStoredUser: vi.fn(),
   recordQuizAnswers: vi.fn(),
   clearQuizProgress: vi.fn(),
+  migrateUserToV2: vi.fn(),
+}));
+
+vi.mock('@cemusta/burgertest', () => ({
+  questions: [],
 }));
 
 import { generateUsername, getStoredUser, setStoredUser, clearStoredUser, recordQuizAnswers, clearQuizProgress } from '@kartoffel/utils';
 import { useUser } from './useUser';
 
-const storedUser: StoredUser = { username: 'stored-user', createdAt: '2024-01-01T00:00:00.000Z' };
+const storedUser: StoredUser = {
+  version: 2,
+  username: 'stored-user',
+  createdAt: '2024-01-01T00:00:00.000Z',
+  generalAnswers: {},
+  stateAnswers: {},
+};
 
 describe('useUser', () => {
   beforeEach(() => {
@@ -42,7 +53,7 @@ describe('useUser', () => {
     });
 
     expect(generateUsername).toHaveBeenCalled();
-    expect(setStoredUser).toHaveBeenCalledWith(expect.objectContaining({ username: 'test-user' }));
+    expect(setStoredUser).toHaveBeenCalledWith(expect.objectContaining({ username: 'test-user', version: 2 }));
     expect(result.current.user).toEqual(returned);
     expect(result.current.user?.username).toBe('test-user');
   });
@@ -75,31 +86,28 @@ describe('useUser', () => {
     expect(result.current.user).toBeNull();
   });
 
-  it('exposes empty correctQuestionIds and incorrectQuestionIds when not stored', () => {
+  it('exposes empty questionAnswers when not stored', () => {
     const { result } = renderHook(() => useUser());
-    expect(result.current.correctQuestionIds).toEqual([]);
-    expect(result.current.incorrectQuestionIds).toEqual([]);
+    expect(result.current.questionAnswers).toEqual({});
   });
 
-  it('exposes stored correctQuestionIds and incorrectQuestionIds', () => {
-    const userWithIds: StoredUser = {
+  it('exposes merged questionAnswers from generalAnswers and stateAnswers', () => {
+    const userWithAnswers: StoredUser = {
       ...storedUser,
-      correctQuestionIds: [1, 2],
-      incorrectQuestionIds: [3],
+      generalAnswers: { 1: [true, true], 2: [false] },
+      stateAnswers: { 301: [true] },
     };
-    vi.mocked(getStoredUser).mockReturnValue(userWithIds);
+    vi.mocked(getStoredUser).mockReturnValue(userWithAnswers);
     const { result } = renderHook(() => useUser());
-    expect(result.current.correctQuestionIds).toEqual([1, 2]);
-    expect(result.current.incorrectQuestionIds).toEqual([3]);
+    expect(result.current.questionAnswers).toEqual({ 1: [true, true], 2: [false], 301: [true] });
   });
 
   it('recordQuizAnswers calls storage function and re-reads user', () => {
-    const userWithIds: StoredUser = {
+    const updatedUser: StoredUser = {
       ...storedUser,
-      correctQuestionIds: [1],
-      incorrectQuestionIds: [],
+      generalAnswers: { 1: [true] },
     };
-    vi.mocked(getStoredUser).mockReturnValueOnce(storedUser).mockReturnValue(userWithIds);
+    vi.mocked(getStoredUser).mockReturnValueOnce(storedUser).mockReturnValue(updatedUser);
 
     const { result } = renderHook(() => useUser());
 
@@ -107,12 +115,12 @@ describe('useUser', () => {
       result.current.recordQuizAnswers([1], []);
     });
 
-    expect(recordQuizAnswers).toHaveBeenCalledWith([1], []);
-    expect(result.current.correctQuestionIds).toEqual([1]);
+    expect(recordQuizAnswers).toHaveBeenCalledWith([1], [], expect.any(Object));
+    expect(result.current.questionAnswers[1]).toEqual([true]);
   });
 
   it('clearProgress calls storage clearQuizProgress and re-reads user', () => {
-    const clearedUser: StoredUser = { ...storedUser, correctQuestionIds: [], incorrectQuestionIds: [] };
+    const clearedUser: StoredUser = { ...storedUser, generalAnswers: {}, stateAnswers: {} };
     vi.mocked(getStoredUser).mockReturnValueOnce(storedUser).mockReturnValue(clearedUser);
 
     const { result } = renderHook(() => useUser());
@@ -122,7 +130,6 @@ describe('useUser', () => {
     });
 
     expect(clearQuizProgress).toHaveBeenCalled();
-    expect(result.current.correctQuestionIds).toEqual([]);
-    expect(result.current.incorrectQuestionIds).toEqual([]);
+    expect(result.current.questionAnswers).toEqual({});
   });
 });

@@ -74,10 +74,9 @@ describe('PracticeQuizScreen', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(useUser).mockReturnValue({
-      user: { username: 'tester', createdAt: '' },
+      user: { version: 2, username: 'tester', createdAt: '', generalAnswers: {}, stateAnswers: {} },
       germanState: 'Bayern',
-      correctQuestionIds: [],
-      incorrectQuestionIds: [],
+      questionAnswers: {},
       showGoogleSearch: true,
       createAnonymousUser: vi.fn(),
       clearUser: vi.fn(),

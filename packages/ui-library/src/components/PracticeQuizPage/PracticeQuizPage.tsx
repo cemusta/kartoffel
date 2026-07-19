@@ -14,8 +14,7 @@ export interface PracticeQuizPageProps {
   randomizeOptions?: boolean;
   showGoogleSearch?: boolean;
   keepTranslationsOn?: boolean;
-  correctQuestionIds?: number[];
-  incorrectQuestionIds?: number[];
+  questionAnswers?: Record<number, boolean[]>;
 }
 
 export function PracticeQuizPage({
@@ -28,8 +27,7 @@ export function PracticeQuizPage({
   randomizeOptions = false,
   showGoogleSearch = true,
   keepTranslationsOn = false,
-  correctQuestionIds,
-  incorrectQuestionIds,
+  questionAnswers,
 }: PracticeQuizPageProps) {
   const quizStartedRef = useRef(false);
 
@@ -98,8 +96,7 @@ export function PracticeQuizPage({
           randomizeOptions={randomizeOptions}
           showGoogleSearch={showGoogleSearch}
           keepTranslationsOn={keepTranslationsOn}
-          correctQuestionIds={correctQuestionIds}
-          incorrectQuestionIds={incorrectQuestionIds}
+          questionAnswers={questionAnswers}
         />
       </div>
     </div>

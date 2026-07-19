@@ -13,8 +13,7 @@ export interface QuizQuestionContainerProps extends HTMLAttributes<HTMLDivElemen
   randomizeOptions?: boolean;
   showGoogleSearch?: boolean;
   keepTranslationsOn?: boolean;
-  correctQuestionIds?: number[];
-  incorrectQuestionIds?: number[];
+  questionAnswers?: Record<number, boolean[]>;
 }
 
 export function QuizQuestionContainer({
@@ -24,8 +23,7 @@ export function QuizQuestionContainer({
   randomizeOptions = false,
   showGoogleSearch = true,
   keepTranslationsOn = false,
-  correctQuestionIds,
-  incorrectQuestionIds,
+  questionAnswers,
   className = '',
   ...props
 }: QuizQuestionContainerProps) {
@@ -46,11 +44,11 @@ export function QuizQuestionContainer({
 
   // Calculate question status based on history
   const questionStatus: QuestionStatus | null = useMemo(() => {
-    if (!correctQuestionIds && !incorrectQuestionIds) return null;
-    if (correctQuestionIds?.includes(currentQuestion.id)) return 'correct';
-    if (incorrectQuestionIds?.includes(currentQuestion.id)) return 'wrong';
-    return 'new';
-  }, [currentQuestion.id, correctQuestionIds, incorrectQuestionIds]);
+    if (!questionAnswers) return null;
+    const answers = questionAnswers[currentQuestion.id];
+    if (!answers || answers.length === 0) return 'new';
+    return answers.at(-1) === true ? 'correct' : 'wrong';
+  }, [currentQuestion.id, questionAnswers]);
 
   const handleSelect = useCallback((key: string) => {
     setAnswers(prev => new Map(prev).set(currentIndex, key));
