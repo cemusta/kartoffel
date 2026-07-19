@@ -46,14 +46,6 @@ export function PracticeQuizPage({
   }, []);
 
   const handleBack = () => {
-    if (quizStartedRef.current) {
-      const confirmed = window.confirm(
-        'Are you sure you want to quit? Your progress will be lost.'
-      );
-      if (!confirmed) {
-        return;
-      }
-    }
     onBack();
   };
 
