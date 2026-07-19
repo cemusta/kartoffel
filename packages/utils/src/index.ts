@@ -5,3 +5,5 @@ export type { StoredUser, QuestionType, QuestionTypeMap } from './storage/userSt
 export { GERMAN_STATES } from './germanStates';
 export type { GermanState } from './germanStates';
 export { generateSeed, seedToNumber, seededShuffle } from './examSeed';
+export { pickWorstQuestion } from './practiceMode';
+export type { PracticeQuestion } from './practiceMode';

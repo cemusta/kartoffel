@@ -26,6 +26,7 @@ export function BurgerTestScreen() {
       onSettings={() => navigate('/settings')}
       onShowAllQuestions={() => navigate('/einburger-test/all-questions')}
       onStartPractice={() => navigate('/einburger-test/practice')}
+      onStartPracticeMode={() => navigate('/einburger-test/practice-mode')}
       onStartRealExam={() => navigate('/einburger-test/real-exam')}
       userState={germanState}
       allQuestionIds={allQuestionIds}

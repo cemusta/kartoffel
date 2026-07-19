@@ -32,6 +32,7 @@ export { StateSelectionPage } from './components/StateSelectionPage';
 export { SettingsPage } from './components/SettingsPage';
 export { ProgressGrid } from './components/ProgressGrid';
 export { PracticeQuizPage } from './components/PracticeQuizPage';
+export { PracticeModePage } from './components/PracticeModePage';
 export { FactCallout } from './components/FactCallout';
 
 export type { ButtonProps } from './components/Button';
@@ -58,4 +59,5 @@ export type { StateSelectionPageProps } from './components/StateSelectionPage';
 export type { SettingsPageProps } from './components/SettingsPage';
 export type { ProgressGridProps } from './components/ProgressGrid';
 export type { PracticeQuizPageProps } from './components/PracticeQuizPage';
+export type { PracticeModePageProps } from './components/PracticeModePage';
 export type { FactCalloutProps } from './components/FactCallout';

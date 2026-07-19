@@ -6,6 +6,7 @@ import { StateSelectionScreen } from '../screens/StateSelectionScreen/StateSelec
 import { SettingsScreen } from '../screens/SettingsScreen/SettingsScreen';
 import { AllQuestionsScreen } from '../screens/AllQuestionsScreen/AllQuestionsScreen';
 import { PracticeQuizScreen } from '../screens/PracticeQuizScreen/PracticeQuizScreen';
+import { PracticeModeScreen } from '../screens/PracticeModeScreen/PracticeModeScreen';
 import { RealExamIntroScreen } from '../screens/RealExamIntroScreen/RealExamIntroScreen';
 import { RealExamQuizScreen } from '../screens/RealExamQuizScreen/RealExamQuizScreen';
 import { ExamReviewScreen } from '../screens/ExamReviewScreen/ExamReviewScreen';
@@ -72,6 +73,14 @@ export const router = createBrowserRouter([
     element: (
       <RequireUser>
         <PracticeQuizScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/einburger-test/practice-mode',
+    element: (
+      <RequireUser>
+        <PracticeModeScreen />
       </RequireUser>
     ),
   },
