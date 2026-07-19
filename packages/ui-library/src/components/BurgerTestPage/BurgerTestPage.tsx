@@ -66,7 +66,7 @@ export function BurgerTestPage({
             >
               ‹
             </button>
-            <p className={styles.topBarTitle}>Burger Test</p>
+            <p className={styles.topBarTitle}>Einbürgerungstest</p>
           </>
         }
         right={<HamburgerMenu username={username} onLogout={onLogout} onSettings={onSettings} />}
@@ -81,7 +81,7 @@ export function BurgerTestPage({
             onClick={onShowAllQuestions}
           />
           <ModeCard
-            title="Practice Mode"
+            title="Practice Exam"
             description={
               practiceEnabled
                 ? '33 questions · passing score 17/33'

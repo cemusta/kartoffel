@@ -15,7 +15,7 @@ export function ExamReviewScreen() {
   const userAnswers = state?.userAnswers ?? {};
 
   if (!wrongIds || wrongIds.length === 0) {
-    navigate('/burger-test', { replace: true });
+    navigate('/einburger-test', { replace: true });
     return null;
   }
 

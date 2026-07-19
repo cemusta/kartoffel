@@ -24,9 +24,9 @@ export function BurgerTestScreen() {
       username={user?.username ?? null}
       onLogout={handleLogout}
       onSettings={() => navigate('/settings')}
-      onShowAllQuestions={() => navigate('/burger-test/all-questions')}
-      onStartPractice={() => navigate('/burger-test/practice')}
-      onStartRealExam={() => navigate('/burger-test/real-exam')}
+      onShowAllQuestions={() => navigate('/einburger-test/all-questions')}
+      onStartPractice={() => navigate('/einburger-test/practice')}
+      onStartRealExam={() => navigate('/einburger-test/real-exam')}
       userState={germanState}
       allQuestionIds={allQuestionIds}
       questionAnswers={questionAnswers}

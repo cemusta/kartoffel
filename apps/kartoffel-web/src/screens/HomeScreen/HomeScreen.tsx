@@ -16,7 +16,7 @@ export function HomeScreen() {
     <HomePage
       username={user?.username ?? null}
       version={packageJson.version}
-      onBurgerTest={() => navigate('/burger-test')}
+      onBurgerTest={() => navigate('/einburger-test')}
       onLogout={handleLogout}
       onSettings={() => navigate('/settings')}
     />
