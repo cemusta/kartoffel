@@ -6,6 +6,7 @@ import { StateSelectionScreen } from '../screens/StateSelectionScreen/StateSelec
 import { SettingsScreen } from '../screens/SettingsScreen/SettingsScreen';
 import { AllQuestionsScreen } from '../screens/AllQuestionsScreen/AllQuestionsScreen';
 import { PracticeQuizScreen } from '../screens/PracticeQuizScreen/PracticeQuizScreen';
+import { PracticeModeScreen } from '../screens/PracticeModeScreen/PracticeModeScreen';
 import { RealExamIntroScreen } from '../screens/RealExamIntroScreen/RealExamIntroScreen';
 import { RealExamQuizScreen } from '../screens/RealExamQuizScreen/RealExamQuizScreen';
 import { ExamReviewScreen } from '../screens/ExamReviewScreen/ExamReviewScreen';
@@ -52,7 +53,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/burger-test',
+    path: '/einburger-test',
     element: (
       <RequireUser>
         <BurgerTestScreen />
@@ -60,7 +61,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/burger-test/all-questions',
+    path: '/einburger-test/all-questions',
     element: (
       <RequireUser>
         <AllQuestionsScreen />
@@ -68,7 +69,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/burger-test/practice',
+    path: '/einburger-test/practice',
     element: (
       <RequireUser>
         <PracticeQuizScreen />
@@ -76,7 +77,15 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/burger-test/real-exam',
+    path: '/einburger-test/practice-mode',
+    element: (
+      <RequireUser>
+        <PracticeModeScreen />
+      </RequireUser>
+    ),
+  },
+  {
+    path: '/einburger-test/real-exam',
     element: (
       <RequireUser>
         <RealExamIntroScreen />
@@ -84,7 +93,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/burger-test/real-exam/:seed',
+    path: '/einburger-test/real-exam/:seed',
     element: (
       <RequireUser>
         <KeyedRealExamQuizScreen />
@@ -92,7 +101,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/burger-test/real-exam/:seed/review',
+    path: '/einburger-test/real-exam/:seed/review',
     element: (
       <RequireUser>
         <ExamReviewScreen />

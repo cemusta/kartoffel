@@ -28,7 +28,7 @@ export function HomePage({ username, version, onBurgerTest, onLogout, onSettings
 
         <div className={styles.modeCardGrid}>
           <ModeCard
-            title="Burger Test"
+            title="Einbürgerungstest"
             description="Test your German citizenship knowledge"
             icon="🍔"
             onClick={onBurgerTest}

@@ -3,10 +3,10 @@ import { QuestionBody, QuestionData } from '../QuestionBody';
 import { QuestionOptions } from '../QuestionOptions';
 import styles from './QuestionContainer.module.css';
 
-const OPTION_KEYS = ['a', 'b', 'c', 'd'] as const;
+export const OPTION_KEYS = ['a', 'b', 'c', 'd'] as const;
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' };
 
-function shuffleArray<T>(array: T[], seed: number): T[] {
+export function shuffleArray<T>(array: T[], seed: number): T[] {
   const shuffled = [...array];
   let random = seed;
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -39,11 +39,13 @@ export function QuestionContainer({
   className = '',
   ...props
 }: QuestionContainerProps) {
-  // Shuffle options deterministically based on question ID when randomization is enabled
+  // Shuffle options deterministically based on question ID when randomization is enabled.
+  // Disabled for questions with images: images are shown in fixed order, so shuffling
+  // options would break the correspondence between an image and its answer option.
   const shuffledKeys = useMemo(() => {
-    if (!randomizeOptions) return [...OPTION_KEYS];
+    if (!randomizeOptions || question.image) return [...OPTION_KEYS];
     return shuffleArray([...OPTION_KEYS], question.id);
-  }, [randomizeOptions, question.id]);
+  }, [randomizeOptions, question.id, question.image]);
 
   return (
     <div className={`${styles.container} ${className}`} {...props}>

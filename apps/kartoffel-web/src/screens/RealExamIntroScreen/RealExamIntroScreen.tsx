@@ -7,7 +7,7 @@ export function RealExamIntroScreen() {
 
   useEffect(() => {
     const seed = generateSeed();
-    navigate(`/burger-test/real-exam/${seed}`, { replace: true });
+    navigate(`/einburger-test/real-exam/${seed}`, { replace: true });
   }, [navigate]);
 
   return null;

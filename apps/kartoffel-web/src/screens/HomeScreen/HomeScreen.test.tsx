@@ -90,7 +90,7 @@ describe('HomeScreen', () => {
     expect(screen.getByTestId('username').textContent).toBe('guest');
   });
 
-  it('navigates to /burger-test on burger test button click', () => {
+  it('navigates to /einburger-test on burger test button click', () => {
     vi.mocked(useUser).mockReturnValue({
       user: { version: 2, username: 'batman', createdAt: '', generalAnswers: {}, stateAnswers: {} },
       germanState: null,
@@ -113,7 +113,7 @@ describe('HomeScreen', () => {
     );
 
     fireEvent.click(screen.getByText('Burger test'));
-    expect(mockNavigate).toHaveBeenCalledWith('/burger-test');
+    expect(mockNavigate).toHaveBeenCalledWith('/einburger-test');
   });
 
   it('calls clearUser and replaces location on logout', () => {

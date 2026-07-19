@@ -52,11 +52,11 @@ export function RealExamQuizScreen() {
   }
 
   function handleReviewWrong(wrongIds: number[], userAnswers: Record<number, string>) {
-    navigate(`/burger-test/real-exam/${seed}/review`, { state: { wrongIds, userAnswers } });
+    navigate(`/einburger-test/real-exam/${seed}/review`, { state: { wrongIds, userAnswers } });
   }
 
   function handleChangeSeed() {
-    navigate(`/burger-test/real-exam/${generateSeed()}`, { replace: true });
+    navigate(`/einburger-test/real-exam/${generateSeed()}`, { replace: true });
   }
 
   function handleBack() {

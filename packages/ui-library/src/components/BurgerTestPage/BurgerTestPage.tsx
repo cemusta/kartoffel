@@ -23,7 +23,7 @@ export interface BurgerTestPageProps {
   onSettings?: () => void;
   onShowAllQuestions: () => void;
   onStartPractice?: () => void;
-  onAnswerAllQuestions?: () => void;
+  onStartPracticeMode?: () => void;
   onStartRealExam?: () => void;
   userState: string | null;
   allQuestionIds?: number[];
@@ -38,7 +38,7 @@ export function BurgerTestPage({
   onSettings,
   onShowAllQuestions,
   onStartPractice,
-  onAnswerAllQuestions: _onAnswerAllQuestions,
+  onStartPracticeMode,
   onStartRealExam,
   userState,
   allQuestionIds,
@@ -51,6 +51,7 @@ export function BurgerTestPage({
     : `${questionCount} general questions`;
 
   const practiceEnabled = Boolean(onStartPractice && userState);
+  const practiceModeEnabled = Boolean(onStartPracticeMode && userState);
   const realExamEnabled = Boolean(onStartRealExam && userState);
 
   return (
@@ -66,7 +67,7 @@ export function BurgerTestPage({
             >
               ‹
             </button>
-            <p className={styles.topBarTitle}>Burger Test</p>
+            <p className={styles.topBarTitle}>Einbürgerungstest</p>
           </>
         }
         right={<HamburgerMenu username={username} onLogout={onLogout} onSettings={onSettings} />}
@@ -83,19 +84,24 @@ export function BurgerTestPage({
           <ModeCard
             title="Practice Mode"
             description={
+              practiceModeEnabled
+                ? 'Practice new & wrong questions'
+                : 'Select a state to start'
+            }
+            icon="📖"
+            disabled={!practiceModeEnabled}
+            onClick={practiceModeEnabled ? onStartPracticeMode : undefined}
+          />
+          <ModeCard
+            title="Practice Exam"
+            description={
               practiceEnabled
-                ? '33 questions · passing score 17/33'
+                ? '33 questions · translations & hints available'
                 : 'Select a state to start practice'
             }
             icon="🎯"
             disabled={!practiceEnabled}
             onClick={practiceEnabled ? onStartPractice : undefined}
-          />
-          <ModeCard
-            title="Answer All Questions"
-            description="Coming soon"
-            icon="📝"
-            disabled={true}
           />
           <ModeCard
             title="Real Exam"
