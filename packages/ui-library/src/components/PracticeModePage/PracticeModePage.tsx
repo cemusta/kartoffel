@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { QuestionData } from '../QuestionBody';
-import { QuestionContainer } from '../QuestionContainer';
+import { QuestionContainer, shuffleArray, OPTION_KEYS } from '../QuestionContainer';
 import { TranslationToggle } from '../TranslationToggle';
 import { FactModal } from '../FactModal';
 import { QuestionStatusBadge, QuestionStatus } from '../QuestionStatusBadge';
@@ -91,8 +91,11 @@ export function PracticeModePage({
         const numKey = parseInt(key, 10);
         if (numKey >= 1 && numKey <= 4) {
           e.preventDefault();
-          const answerKey = ['a', 'b', 'c', 'd'][numKey - 1];
-          setSelectedAnswer(answerKey);
+          const visualKeys =
+            randomizeOptions && !question.image
+              ? shuffleArray([...OPTION_KEYS], question.id)
+              : [...OPTION_KEYS];
+          setSelectedAnswer(visualKeys[numKey - 1]);
         }
       }
     };
@@ -107,6 +110,8 @@ export function PracticeModePage({
     selectedAnswer,
     handleCheck,
     handleNext,
+    randomizeOptions,
+    question,
   ]);
 
   return (
