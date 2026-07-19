@@ -23,6 +23,8 @@ export interface BurgerTestPageProps {
   onSettings?: () => void;
   onShowAllQuestions: () => void;
   onStartPractice?: () => void;
+  onAnswerAllQuestions?: () => void;
+  onStartRealExam?: () => void;
   userState: string | null;
   allQuestionIds?: number[];
   correctQuestionIds?: number[];
@@ -36,6 +38,8 @@ export function BurgerTestPage({
   onSettings,
   onShowAllQuestions,
   onStartPractice,
+  onAnswerAllQuestions: _onAnswerAllQuestions,
+  onStartRealExam,
   userState,
   allQuestionIds,
   correctQuestionIds = [],
@@ -47,6 +51,7 @@ export function BurgerTestPage({
     : `${questionCount} general questions`;
 
   const practiceEnabled = Boolean(onStartPractice && userState);
+  const realExamEnabled = Boolean(onStartRealExam && userState);
 
   return (
     <div className={styles.screen}>
@@ -85,6 +90,23 @@ export function BurgerTestPage({
             icon="🎯"
             disabled={!practiceEnabled}
             onClick={practiceEnabled ? onStartPractice : undefined}
+          />
+          <ModeCard
+            title="Answer All Questions"
+            description="Coming soon"
+            icon="📝"
+            disabled={true}
+          />
+          <ModeCard
+            title="Real Exam"
+            description={
+              realExamEnabled
+                ? '33 questions · official exam format'
+                : 'Select a state to start'
+            }
+            icon="🎓"
+            disabled={!realExamEnabled}
+            onClick={realExamEnabled ? onStartRealExam : undefined}
           />
         </div>
         {allQuestionIds && allQuestionIds.length > 0 && (

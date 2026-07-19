@@ -1,0 +1,232 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--md-sys-color-background);
+  animation: pageEnter 0.2s ease forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--md-sys-color-on-surface);
+  transition: background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.backButton:active {
+  background-color: var(--md-sys-color-surface-variant);
+}
+
+.topBarTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Hero */
+.heroSection {
+  text-align: center;
+  padding: 1rem 0 0.5rem;
+}
+
+.heroIcon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.heroTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 0.4rem;
+}
+
+.heroSubtitle {
+  font-size: 1rem;
+  color: var(--md-sys-color-on-surface-variant, #555);
+  margin: 0;
+}
+
+/* Info card */
+.infoCard {
+  background: var(--md-sys-color-surface-container, #f5f5f5);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.infoTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  margin: 0 0 0.75rem;
+}
+
+.infoList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.infoList li {
+  font-size: 0.95rem;
+  color: var(--md-sys-color-on-surface-variant, #555);
+  line-height: 1.4;
+}
+
+/* Seed card */
+.seedCard {
+  background: var(--md-sys-color-primary-container, #dde8ff);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.seedLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-sys-color-on-primary-container, #001b61);
+  margin: 0;
+}
+
+.seedRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.seedValue {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--md-sys-color-primary, #1a73e8);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.changeButton {
+  padding: 0.35rem 0.8rem;
+  background: transparent;
+  color: var(--md-sys-color-primary, #1a73e8);
+  border: 1.5px solid var(--md-sys-color-primary, #1a73e8);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.changeButton:hover {
+  background: var(--md-sys-color-primary, #1a73e8);
+  color: white;
+}
+
+.seedHint {
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-primary-container, #001b61);
+  margin: 0;
+  opacity: 0.75;
+}
+
+.shareRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.shareInput {
+  flex: 1;
+  border: 1.5px solid var(--md-sys-color-outline, #ccc);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  background: var(--md-sys-color-surface, #fff);
+  color: var(--md-sys-color-on-surface, #333);
+  min-width: 0;
+}
+
+.shareInput:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary, #1a73e8);
+}
+
+.copyButton {
+  padding: 0.5rem 1rem;
+  background: var(--md-sys-color-primary, #1a73e8);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.copyButton:hover {
+  background: var(--md-sys-color-primary-dark, #1558b0);
+}
+
+/* Start button */
+.startButton {
+  width: 100%;
+  padding: 1.1rem;
+  background: var(--md-sys-color-primary, #1a73e8);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  margin-top: 0.25rem;
+}
+
+.startButton:hover {
+  background: var(--md-sys-color-primary-dark, #1558b0);
+}

@@ -4,3 +4,4 @@ export { getStoredUser, setStoredUser, clearStoredUser, recordQuizAnswers, clear
 export type { StoredUser } from './storage/userStorage';
 export { GERMAN_STATES } from './germanStates';
 export type { GermanState } from './germanStates';
+export { generateSeed, seedToNumber, seededShuffle } from './examSeed';

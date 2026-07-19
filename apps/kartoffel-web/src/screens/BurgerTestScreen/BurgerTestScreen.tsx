@@ -25,6 +25,7 @@ export function BurgerTestScreen() {
       onSettings={() => navigate('/settings')}
       onShowAllQuestions={() => navigate('/burger-test/all-questions')}
       onStartPractice={() => navigate('/burger-test/practice')}
+      onStartRealExam={() => navigate('/burger-test/real-exam')}
       userState={germanState}
       allQuestionIds={allQuestionIds}
       correctQuestionIds={correctQuestionIds}
