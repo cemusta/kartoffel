@@ -1,6 +1,6 @@
 import { HTMLAttributes, useState, useEffect, useCallback, useMemo } from 'react';
 import { QuestionData } from '../QuestionBody';
-import { QuestionContainer } from '../QuestionContainer';
+import { QuestionContainer, shuffleArray, OPTION_KEYS } from '../QuestionContainer';
 import { FactModal } from '../FactModal';
 import { TranslationToggle } from '../TranslationToggle';
 import { QuestionStatusBadge, QuestionStatus } from '../QuestionStatusBadge';
@@ -146,13 +146,16 @@ export function QuizQuestionContainer({
         return;
       }
 
-      // 1-4 - Select answers A-D (only if not revealed)
+      // 1-4 - Select answers A-D in visual (possibly shuffled) order
       if (!isRevealed) {
         const numKey = parseInt(key, 10);
         if (numKey >= 1 && numKey <= 4) {
           e.preventDefault();
-          const answerKey = ['a', 'b', 'c', 'd'][numKey - 1];
-          handleSelect(answerKey);
+          const visualKeys =
+            randomizeOptions && !currentQuestion.image
+              ? shuffleArray([...OPTION_KEYS], currentQuestion.id)
+              : [...OPTION_KEYS];
+          handleSelect(visualKeys[numKey - 1]);
         }
       }
     };
@@ -170,6 +173,8 @@ export function QuizQuestionContainer({
     handleCheck,
     handleNext,
     handlePrevious,
+    randomizeOptions,
+    currentQuestion,
   ]);
 
   if (finished) {

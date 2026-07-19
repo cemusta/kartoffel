@@ -36,12 +36,6 @@ export function RealExamQuizPage({
   }, []);
 
   const handleBack = () => {
-    if (examStartedRef.current) {
-      const confirmed = window.confirm(
-        'Are you sure you want to quit? Your exam progress will be lost.',
-      );
-      if (!confirmed) return;
-    }
     onBack();
   };
 
